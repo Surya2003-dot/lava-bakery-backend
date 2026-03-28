@@ -1,7 +1,4 @@
 
-const API_BASE_URL = "https://lava-bakery-backend.onrender.com";
-
-
 function login(){
 
 const email=document.getElementById("email").value;

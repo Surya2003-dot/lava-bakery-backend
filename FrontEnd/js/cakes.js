@@ -141,7 +141,7 @@ let item = cart.find(c=>c.cakeId==id || c.cake?.id==id)
 
 if(item){
 
-fetch(`http://localhost:8080/api/cart/${item.id}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/cart/${item.id}`,{
 method:"DELETE",
 headers:{ "Authorization":"Bearer "+token }
 })
@@ -158,7 +158,7 @@ updateCartCount()
 
 // ADD
 
-fetch(`http://localhost:8080/api/cart/add?cakeId=${id}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/cart/add?cakeId=${id}`,{
 method:"POST",
 headers:{ "Authorization":"Bearer "+token }
 })
