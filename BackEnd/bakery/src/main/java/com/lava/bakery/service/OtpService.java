@@ -22,6 +22,8 @@ public class OtpService {
                 (int)(Math.random()*900000)+100000
         );
 
+        System.out.println("OTP GENERATED: " + otp);
+
         OtpVerification otpEntity = new OtpVerification();
 
         otpEntity.setEmail(email);
@@ -32,7 +34,17 @@ public class OtpService {
 
         otpRepository.save(otpEntity);
 
-        emailService.sendOtp(email,otp);
+        try {
+            System.out.println("Sending OTP to: " + email);
+
+            emailService.sendOtp(email, otp);
+
+            System.out.println("MAIL PROCESS DONE ✅");
+
+        } catch (Exception e) {
+            System.out.println("MAIL FAILED ❌");
+            e.printStackTrace();
+        }
     }
 
 }

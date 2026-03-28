@@ -11,18 +11,30 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendOtp(String email,String otp){
+    public void sendOtp(String email, String otp){
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        try {
 
-        message.setTo(email);
-        message.setSubject("Lava Bakery OTP Verification");
+            SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setText(
-                "Your OTP is: " + otp +
-                        "\nValid for 5 minutes"
-        );
+            message.setFrom("surya.developer15@gmail.com"); // 🔥 IMPORTANT
+            message.setTo(email);
 
-        mailSender.send(message);
+            message.setSubject("Lava Bakery OTP Verification");
+
+            message.setText(
+                    "Your OTP is: " + otp +
+                            "\nValid for 5 minutes"
+            );
+
+            mailSender.send(message);
+
+            System.out.println("EMAIL SENT SUCCESS ✅");
+
+        } catch (Exception e) {
+
+            System.out.println("EMAIL FAILED ❌");
+            e.printStackTrace();
+        }
     }
 }
