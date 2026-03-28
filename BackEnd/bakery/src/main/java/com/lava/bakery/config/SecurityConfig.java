@@ -69,8 +69,11 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // ✅ Allow all origins (safe for development)
-        config.setAllowedOriginPatterns(List.of("*"));
-
+        config.setAllowedOrigins(List.of(
+                "http://127.0.0.1:5500",
+                "http://localhost:5500",
+                "https://lava-bakery-backend.onrender.com"
+        ));
         // ✅ Allow all HTTP methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
