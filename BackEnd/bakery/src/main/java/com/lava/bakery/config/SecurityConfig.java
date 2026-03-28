@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,62 +32,63 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/api/auth/**",
+                        // ✅ PUBLIC APIs
+                        .requestMatchers(
+                                "/",
+                                "/api/auth/**",
                                 "/api/cakes/**",
-                                "/images/**").permitAll()
+                                "/api/orders/**",
+                                "/api/delivery/**",
+                                "/images/**",
+                                "/uploads/**"
+                        ).permitAll()
 
-                        .requestMatchers("/api/cakes/search/**").permitAll()
-
-                        .requestMatchers("/api/orders/place").permitAll()
-
-                        .requestMatchers("/api/orders/**").permitAll()
-
-                        .requestMatchers("/api/delivery/login").permitAll()
-                        .requestMatchers("/api/delivery/**").permitAll()
-
+                        // ✅ ADMIN APIs
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        .requestMatchers("/uploads/**").permitAll()
-                        .requestMatchers("/api/orders/delivery-slots").permitAll()
-
+                        // ❗ EVERYTHING ELSE
                         .anyRequest().authenticated()
                 )
+
+                // ✅ JWT FILTER
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    // 🌐 CORS CONFIG (FULLY FLEXIBLE)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration configuration = new CorsConfiguration();
+        CorsConfiguration config = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(
-                List.of("http://127.0.0.1:5500")
-        );
+        // ✅ Allow all origins (safe for development)
+        config.setAllowedOriginPatterns(List.of("*"));
 
-        configuration.setAllowedMethods(
-                List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        );
+        // ✅ Allow all HTTP methods
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        configuration.setAllowedHeaders(
-                List.of("*")
-        );
+        // ✅ Allow all headers
+        config.setAllowedHeaders(List.of("*"));
 
-        configuration.setAllowCredentials(true);
+        // ⚠️ Important for cookies / auth
+        config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source =
-                new UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**", configuration);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
 
         return source;
     }
+
+    // 🔐 Password Encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

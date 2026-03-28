@@ -32,34 +32,65 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
+        String path = request.getServletPath();
 
-        if (header != null && header.startsWith("Bearer ")) {
+        // ✅ SKIP PUBLIC APIs (FAST EXIT)
+        if (isPublicPath(path)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String header = request.getHeader("Authorization");
+
+            // ✅ No token → allow request
+            if (header == null || !header.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
 
             String token = header.substring(7);
 
-            if (jwtUtil.validateToken(token)) {
-
-                String email = jwtUtil.extractEmail(token);
-
-                User user = userRepository.findByEmail(email).orElse(null);
-
-                if (user != null) {
-
-                    String roleName = user.getRole().getName();
-
-                    UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(
-                                    email,
-                                    null,
-                                    List.of(new SimpleGrantedAuthority("ROLE_" + roleName))
-                            );
-
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                }
+            // ✅ Validate token
+            if (!jwtUtil.validateToken(token)) {
+                filterChain.doFilter(request, response);
+                return;
             }
+
+            String email = jwtUtil.extractEmail(token);
+
+            User user = userRepository.findByEmail(email).orElse(null);
+
+            if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                String role = user.getRole().getName();
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+
+        } catch (Exception e) {
+            // ❗ Never break request flow
+            System.out.println("JWT Error: " + e.getMessage());
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    // 🔥 CLEAN METHOD (BEST PRACTICE)
+    private boolean isPublicPath(String path) {
+        return path.startsWith("/api/auth") ||
+                path.startsWith("/api/cakes") ||
+                path.startsWith("/api/orders") ||
+                path.startsWith("/api/delivery") ||
+                path.startsWith("/images") ||
+                path.startsWith("/uploads") ||
+                path.equals("/");
     }
 }
