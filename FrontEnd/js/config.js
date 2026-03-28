@@ -1,1 +1,1 @@
-const API_BASE_URL = "https://lava-bakery-backend.onrender.com";
+const API_BASE_URL = "https://lava-bakery-backend.onrender.com/api";
