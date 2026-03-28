@@ -13,28 +13,17 @@ public class EmailService {
 
     public void sendOtp(String email, String otp){
 
-        try {
+        SimpleMailMessage message = new SimpleMailMessage();
 
-            SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("surya.developer15@gmail.com");
+        message.setTo(email);
+        message.setSubject("Lava Bakery OTP Verification");
 
-            message.setFrom("surya.developer15@gmail.com"); // 🔥 IMPORTANT
-            message.setTo(email);
+        message.setText(
+                "Your OTP is: " + otp +
+                        "\nValid for 5 minutes"
+        );
 
-            message.setSubject("Lava Bakery OTP Verification");
-
-            message.setText(
-                    "Your OTP is: " + otp +
-                            "\nValid for 5 minutes"
-            );
-
-            mailSender.send(message);
-
-            System.out.println("EMAIL SENT SUCCESS ✅");
-
-        } catch (Exception e) {
-
-            System.out.println("EMAIL FAILED ❌");
-            e.printStackTrace();
-        }
+        mailSender.send(message); // ❗ remove try-catch temporarily
     }
 }
