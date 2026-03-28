@@ -229,7 +229,7 @@ function loadOrders(){
 const date = document.getElementById("dateFilter").value
 const status = document.getElementById("statusFilter").value
 
-let url = `http://localhost:8080/admin/orders?date=${date}&status=${status}`
+let url = `https://lava-bakery-backend.onrender.com/admin/orders?date=${date}&status=${status}`
 
 // custom date
 if(date === "custom"){
@@ -338,7 +338,7 @@ function updateStatus(orderId,status){
 
 if(!status) return
 
-fetch(`http://localhost:8080/admin/orders/${orderId}/status?status=${status}`,{
+fetch(`https://lava-bakery-backend.onrender.com/admin/orders/${orderId}/status?status=${status}`,{
 method:"PUT",
 headers:{
 "Authorization":"Bearer "+token

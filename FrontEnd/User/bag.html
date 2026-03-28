@@ -308,7 +308,7 @@ window.location.href="login.html"
 }
 
 // LOAD USER ORDERS
-fetch("http://localhost:8080/api/orders/my-orders",{
+fetch("https://lava-bakery-backend.onrender.com/api/orders/my-orders",{
 headers:{
 "Authorization":"Bearer "+token
 }
@@ -348,7 +348,7 @@ let kg = order.orderedKg
 let date = order.deliveryDate
 let slot = order.deliverySlot
 let total = order.totalPrice
-let image = "http://localhost:8080"+order.imageUrl
+let image = "https://lava-bakery-backend.onrender.com"+order.imageUrl
 let status = order.status 
 let message = order.cakeMessage
 

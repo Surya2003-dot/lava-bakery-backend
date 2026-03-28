@@ -292,7 +292,7 @@ if(badge) badge.innerText=0
 return
 }
 
-fetch("http://localhost:8080/api/cart",{
+fetch("https://lava-bakery-backend.onrender.com/api/cart",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -317,7 +317,7 @@ if(badge) badge.innerText = 0
 return
 }
 
-fetch("http://localhost:8080/api/orders/pending-count",{
+fetch("https://lava-bakery-backend.onrender.com/api/orders/pending-count",{
 headers:{
 "Authorization":"Bearer "+token
 }
@@ -354,7 +354,7 @@ window.location.href="login.html"
 return
 }
 
-fetch("http://localhost:8080/api/cart/add",{
+fetch("https://lava-bakery-backend.onrender.com/api/cart/add",{
 
 method:"POST",
 
@@ -390,7 +390,7 @@ return
 
 if(btn.classList.contains("cart-active")){
 
-fetch("http://localhost:8080/api/cart",{
+fetch("https://lava-bakery-backend.onrender.com/api/cart",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -400,7 +400,7 @@ let item=cart.find(c=>c.cakeId==id)
 
 if(item){
 
-fetch(`http://localhost:8080/api/cart/${item.id}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/cart/${item.id}`,{
 method:"DELETE",
 headers:{ "Authorization":"Bearer "+token }
 })
@@ -415,7 +415,7 @@ updateCartCount()
 
 }else{
 
-fetch("http://localhost:8080/api/cart/add",{
+fetch("https://lava-bakery-backend.onrender.com/api/cart/add",{
 
 method:"POST",
 
@@ -446,7 +446,7 @@ let token=localStorage.getItem("token")
 
 if(!token) return
 
-fetch("http://localhost:8080/api/cart",{
+fetch("https://lava-bakery-backend.onrender.com/api/cart",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -513,7 +513,7 @@ if(badge) badge.innerText=0
 return
 }
 
-fetch("http://localhost:8080/api/orders/pending-count",{
+fetch("https://lava-bakery-backend.onrender.com/api/orders/pending-count",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())

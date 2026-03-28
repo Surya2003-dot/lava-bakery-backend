@@ -177,7 +177,7 @@ document.getElementById("cakeDesc").innerText = product.description
 document.getElementById("cakeWeight").innerText =
 (product.weight) + " KG"
 document.getElementById("cakePrice").innerText = cakePrice
-document.getElementById("cakeImg").src = "http://localhost:8080" + product.image
+document.getElementById("cakeImg").src = "https://lava-bakery-backend.onrender.com" + product.image
 
 
 updateTotal()
@@ -299,7 +299,7 @@ let phone = document.getElementById("phone").value
 let message = document.getElementById("cakeMessage").value
 let date = document.getElementById("deliveryDate").value
 let slot = document.getElementById("deliverySlot").value
-fetch(`http://localhost:8080/api/orders/place?cakeId=${cakeId}&kg=${kg}&deliveryAddress=${encodeURIComponent(address)}&phoneNumber=${phone}&paymentMethod=CASH_ON_DELIVERY&eggType=EGG&cakeMessage=${encodeURIComponent(message)}&deliveryDate=${date}&deliverySlot=${slot}&cakeShape=${encodeURIComponent(shape)}&cakePrice=${cakePrice}&deliveryCharge=${deliveryCharge}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/orders/place?cakeId=${cakeId}&kg=${kg}&deliveryAddress=${encodeURIComponent(address)}&phoneNumber=${phone}&paymentMethod=CASH_ON_DELIVERY&eggType=EGG&cakeMessage=${encodeURIComponent(message)}&deliveryDate=${date}&deliverySlot=${slot}&cakeShape=${encodeURIComponent(shape)}&cakePrice=${cakePrice}&deliveryCharge=${deliveryCharge}`,{
 
 method:"POST",
 
@@ -326,7 +326,7 @@ userEmail: localStorage.getItem("email"),
 
 cake: product.name,
 
-image: "http://localhost:8080" + product.image,
+image: "https://lava-bakery-backend.onrender.com" + product.image,
 
 kg: kg,
 
@@ -388,7 +388,7 @@ function loadSlots(prepTime){
 
     dropdown.disabled = false
 
-    fetch(`http://localhost:8080/api/orders/delivery-slots?prepTime=${prepTime}`)
+    fetch(`https://lava-bakery-backend.onrender.com/api/orders/delivery-slots?prepTime=${prepTime}`)
     .then(res => res.json())
     .then(data => {
 

@@ -35,7 +35,7 @@ style="cursor:pointer;">
 
 ${cake.badge ? `<span class="badge-label ${cake.badge === 'Hot Seller' ? 'hot-seller' : 'best-seller'}">${cake.badge}</span>` : ''}
 
-<img src="http://localhost:8080${cake.imageUrl}" alt="${cake.name}">
+<img src="https://lava-bakery-backend.onrender.com${cake.imageUrl}" alt="${cake.name}">
 
 <span class="prep-time-badge">
 <i class="fa-solid fa-clock"></i>
@@ -131,7 +131,7 @@ if(btn.classList.contains("cart-active")){
 
 // REMOVE
 
-fetch("http://localhost:8080/api/cart",{
+fetch("https://lava-bakery-backend.onrender.com/api/cart",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -182,7 +182,7 @@ let token = localStorage.getItem("token")
 
 if(!token) return
 
-fetch("http://localhost:8080/api/cart",{
+fetch("https://lava-bakery-backend.onrender.com/api/cart",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -219,7 +219,7 @@ if(badge) badge.innerText=0
 return
 }
 
-fetch("http://localhost:8080/api/cart",{
+fetch("https://lava-bakery-backend.onrender.com/api/cart",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())

@@ -228,10 +228,10 @@ special moments with our delicious cakes.
 const params = new URLSearchParams(window.location.search)
 let flavour = params.get("flavour")
 
-let url = "http://localhost:8080/api/cakes/all" // default
+let url = "https://lava-bakery-backend.onrender.com/api/cakes/all" // default
 
 if(flavour){
-url = "http://localhost:8080/api/cakes/flavour/" + encodeURIComponent(flavour)
+url = "https://lava-bakery-backend.onrender.com/api/cakes/flavour/" + encodeURIComponent(flavour)
 }
 
 fetch(url)
@@ -269,7 +269,7 @@ style="cursor:pointer;">
 
 ${cake.badge ? `<span class="badge-label ${cake.badge === 'Hot Seller' ? 'hot-seller' : 'best-seller'}">${cake.badge}</span>` : ''}
 
-<img src="http://localhost:8080/${cake.imageUrl.replace(/^\/+/, '')}" alt="${cake.name}">
+<img src="https://lava-bakery-backend.onrender.com/${cake.imageUrl.replace(/^\/+/, '')}" alt="${cake.name}">
 
 <span class="prep-time-badge">
 <i class="fa-solid fa-clock"></i>

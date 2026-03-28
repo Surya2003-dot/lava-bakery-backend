@@ -124,7 +124,7 @@ if(!token){
     return
 }
 
-fetch(`http://localhost:8080/api/orders/${id}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/orders/${id}`,{
     headers:{
         "Authorization":"Bearer " + token
     }
@@ -206,7 +206,7 @@ if(!deliveryBoyId){
     showToast("Login expired ❌","danger")
     return
 }
-    fetch(`http://localhost:8080/api/delivery/out-for-delivery/${currentOrderId}/${deliveryBoyId}`,{
+    fetch(`https://lava-bakery-backend.onrender.com/api/delivery/out-for-delivery/${currentOrderId}/${deliveryBoyId}`,{
         method:"PUT",
         headers:{
             "Authorization":"Bearer " + token
@@ -232,7 +232,7 @@ function markDelivered(){
 
     let token = localStorage.getItem("token")
 
-    fetch(`http://localhost:8080/api/orders/${currentOrderId}/status?status=DELIVERED`,{
+    fetch(`https://lava-bakery-backend.onrender.com/api/orders/${currentOrderId}/status?status=DELIVERED`,{
         method:"PUT",
         headers:{
             "Authorization":"Bearer " + token

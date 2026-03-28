@@ -226,7 +226,7 @@ special moments with our delicious cakes.
 <!-- JS -->
 <script>
 
-const API_BASE_URL = "http://localhost:8080/api";
+const API_BASE_URL = "https://lava-bakery-backend.onrender.com/api";
 
 const params = new URLSearchParams(window.location.search);
 
@@ -339,7 +339,7 @@ style="cursor:pointer;">
 
 ${cake.badge ? `<span class="badge-label ${cake.badge === 'Hot Seller' ? 'hot-seller' : 'best-seller'}">${cake.badge}</span>` : ''}
 
-<img src="http://localhost:8080${cake.imageUrl}" alt="${cake.name}">
+<img src="https://lava-bakery-backend.onrender.com${cake.imageUrl}" alt="${cake.name}">
 
 <span class="prep-time-badge">
 <i class="fa-solid fa-clock"></i>

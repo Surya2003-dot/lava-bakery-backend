@@ -170,7 +170,7 @@ onkeypress="mobileSearch(event)">
 
 <script>
 
-const API = "http://localhost:8080/api/cart"
+const API = "https://lava-bakery-backend.onrender.com/api/cart"
 
 function checkLogin(){
 
@@ -239,7 +239,7 @@ style="cursor:pointer;">
 
 ${item.badge ? `<span class="badge-label ${item.badge === 'Hot Seller' ? 'hot-seller' : 'best-seller'}">${item.badge}</span>` : ''}
 
-<img src="http://localhost:8080${item.image}" alt="${item.name}">
+<img src="https://lava-bakery-backend.onrender.com${item.image}" alt="${item.name}">
 
 <span class="prep-time-badge">
 <i class="fa-solid fa-clock"></i>
