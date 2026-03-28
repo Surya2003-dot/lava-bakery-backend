@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Cakes</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />         
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+/* ================= GLOBAL ================= */
+body{
+background:#f6f6f6;
+overflow-x:hidden;
+font-family:Arial, sans-serif;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar{
+width:230px;
+height:100vh;
+background:#111;
+color:white;
+position:fixed;
+left:0;
+top:0;
+padding-top:20px;
+transition:0.3s;
+z-index:1000;
+}
+
+.sidebar h4{
+text-align:center;
+margin-bottom:20px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+padding:12px;
+text-decoration:none;
+transition:0.2s;
+}
+
+.sidebar a:hover{
+background:#333;
+}
+
+/* ================= CONTENT ================= */
+.content{
+margin-left:230px;
+padding:20px;
+transition:0.3s;
+}
+
+/* ================= MOBILE MENU ================= */
+.menu-btn{
+font-size:24px;
+cursor:pointer;
+display:none;
+margin-bottom:10px;
+}
+
+/* ================= CARD ================= */
+.mobile-product-card{
+background:#fff;
+border-radius:10px;
+overflow:hidden;
+transition:0.3s;
+height:100%;
+}
+
+.mobile-product-card:hover{
+transform:translateY(-4px);
+box-shadow:0 6px 16px rgba(0,0,0,0.08);
+}
+
+/* ================= IMAGE ================= */
+.mobile-product-img{
+position:relative;
+width:100%;
+aspect-ratio:1/1;
+overflow:hidden;
+background:#f8f8f8;
+}
+
+.mobile-product-img img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* ================= BADGE ================= */
+.badge-label{
+position:absolute;
+top:8px;
+left:8px;
+color:white;
+font-size:12px;
+padding:3px 8px;
+border-radius:4px;
+font-weight:600;
+}
+
+.hot-seller{ background:#e53935; }
+.best-seller{ background:#28a745; }
+
+/* ================= PREP TIME ================= */
+.prep-time-badge{
+position:absolute;
+bottom:6px;
+left:6px;
+background:rgba(255,255,255,0.9);
+color:#333;
+font-size:10px;
+padding:2px 6px;
+border-radius:12px;
+display:flex;
+align-items:center;
+gap:3px;
+box-shadow:0 1px 4px rgba(0,0,0,0.15);
+font-weight:500;
+}
+
+.prep-time-badge i{
+font-size:10px;
+color:#ff6b6b;
+}
+
+/* ================= TITLE ================= */
+.product-title{
+font-size:15px;
+font-weight:600;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+/* ================= PRICE ================= */
+.price-row{
+display:flex;
+align-items:center;
+gap:6px;
+flex-wrap:wrap;
+}
+
+.main-price{
+font-weight:700;
+font-size:15px;
+}
+
+.old-price{
+text-decoration:line-through;
+color:#777;
+font-size:13px;
+}
+
+.discount{
+background:#e6f7ec;
+color:#28a745;
+font-size:12px;
+padding:2px 6px;
+border-radius:4px;
+}
+
+/* ================= EXTRA ================= */
+.cake-weight,
+.cake-shape{
+font-size:11px;
+background:#f2f2f2;
+padding:2px 6px;
+border-radius:10px;
+color:#555;
+display:flex;
+align-items:center;
+gap:3px;
+}
+
+.cake-weight i,
+.cake-shape i{
+font-size:10px;
+color:#ff6b6b;
+}
+
+/* ================= DESCRIPTION ================= */
+.cake-desc{
+font-size:14px;
+color:#555;
+margin:3px 1px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+/* ================= RATING ================= */
+.rating-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:6px;
+}
+
+.rating-badge{
+background:#28a745;
+color:#fff;
+font-size:11px;
+padding:2px 5px;
+border-radius:4px;
+}
+
+.review-count{
+font-size:12px;
+color:#666;
+white-space:nowrap;
+}
+
+/* ================= ADMIN BUTTONS ================= */
+.admin-actions{
+display:flex;
+gap:5px;
+margin-top:8px;
+}
+
+.admin-actions button{
+font-size:12px;
+padding:5px;
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:576px){
+
+.mobile-product-img{
+aspect-ratio:1/1;
+}
+
+.rating-badge{
+font-size:10px;
+}
+
+.review-count{
+font-size:11px;
+}
+
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+<h4 class="text-center mb-4">Admin</h4>
+<a href="dashboard.html">Dashboard</a>
+<a href="orders.html">Orders</a>
+<a href="cakes.html">Cakes</a>
+<a href="users.html">Users</a>
+<a href="DeliveryBoy.html">Delivery Boy</a>
+<a href="#" onclick="logout()">Logout</a>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+<span class="menu-btn" onclick="toggleMenu()">☰</span>
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+<h2 class="m-0">All Cakes</h2>
+<button class="btn btn-success" onclick="openAddForm()">+ Add Cake</button>
+</div>
+
+<!-- SEARCH + FILTER BAR -->
+<div class="card p-3 mb-3 shadow-sm">
+
+<div class="row g-2 align-items-center">
+
+<!--  SEARCH -->
+<div class="col-12 col-md-4">
+<input type="text"
+id="adminSearch"
+class="form-control"
+placeholder="🔍 Search cakes..."
+onkeyup="applyFilter()">
+</div>
+
+<!--  FLAVOUR -->
+<div class="col-6 col-md-4">
+<select id="filterFlavour"
+class="form-select"
+onchange="applyFilter()">
+<option value="">All Flavours</option>
+<option>Butter Cream Cake</option>
+<option>Lava Special Cake</option>
+<option>Chocolate Flavoured Cake</option>
+<option>Fruit Flavoured Cake</option>
+<option>Cheese Cake</option>
+<option>Velvet Flavoured Cake</option>
+<option>Dream Flavoured Cake</option>
+</select>
+</div>
+
+<!-- AVAILABLE -->
+<div class="col-6 col-md-4">
+<select id="filterAvailable"
+class="form-select"
+onchange="applyFilter()">
+<option value="">All Status</option>
+<option value="true">Available</option>
+<option value="false">Unavailable</option>
+</select>
+</div>
+
+</div>
+
+</div>
+
+<!-- CAKE LIST -->
+<div class="row" id="cakeList"></div>
+
+</div>
+
+
+<!-- ADD MODAL -->
+<div class="modal fade" id="addModal">
+<div class="modal-dialog modal-lg">
+<div class="modal-content p-3">
+
+<h5>Add Cake</h5>
+
+<div class="row">
+
+<!-- LEFT -->
+<div class="col-md-6">
+
+<input id="name" class="form-control mb-2" placeholder="Enter Cake Name" required>
+
+<input id="price" type="number" class="form-control mb-2" placeholder="Price/kg (₹)" required>
+
+<input id="oldPrice" type="number" class="form-control mb-2" placeholder="Old Price">
+
+<input id="offer" class="form-control mb-2" placeholder="Offer %" readonly>
+
+<!-- CATEGORY -->
+<select id="category" class="form-control mb-2" required>
+<option value="">Select Category</option>
+<option>Birthday Cake</option>
+<option>Wedding Cake</option>
+<option>Anniversary Cake</option>
+<option>Kids Cake</option>
+<option>Premium Cake</option>
+<option>Custom Cake</option>
+</select>
+
+<!-- FLAVOUR -->
+<select id="flavour" class="form-control mb-2" required>
+<option value="">Select Flavour</option>
+<option>Fresh Cream Cake</option>
+<option>Butter Cream Cake</option>
+<option>Lava Special Cake</option>
+<option>Chocolate Flavoured Cake</option>
+<option>Fruit Flavoured Cake</option>
+<option>Cheese Cake</option>
+<option>Velvet Flavoured Cake</option>
+<option>Dream Flavoured Cake</option>
+</select>
+
+<!-- EGG TYPE -->
+<div class="mb-2">
+<label>Egg Type:</label><br>
+<input type="radio" name="eggType" value="EGG" checked> Egg
+<input type="radio" name="eggType" value="EGGLESS"> Eggless
+</div>
+<!-- IMAGE PREVIEW IN EMPTY SPACE -->
+<div class="mt-2">
+
+<img id="imagePreview"
+     src=""
+     style="width:100%; max-width:180px; height:120px; object-fit:cover;
+     border-radius:10px; display:none; border:1px solid #ccc;">
+
+<div id="imageActions" style="display:none; margin-top:5px;">
+
+<i class="fa fa-pen text-primary me-3"
+   style="cursor:pointer;"
+   onclick="changeAddImage()" title="Change"></i>
+
+<i class="fa fa-trash text-danger"
+   style="cursor:pointer;"
+   onclick="removeAddImage()" title="Remove"></i>
+
+</div>
+
+</div>  
+</div>
+
+<!-- RIGHT -->
+<div class="col-md-6">
+
+<input type="file" id="image" class="form-control mb-2" required>
+
+<input id="rating" type="number" step="0.1" class="form-control mb-2" placeholder="Rating (Eg: 4.5)" required>
+
+<input id="review" type="number" class="form-control mb-2" placeholder="Review Count" required>
+
+<input id="prepTime" type="number" class="form-control mb-2" placeholder="Preparation Time (hrs)" required>
+
+<input id="weights" class="form-control mb-2" placeholder="Weights (Eg: 1kg,2kg)" required>
+
+<!-- SHAPES -->
+<select id="shapes" class="form-control mb-2" required>
+<option value="">Select Shape</option>
+<option>Round</option>
+<option>Square</option>
+<option>Heart</option>
+</select>
+
+<input id="badge" class="form-control mb-2" placeholder="Badge (Hot / Best Seller)">
+
+<!-- FEATURED -->
+<select id="featured" class="form-control mb-2">
+<option value="true">Featured - Yes</option>
+<option value="false">Featured - No</option>
+</select>
+
+<!-- EXTRA -->
+<input id="dailyCapacityKg" type="number" class="form-control mb-2" placeholder="Daily Capacity (Kg)">
+<input id="minOrderKg" type="number" class="form-control mb-2" placeholder="Min Order (Kg)">
+<input id="maxOrderKg" type="number" class="form-control mb-2" placeholder="Max Order (Kg)">
+
+</div>
+
+<!-- DESCRIPTION -->
+<textarea id="desc" class="form-control mb-2" placeholder="Description" required></textarea>
+
+<!-- AVAILABLE -->
+<div class="form-check">
+<input type="checkbox" id="available" checked>
+<label>Available</label>
+</div>
+
+<div class="d-flex gap-2 mt-2">
+    <button class="btn btn-secondary w-100" data-bs-dismiss="modal">
+Cancel
+</button>
+
+<button class="btn btn-success w-100" onclick="addCake()">
+Add Cake
+</button>
+
+
+
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+
+  <!-- edit  -->
+<div class="modal fade" id="editModal">
+<div class="modal-dialog modal-lg">
+<div class="modal-content p-3">
+
+<h5>Edit Cake</h5>
+
+<div class="row">
+
+<!-- LEFT -->
+<div class="col-md-6">
+
+<label>Name</label>
+<input id="editName" class="form-control mb-2">
+
+<label>Price (₹)</label>
+<input id="editPrice" type="number" class="form-control mb-2">
+
+<label>Old Price (₹)</label>
+<input id="editOldPrice" type="number" class="form-control mb-2">
+
+<label>Offer (%)</label>
+<input id="editOffer" class="form-control mb-2">
+
+<label>Category</label>
+<input id="editCategory" class="form-control mb-2">
+
+<label>Flavour</label>
+<input id="editFlavour" class="form-control mb-2">
+
+<label>Egg Type</label>
+<select id="editEggType" class="form-control mb-2">
+<option value="EGG">Egg</option>
+<option value="EGGLESS">Eggless</option>
+</select>
+
+<label>Featured</label>
+<select id="editFeatured" class="form-control mb-2">
+<option value="true">Yes</option>
+<option value="false">No</option>
+</select>
+<label>Current Image</label>
+
+<img id="editImagePreview"
+     src=""
+     style="width:100%; max-width:180px; height:120px; object-fit:cover;
+     border-radius:10px; border:1px solid #ccc; margin-bottom:8px;">
+     <i class="fa fa-pen text-primary me-3"
+   onclick="changeEditImage()"></i>
+
+<i class="fa fa-trash text-danger"
+   onclick="removeEditImage()"></i>
+     
+</div>
+
+
+<!-- RIGHT -->
+<div class="col-md-6">
+
+<label>Image</label>
+<input type="file" id="editImageFile" class="form-control mb-2">
+
+<label>Rating</label>
+<input id="editRating" type="number" step="0.1" class="form-control mb-2">
+
+<label>Review Count</label>
+<input id="editReview" type="number" class="form-control mb-2">
+
+<label>Preparation Time (hrs)</label>
+<input id="editPrepTime" type="number" class="form-control mb-2">
+
+<label>Weight (kg/g)</label>
+<input id="editWeights" class="form-control mb-2">
+
+<label>Shape</label>
+<select id="editShapes" class="form-control mb-2">
+<option>Round</option>
+<option>Square</option>
+<option>Heart</option>
+</select>
+
+<label>Badge</label>
+<input id="editBadge" class="form-control mb-2">
+
+<label>Daily Capacity (Kg)</label>
+<input id="editDailyCapacityKg" type="number" class="form-control mb-2">
+
+<label>Min Order (Kg)</label>
+<input id="editMinOrderKg" type="number" class="form-control mb-2">
+
+<label>Max Order (Kg)</label>
+<input id="editMaxOrderKg" type="number" class="form-control mb-2">
+
+</div>
+
+<label>Description</label>
+<textarea id="editDesc" class="form-control mb-2"></textarea>
+
+<div class="form-check mt-2">
+<input type="checkbox" id="editAvailable">
+<label>Available</label>
+</div>
+
+<div class="d-flex gap-2 mt-3">
+<button class="btn btn-secondary w-100" data-bs-dismiss="modal">
+Cancel
+</button>
+
+<button class="btn btn-primary w-100" onclick="updateCake()">
+Update Cake
+</button>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<div id="toastBox" style="
+position:fixed;
+bottom:20px;
+right:20px;
+background:#28a745;
+color:white;
+padding:10px 15px;
+border-radius:6px;
+display:none;
+z-index:9999;
+"></div>
+<script>
+
+
+const token = localStorage.getItem("adminToken")
+let editId = null
+
+if(!token){
+window.location.href="login.html"
+}
+
+// ================= COMMON IMAGE PREVIEW =================
+function setupImagePreview(inputId, previewId, actionsId){
+
+const input = document.getElementById(inputId)
+const preview = document.getElementById(previewId)
+const actions = actionsId ? document.getElementById(actionsId) : null
+
+input.addEventListener("change", function(){
+
+const file = this.files[0]
+
+if(file){
+const reader = new FileReader()
+
+reader.onload = function(e){
+preview.src = e.target.result
+preview.style.display = "block"
+if(actions) actions.style.display = "block"
+}
+
+reader.readAsDataURL(file)
+}
+
+})
+}
+// ================= IMAGE ACTIONS =================
+
+// ADD MODAL
+function changeAddImage(){
+document.getElementById("image").click()
+}
+
+function removeAddImage(){
+document.getElementById("image").value = ""
+document.getElementById("imagePreview").src = ""
+document.getElementById("imagePreview").style.display = "none"
+document.getElementById("imageActions").style.display = "none"
+}
+
+// EDIT MODAL
+function changeEditImage(){
+document.getElementById("editImageFile").click()
+}
+
+function removeEditImage(){
+document.getElementById("editImageFile").value = ""
+document.getElementById("editImagePreview").src = ""
+}
+// APPLY
+setupImagePreview("image","imagePreview","imageActions")
+setupImagePreview("editImageFile","editImagePreview",null)
+
+
+// ================= VALIDATION =================
+function validateForm(ids){
+
+let valid = true
+
+ids.forEach(id=>{
+let el = document.getElementById(id)
+
+if(!el.value || el.value.trim() === ""){
+el.classList.add("is-invalid")
+valid = false
+}else{
+el.classList.remove("is-invalid")
+}
+})
+
+return valid
+}
+
+
+document.querySelectorAll("input,select,textarea").forEach(el=>{
+el.addEventListener("input", ()=> el.classList.remove("is-invalid"))
+})
+
+
+// ================= OFFER AUTO =================
+document.getElementById("price").addEventListener("input", calculateOffer)
+document.getElementById("oldPrice").addEventListener("input", calculateOffer)
+
+function calculateOffer(){
+let price = parseFloat(document.getElementById("price").value)
+let oldPrice = parseFloat(document.getElementById("oldPrice").value)
+
+if(price && oldPrice && oldPrice > price){
+let offer = Math.round(((oldPrice - price) / oldPrice) * 100)
+document.getElementById("offer").value = offer
+}else{
+document.getElementById("offer").value = ""
+}
+}
+
+
+// ================= LOAD CAKES =================
+function loadCakes(){
+
+let name = document.getElementById("adminSearch")?.value || ""
+let flavour = document.getElementById("filterFlavour")?.value || ""
+let available = document.getElementById("filterAvailable")?.value
+
+let url = "http://localhost:8080/api/cakes/search?"
+
+if(name) url += "name=" + encodeURIComponent(name) + "&"
+if(flavour) url += "flavour=" + encodeURIComponent(flavour) + "&"
+if(available !== "") url += "available=" + available
+
+fetch(url,{
+headers:{ "Authorization":"Bearer "+token }
+})
+.then(res=>res.json())
+.then(data=>{
+
+let html=""
+
+data.forEach(cake=>{
+
+html+=`
+<div class="col-6 col-md-4 col-lg-3 p-1">
+
+<div class="mobile-product-card">
+
+<div class="mobile-product-img">
+
+${cake.badge ? `<span class="badge-label ${cake.badge === 'Hot Seller' ? 'hot-seller' : 'best-seller'}">${cake.badge}</span>` : ''}
+
+<img src="http://localhost:8080/${cake.imageUrl.replace(/^\/+/, '')}">
+
+<span class="prep-time-badge">
+<i class="fa-solid fa-clock"></i>
+${cake.preparationTimeHours} hrs
+</span>
+
+</div>
+
+<div class="p-2">
+
+<div class="product-title">${cake.name}</div>
+
+<div class="price-row">
+<span class="main-price">₹${cake.pricePerKg}</span>
+${cake.oldPrice ? `<span class="old-price">₹${cake.oldPrice}</span>` : ''}
+${cake.offerPercentage ? `<span class="discount">${cake.offerPercentage}% OFF</span>` : ''}
+
+<span class="cake-weight">${cake.weights}</span>
+<span class="cake-shape">${cake.shapes}</span>
+</div>
+
+<p class="cake-desc">${cake.description}</p>
+
+<div class="rating-row">
+<div>
+<span class="rating-badge">${cake.rating} ★</span>
+<span class="review-count">${cake.reviewCount} Reviews</span>
+</div>
+
+<div class="mt-2 d-flex gap-2">
+<button class="btn btn-sm btn-primary w-50"
+onclick='openEdit(${JSON.stringify(cake)})'>Edit</button>
+
+<button class="btn btn-sm btn-danger w-50"
+onclick="deleteCake(${cake.id})">Delete</button>
+</div>
+
+</div>
+
+</div>
+</div>
+</div>
+`
+})
+
+document.getElementById("cakeList").innerHTML = html
+
+})
+}
+
+// ==================== filter cakes================= 
+function applyFilter(){
+    loadCakes()
+}
+// ================= ADD CAKE =================
+
+function addCake(){
+
+if(!validateForm([
+"name","price","category","flavour",
+"prepTime","weights","shapes","rating","review"
+])){
+showToast("Fill all fields ❌")
+return
+}
+
+let name = document.getElementById("name").value.trim()
+
+// CAPITALIZE
+name = name.split(" ").map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(" ")
+
+let price = parseFloat(document.getElementById("price").value)
+let oldPrice = parseFloat(document.getElementById("oldPrice").value)
+let offer = document.getElementById("offer").value
+
+let eggType = document.querySelector('input[name="eggType"]:checked').value
+let featuredValue = document.getElementById("featured").value === "true"
+
+let weight = document.getElementById("weights").value.trim()
+
+let formData = new FormData()
+
+formData.append("name", name)
+formData.append("description", document.getElementById("desc").value)
+formData.append("category", document.getElementById("category").value)
+formData.append("flavour", document.getElementById("flavour").value)
+formData.append("eggType", eggType)
+formData.append("pricePerKg", price)
+if(oldPrice){
+    formData.append("oldPrice", oldPrice)
+}
+
+if(offer){
+    formData.append("offerPercentage", offer)
+}
+formData.append("badge", document.getElementById("badge").value || "")
+formData.append("available", document.getElementById("available").checked ? "true" : "false")
+formData.append("featured", featuredValue ? "true" : "false")
+formData.append("preparationTimeHours", document.getElementById("prepTime").value)
+formData.append("rating", document.getElementById("rating").value)
+formData.append("reviewCount", document.getElementById("review").value)
+formData.append("weights", weight)
+formData.append("shapes", document.getElementById("shapes").value)
+let daily = document.getElementById("dailyCapacityKg").value
+let min = document.getElementById("minOrderKg").value
+let max = document.getElementById("maxOrderKg").value
+
+if(daily)
+formData.append("dailyCapacityKg", parseFloat(daily))
+
+if(min)
+formData.append("minOrderKg", parseFloat(min))
+
+if(max)
+formData.append("maxOrderKg", parseFloat(max))
+let imageInput = document.getElementById("image")
+
+if(imageInput.files.length !== 1){
+showToast("Select image ❌")
+return
+}
+
+formData.append("image", imageInput.files[0])
+
+fetch("http://localhost:8080/api/cakes/add-with-image",{
+method:"POST",
+headers:{ "Authorization":"Bearer "+token },
+body: formData
+})
+.then(res=>{
+if(!res.ok){
+return res.text().then(err=>{ throw new Error(err) })
+}
+return res.json()
+})
+.then(()=>{
+showToast("Cake Added ✅")
+loadCakes()
+bootstrap.Modal.getInstance(addModal).hide()
+})
+.catch(err=>{
+console.error(err)
+showToast("Add failed ❌")
+})
+
+}
+
+
+// ================= EDIT =================
+function openEdit(cake){
+
+editId = cake.id
+
+editName.value = cake.name
+editPrice.value = cake.pricePerKg
+editOldPrice.value = cake.oldPrice
+editOffer.value = cake.offerPercentage
+editCategory.value = cake.category
+editFlavour.value = cake.flavour
+editEggType.value = cake.eggType
+editRating.value = cake.rating
+editReview.value = cake.reviewCount
+editPrepTime.value = cake.preparationTimeHours
+editWeights.value = cake.weights
+editShapes.value = cake.shapes
+editBadge.value = cake.badge
+editDesc.value = cake.description
+editAvailable.checked = cake.available
+editFeatured.value = cake.featured
+editDailyCapacityKg.value = cake.dailyCapacityKg ?? ""
+editMinOrderKg.value = cake.minOrderKg ?? ""
+editMaxOrderKg.value = cake.maxOrderKg ?? ""
+
+document.getElementById("editImagePreview").src =
+"http://localhost:8080/" + cake.imageUrl.replace(/^\/+/, "")
+
+new bootstrap.Modal(editModal).show()
+}
+
+
+// ================= UPDATE =================
+function updateCake(){
+
+if(!validateForm([
+"editName","editPrice","editCategory","editFlavour",
+"editPrepTime","editWeights","editShapes","editRating","editReview"
+])){
+showToast("Fill all fields ❌")
+return
+}
+
+let formData = new FormData()
+
+formData.append("name", editName.value)
+formData.append("description", editDesc.value)
+formData.append("category", editCategory.value)
+formData.append("flavour", editFlavour.value)
+formData.append("eggType", editEggType.value)
+formData.append("pricePerKg", editPrice.value)
+if(editOldPrice.value){
+    formData.append("oldPrice", editOldPrice.value)
+}
+
+if(editOffer.value){
+    formData.append("offerPercentage", editOffer.value)
+}
+formData.append("badge", editBadge.value)
+formData.append("available", editAvailable.checked)
+formData.append("featured", editFeatured.value === "true")
+formData.append("preparationTimeHours", editPrepTime.value)
+formData.append("rating", editRating.value)
+formData.append("reviewCount", editReview.value)
+formData.append("weights", editWeights.value)
+formData.append("shapes", editShapes.value)
+
+if(editDailyCapacityKg.value)
+formData.append("dailyCapacityKg", parseFloat(editDailyCapacityKg.value))
+
+if(editMinOrderKg.value)
+formData.append("minOrderKg", parseFloat(editMinOrderKg.value))
+
+if(editMaxOrderKg.value)
+formData.append("maxOrderKg", parseFloat(editMaxOrderKg.value))
+
+if(editImageFile.files[0]){
+formData.append("image", editImageFile.files[0])
+}
+
+fetch(`http://localhost:8080/api/cakes/update-with-image/${editId}`,{
+method:"PUT",
+headers:{ "Authorization":"Bearer "+token },
+body: formData
+})
+.then(res=>res.json())
+.then(()=>{
+showToast("Updated ✅")
+loadCakes()
+bootstrap.Modal.getInstance(editModal).hide()
+})
+
+}
+
+
+// ================= DELETE =================
+function deleteCake(id){
+
+if(!confirm("Delete this cake? ❗")) return
+
+fetch(`http://localhost:8080/api/cakes/${id}`,{
+method:"DELETE",
+headers:{ "Authorization":"Bearer "+token }
+})
+.then(res => {
+if(!res.ok) throw new Error("Delete failed ❌")
+return res.text()
+})
+.then(()=>{
+showToast("Deleted 🗑️")
+loadCakes()
+})
+.catch(()=>{
+showToast("Delete failed ❌")
+})
+
+}
+
+
+// ================= UI =================
+function openAddForm(){
+new bootstrap.Modal(addModal).show()
+}
+
+function logout(){
+localStorage.removeItem("adminToken")
+location.href="login.html"
+}
+
+function showToast(msg){
+
+let t = document.getElementById("toastBox")
+
+t.innerText = msg
+t.style.display = "block"
+t.style.background = msg.includes("❌") ? "#dc3545" : "#28a745"
+
+setTimeout(()=> t.style.display="none",2000)
+}
+
+
+// INIT
+loadCakes()
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

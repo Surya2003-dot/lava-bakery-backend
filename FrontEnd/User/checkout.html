@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lava Cakes - Checkout</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="icon" href="images/six.webp">
+
+<style>
+
+body{
+background:#f6f6f6;
+}
+
+.checkout-card{
+background:white;
+border-radius:10px;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.product-img{
+height:120px;
+object-fit:contain;
+}
+
+.order-toast{
+position:fixed;
+top:20px;
+right:20px;
+display:none;
+z-index:999;
+}
+
+.toast-box{
+background:#28a745;
+color:white;
+padding:15px 20px;
+border-radius:8px;
+display:flex;
+align-items:center;
+gap:10px;
+animation:slideIn 0.4s ease;
+}
+
+.tick{
+font-size:20px;
+font-weight:bold;
+}
+
+@keyframes slideIn{
+from{transform:translateX(200px);opacity:0}
+to{transform:translateX(0);opacity:1}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container py-5">
+
+<h2 class="mb-4">Checkout</h2>
+
+<div class="row g-4">
+
+<div class="col-md-5">
+
+<div class="checkout-card p-3">
+
+<h5>Order Summary</h5>
+
+<img id="cakeImg" class="product-img">
+
+<h6 id="cakeName"></h6>
+
+<p id="cakeDesc"></p>
+<p id="cakeprep"></p>
+
+
+<p>Weight : <span id="cakeWeight"></span></p>
+
+<hr>
+
+<p>Cake Price : ₹<span id="cakePrice"></span></p>
+
+<p>Distance : <span id="distanceKm">0</span> KM</p>
+<p id="deliveryStatus" style="color:red; font-weight:bold;"></p>
+<p>Delivery Charge : ₹<span id="deliveryCharge">0</span></p>
+
+<h5>Total : ₹<span id="totalPrice"></span></h5>
+
+</div>
+
+</div>
+
+
+<div class="col-md-7">
+
+<div class="checkout-card p-4">
+<form id="checkoutForm">
+
+<h5>Delivery Details</h5>
+
+<input id="phone" class="form-control mb-3" placeholder="Phone Number" required>
+
+<h6>Address</h6>
+
+<input id="street" class="form-control mb-2" placeholder="House / Street" required>
+<input id="area" class="form-control mb-2" placeholder="Area / Landmark" required>
+<input id="city" class="form-control mb-2" placeholder="City" required>
+<input id="pincode" class="form-control mb-3" placeholder="Pincode" required>
+
+<input id="cakeMessage" class="form-control mt-3" placeholder="Cake Message" required>
+
+<label for="deliveryDate" class="mt-3 ">
+Delivery Date
+</label>
+
+<input type="date"
+id="deliveryDate"
+class="form-control"
+required>
+<select id="deliverySlot" class="form-control mt-3" required>
+<option value="">Select Slot</option>
+</select>
+
+<button id="placeOrderBtn" type="submit" class="btn btn-danger w-100 mt-4">
+Place Order
+</button>
+
+</form>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div id="orderToast" class="order-toast">
+<div class="toast-box">
+<div class="tick">✔</div>
+<p>Order Placed Successfully</p>
+</div>
+</div>
+
+
+<script>
+
+let product = JSON.parse(localStorage.getItem("buyNowCake"))
+
+if(product && !product.weight){
+product.weight = 1
+}
+console.log(product)
+const shopLat = 11.5183
+const shopLon = 79.3241
+
+let deliveryCharge = 0
+let cakePrice = 0
+
+if(product){
+
+cakePrice = product.price * (product.weight || 1)
+let shape = product.shapes || ""
+document.getElementById("cakeprep").innerText =
+"Preparation Time: " + product.preparationTimeHours + " hr"
+document.getElementById("cakeName").innerText =
+product.name + (shape ? " (" + shape + ")" : "")
+document.getElementById("cakeDesc").innerText = product.description
+document.getElementById("cakeWeight").innerText =
+(product.weight) + " KG"
+document.getElementById("cakePrice").innerText = cakePrice
+document.getElementById("cakeImg").src = "http://localhost:8080" + product.image
+
+
+updateTotal()
+
+}
+
+function updateTotal(){
+
+document.getElementById("totalPrice").innerText =
+cakePrice + deliveryCharge
+
+}
+
+
+async function calculateDeliveryFromAddress(){
+
+let city=document.getElementById("city").value.trim()
+let pincode=document.getElementById("pincode").value.trim()
+
+if(city==="" || pincode==="") return
+
+let address=`${city} ${pincode} Tamil Nadu India`
+
+let response=await fetch(
+`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address)}`
+)
+
+let data=await response.json()
+
+if(data.length===0) return
+
+let userLat=parseFloat(data[0].lat)
+let userLon=parseFloat(data[0].lon)
+
+calculateDelivery(userLat,userLon)
+
+}
+
+document.getElementById("city").addEventListener("change",calculateDeliveryFromAddress)
+document.getElementById("pincode").addEventListener("change",calculateDeliveryFromAddress)
+
+
+function calculateDelivery(userLat,userLon){
+
+let distance = calculateDistance(userLat,userLon,shopLat,shopLon)
+
+document.getElementById("distanceKm").innerText =
+distance.toFixed(2)
+// reset every time
+document.getElementById("deliveryStatus").innerText = ""
+document.getElementById("placeOrderBtn").disabled = false
+if(distance <= 3) deliveryCharge = 30
+else if(distance <= 6) deliveryCharge = 50
+else if(distance <= 10) deliveryCharge = 80
+else if(distance <= 15) deliveryCharge = 120
+else{
+deliveryCharge = 0
+
+document.getElementById("deliveryCharge").innerText = 0
+
+document.getElementById("deliveryStatus").innerText =
+"🚫 Delivery unavailable for this location (>15 KM)"
+
+document.getElementById("placeOrderBtn").disabled = true
+
+updateTotal()
+
+return
+}
+
+document.getElementById("deliveryCharge").innerText = deliveryCharge
+
+updateTotal()
+
+}
+
+
+function calculateDistance(lat1, lon1, lat2, lon2){
+
+const R = 6371
+
+const dLat = (lat2-lat1) * Math.PI/180
+const dLon = (lon2-lon1) * Math.PI/180
+
+const a =
+Math.sin(dLat/2) * Math.sin(dLat/2) +
+Math.cos(lat1*Math.PI/180) *
+Math.cos(lat2*Math.PI/180) *
+Math.sin(dLon/2) *
+Math.sin(dLon/2)
+
+const c = 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
+
+return R*c
+
+}
+
+
+function placeOrder(){
+
+createOrder()
+
+}
+
+function createOrder(){
+
+let token = localStorage.getItem("token")
+
+let cakeId = product.id
+let kg = product.weight || 1
+let shape = product.shapes
+let address =
+document.getElementById("street").value + " " +
+document.getElementById("area").value + " " +
+document.getElementById("city").value + " " +
+document.getElementById("pincode").value
+
+let phone = document.getElementById("phone").value
+let message = document.getElementById("cakeMessage").value
+let date = document.getElementById("deliveryDate").value
+let slot = document.getElementById("deliverySlot").value
+fetch(`http://localhost:8080/api/orders/place?cakeId=${cakeId}&kg=${kg}&deliveryAddress=${encodeURIComponent(address)}&phoneNumber=${phone}&paymentMethod=CASH_ON_DELIVERY&eggType=EGG&cakeMessage=${encodeURIComponent(message)}&deliveryDate=${date}&deliverySlot=${slot}&cakeShape=${encodeURIComponent(shape)}&cakePrice=${cakePrice}&deliveryCharge=${deliveryCharge}`,{
+
+method:"POST",
+
+headers:{
+"Authorization":"Bearer "+token
+}
+
+})
+.then(res=>{
+if(!res.ok){
+throw new Error("Order API failed")
+}
+return res.json()
+})
+.then(data=>{
+
+console.log("Order success:",data)
+
+let orders = JSON.parse(localStorage.getItem("orders")) || []
+
+let newOrder = {
+
+userEmail: localStorage.getItem("email"),
+
+cake: product.name,
+
+image: "http://localhost:8080" + product.image,
+
+kg: kg,
+
+date: date,
+
+slot: slot,
+
+total: cakePrice + deliveryCharge,
+
+status: "PREPARING"
+
+}
+
+orders.push(newOrder)
+
+localStorage.setItem("orders", JSON.stringify(orders))
+
+document.getElementById("orderToast").style.display="block"
+
+setTimeout(()=>{
+window.location.href="bag.html"
+},1500)
+
+})
+
+}
+
+const slotSelect = document.getElementById("deliverySlot");
+const deliveryDate = document.getElementById("deliveryDate");
+const today = new Date().toISOString().split("T")[0];
+
+let dateInput = document.getElementById("deliveryDate");
+
+dateInput.setAttribute("min", today);
+dateInput.value = today;
+
+function loadSlots(prepTime){
+
+    let dropdown = document.getElementById("deliverySlot")
+
+    let selectedDate = document.getElementById("deliveryDate").value
+    let todayDate = new Date().toISOString().split("T")[0]
+
+  
+    dropdown.innerHTML = `<option value="">Select Slot</option>`
+
+    if(selectedDate === todayDate){
+
+        dropdown.innerHTML = `
+        <option value="Today" selected>
+         Today Delivery (Auto Assigned)
+        </option>`
+
+        dropdown.disabled = true   
+        document.getElementById("placeOrderBtn").disabled = false
+
+        return
+    }
+
+    dropdown.disabled = false
+
+    fetch(`http://localhost:8080/api/orders/delivery-slots?prepTime=${prepTime}`)
+    .then(res => res.json())
+    .then(data => {
+
+        data.tomorrow.forEach(s => {
+
+            let formatted = formatTimeSlot(s)
+
+            dropdown.innerHTML += `<option value="${formatted}">
+            ${formatted}</option>`
+
+        })
+
+    })
+}
+document.getElementById("deliveryDate").addEventListener("change", () => {
+    loadSlots(product.preparationTimeHours)
+})
+let now = new Date()
+let hour = now.getHours()
+
+if(hour >= 20){
+    let tomorrow = new Date()
+    tomorrow.setDate(now.getDate() + 1)
+
+    let minDate = tomorrow.toISOString().split("T")[0]
+    document.getElementById("deliveryDate").setAttribute("min", minDate)
+}
+window.onload = function(){
+
+    if(product){
+        let prep = product.preparationTimeHours || 1
+        loadSlots(prep)
+    }
+
+}
+function formatTimeSlot(slot){
+
+    let parts = slot.split(" - ")
+
+    let start = convertTo12Hour(parts[0])
+    let end = convertTo12Hour(parts[1])
+
+    return start + " - " + end
+}
+
+function convertTo12Hour(time){
+
+    let [hour, min] = time.split(":")
+    hour = parseInt(hour)
+
+    let ampm = hour >= 12 ? "PM" : "AM"
+
+    hour = hour % 12
+    if(hour === 0) hour = 12
+
+    return hour + " " + ampm
+}
+document.getElementById("checkoutForm").addEventListener("submit",function(e){
+
+    e.preventDefault() 
+
+    placeOrder() 
+
+})
+function autoComma(input){
+    input.addEventListener("blur", function(){
+
+        let value = input.value.trim()
+
+        if(value && !value.endsWith(",")){
+            input.value = value + ", "
+        }
+
+    })
+}
+
+// apply to all fields
+autoComma(document.getElementById("street"))
+autoComma(document.getElementById("area"))
+autoComma(document.getElementById("city"))
+</script>
+
+</body>
+</html>

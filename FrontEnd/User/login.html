@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lava Cakes - Login</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="icon" href="images/six.webp">
+
+<style>
+
+body{
+background:linear-gradient(135deg,#fff1f2,#ffe4e6);
+font-family: 'Segoe UI',sans-serif;
+}
+
+.login-card{
+border:none;
+border-radius:15px;
+}
+
+.bakery-title{
+font-weight:700;
+color:black;
+}
+.log{
+    font-weight:700;
+color:#e11d48;
+}
+
+.input-error{
+font-size:13px;
+color:#dc3545;
+display:none;
+}
+
+.form-control:focus{
+box-shadow:none;
+border-color:#e11d48;
+}
+
+.login-btn{
+background:#e11d48;
+border:none;
+}
+
+.login-btn:hover{
+background:#be123c;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container vh-100 d-flex align-items-center justify-content-center">
+
+<div class="row w-100 justify-content-center">
+
+<div class="col-12 col-sm-10 col-md-7 col-lg-5">
+
+<div class="card shadow-lg login-card p-4">
+
+<h3 class="text-center bakery-title mb-4">
+🍰 <span class="log">Lava</span> Cakes Login
+</h3>
+
+<div class="mb-3">
+<label>Email</label>
+<input type="email" id="email" class="form-control">
+
+<div id="emailError" class="input-error">
+Invalid email or password
+</div>
+</div>
+
+<div class="mb-3">
+<label>Password</label>
+<input type="password" id="password" class="form-control">
+<a href="forgot.html">Forgot Password</a>
+<div id="passwordError" class="input-error">
+Invalid email or password
+</div>
+</div>
+
+<button class="btn login-btn text-white w-100"
+onclick="login()">
+Login
+</button>
+
+<p class="text-center mt-3">
+Don't have account?
+<a href="register.html">Register</a>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- <script src="js/config.js"></script> -->
+<script src="js/auth.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lava Cakes - My Orders</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="icon" href="images/six.webp">
+
+<style>
+
+body{
+background:#f5f5f5;
+font-family:Arial;
+}
+
+.order-card{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-bottom:25px;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.cake-img{
+width:100%;
+border-radius:8px;
+object-fit:cover;
+}
+
+.timeline{
+position:relative;
+display:flex;
+justify-content:space-between;
+margin-top:30px;
+}
+
+.timeline-bg{
+position:absolute;
+top:10px;
+left:0;
+right:0;
+height:4px;
+background:#ddd;
+z-index:1;
+}
+
+.timeline-progress{
+position:absolute;
+top:10px;
+left:0;
+height:4px;
+background:#28a745;
+z-index:2;
+transition:0.4s;
+}
+
+.step{
+text-align:center;
+flex:1;
+position:relative;
+z-index:3;
+}
+
+.circle{
+width:20px;
+height:20px;
+border-radius:50%;
+background:#ccc;
+margin:auto;
+margin-bottom:5px;
+}
+
+.step.active .circle{
+background:#28a745;
+}
+
+.step span{
+font-size:13px;
+}
+
+.rating{
+font-size:22px;
+color:#ccc;
+cursor:pointer;
+}
+
+.rating.active{
+color:gold;
+}
+
+@media(max-width:768px){
+
+.step span{
+font-size:11px;
+}
+
+.order-card{
+padding:15px;
+}
+
+}
+.delivery-bubble{
+position:absolute;
+top:-45px; 
+left:50%;
+transform:translateX(-50%);
+background:#ffffff;
+padding:10px 12px;
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+border-left:4px solid #28a745;
+max-width:300px;
+width:max-content;
+z-index:10;
+text-align:left;
+}
+
+
+.delivery-bubble::after{
+content:"";
+position:absolute;
+bottom:-10px;
+left:50%;
+transform:translateX(-50%);
+border-width:8px;
+border-style:solid;
+border-color:#ffffff transparent transparent transparent;
+}.delivery-bubble{
+animation:fadeInUp 0.4s ease;
+}
+@media(max-width:768px){
+
+.delivery-bubble{
+top:-40px;             
+font-size:12px;
+padding:8px 10px;
+max-width:80vw;        
+}
+
+.delivery-bubble h6{
+font-size:13px;
+margin-bottom:5px;
+}
+.delivery-bubble{
+word-break:break-word;
+}
+}
+@keyframes fadeInUp{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+</style>
+
+</head>
+
+<body >
+    
+<!--  Top Info Bar -->
+<div class="top-bar py-1 bg-light border-bottom">
+  <div class="container d-flex justify-content-between small">
+    <div>🚚 Same Day Delivery Available</div>
+    <div>📍 Delivering to Virudhachalam</div>
+  </div>
+</div>
+
+<!--  Navbar -->
+<nav class="navbar bg-white shadow-sm py-2">
+  <div class="container d-flex justify-content-between align-items-center">
+    
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold fs-4 text-dark m-0" href="index.html"><i class="fa-solid fa-angles-left"></i>
+      <span class="text-danger">Lava</span> Cakes
+    </a>
+
+    <!-- Desktop Search -->
+    <div class="d-none d-lg-block w-50 position-relative">
+      <input type="text" id="desktopSearch"
+             class="form-control rounded-pill ps-4"
+             placeholder="Search cakes, flavours..." onkeyup="handleSearch(event)">
+      <i class="fa-solid fa-magnifying-glass position-absolute"
+         style="top:50%; left:5px; transform:translateY(-50%);"></i>
+    </div>
+
+    <!-- Icons -->
+    <div class="d-flex align-items-center gap-3">
+
+      <!-- Mobile Search Icon -->
+      <i class="fa-solid fa-magnifying-glass fs-5 d-lg-none"
+         id="mobileSearchIcon"
+         style="cursor:pointer;"></i>
+
+
+
+      <a href="cart.html" class="position-relative text-dark">
+
+<i class="fa-solid fa-cart-shopping fs-5"></i>
+
+<span id="cartCount"
+class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill"
+style="font-size:10px;">
+0
+</span>
+
+</a>
+      
+     
+      <a href="bag.html" class="position-relative text-dark">
+
+<i class="fa-solid fa-bag-shopping fs-5"></i>
+
+<span id="bagCount"
+class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill"
+style="font-size:10px;">
+0
+</span>
+
+</a>
+     <a href="login.html"
+   class="text-dark d-lg-none position-relative"
+   id="mobileUserIcon">
+
+  <i class="fa-solid fa-user fs-5"></i>
+
+  <!-- login status badge -->
+  <span id="userStatusBadge">
+  </span>
+
+</a>
+<div id="userDropdown" class="user-dropdown">
+  <div id="logoutBtn">Logout</div>
+  <div id="cancelBtn">Cancel</div>
+</div>
+     <!--  Desktop Login Button -->
+  <a href="login.html" id="loginBtn" class="btn btn-outline-dark btn-sm d-none d-lg-block">
+    Login
+  </a>
+
+    </div>
+
+  </div>
+</nav>
+<!--  Full Screen Search Overlay -->
+<div id="searchOverlay" class="search-overlay">
+
+  <div class="search-container">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="m-0">Search</h5>
+      <i class="fa-solid fa-xmark fs-4"
+         id="closeSearch"
+         style="cursor:pointer;"></i>
+    </div>
+
+    <input type="text"
+           id="searchInput"
+           class="form-control form-control-lg"
+           placeholder="Search cakes..."
+           autocomplete="off" onkeypress="mobileSearch(event)">
+<div id="suggestionsBox" class="suggestions-box"></div>
+    <!--  Search History -->
+    <div id="searchHistory" class="mt-3"></div>
+
+  </div>
+
+</div>
+
+<!-- Mobile Search Box -->
+<div class="container d-lg-none mt-2" id="mobileSearchBox" style="display:none;">
+<input type="text"
+id="mobileSearchInput"
+class="form-control rounded-pill"
+placeholder="Search cakes..."
+onkeypress="mobileSearch(event)">
+</div>
+
+
+<section class="container py-5">
+<h2 class="fw-bold mb-4">
+
+
+
+<span class="text-danger">My</span> Orders
+
+</h2>
+
+<div id="ordersContainer"></div>
+</section>
+<script>
+
+// LOGIN CHECK
+let token = localStorage.getItem("token")
+
+if(!token){
+window.location.href="login.html"
+}
+
+// LOAD USER ORDERS
+fetch("http://localhost:8080/api/orders/my-orders",{
+headers:{
+"Authorization":"Bearer "+token
+}
+})
+.then(res=>res.json())
+.then(data=>{
+
+let orders = data
+
+renderOrders(orders)
+
+})
+function renderOrders(orders){
+
+let container = document.getElementById("ordersContainer")
+
+if(orders.length === 0){
+
+container.innerHTML = `
+<div class="text-center mt-5">
+<h4>No Orders Yet</h4>
+<a href="index.html" class="btn btn-danger mt-3">
+Order Cakes
+</a>
+</div>
+`
+return
+}
+
+let html=""
+
+orders.forEach(order=>{
+
+
+let cake = order.cakeName
+let kg = order.orderedKg
+let date = order.deliveryDate
+let slot = order.deliverySlot
+let total = order.totalPrice
+let image = "http://localhost:8080"+order.imageUrl
+let status = order.status 
+let message = order.cakeMessage
+
+let progress = 33
+let preparing = "step active"
+let delivery = "step"
+let delivered = "step"
+
+if(status === "OUT_FOR_DELIVERY"){
+progress = 66
+delivery = "step active"
+}
+
+if(status === "DELIVERED"|| status === "COMPLETED"){
+progress = 100
+delivery = "step active"
+delivered = "step active"
+}
+
+html += `
+
+<div class="order-card"  >
+
+<div class="row align-items-center g-3">
+
+<div class="col-md-3 col-4">
+<img src="${image}" class="cake-img">
+</div>
+
+<div class="col-md-9 col-8">
+
+<h5>${cake}</h5>
+
+<p class="mb-1">${kg} KG</p>
+<p class="mb-1">${message}</p>
+
+<p class="mb-1">Delivery Date : ${date}</p>
+
+<p class="mb-1">Slot : ${slot}</p>
+
+<h6>Total ₹${total}</h6>
+
+</div>
+
+</div>
+
+<div class="timeline">
+
+<div class="timeline-bg"></div>
+
+<div class="timeline-progress" style="width:${progress}%"></div>
+
+<div class="${preparing}">
+<div class="circle"></div>
+<span>🍰 Preparing</span>
+</div>
+
+<!--  OUT FOR DELIVERY + BUBBLE -->
+<div class="${delivery}" style="position:relative;">
+<div class="circle"></div>
+<span>🚚 Out for Delivery</span>
+
+${status === "OUT_FOR_DELIVERY" && order.deliveryBoyName ? `
+
+<div class="delivery-bubble">
+
+
+<p class="mb-1"><b>Name:</b> ${order.deliveryBoyName} <i class="fa-solid fa-phone"></i> <a href="tel:${order.deliveryBoyPhone}">
+  +91${order.deliveryBoyPhone || "Not Available"}
+</a></p>
+
+
+
+</div>
+
+` : ""}
+
+</div>
+
+<div class="${delivered}">
+<div class="circle"></div>
+<span>📦 Delivered</span>
+</div>
+
+</div>
+
+
+${status === "DELIVERED" ? `
+
+
+` : ""}
+
+</div>
+
+`
+
+})
+
+container.innerHTML = html
+
+}
+
+// <div class="mt-4">
+
+// <b>Rate your cake</b>
+// <br>
+
+// <span class="rating" onclick="rate(this)">★</span>
+// <span class="rating" onclick="rate(this)">★</span>
+// <span class="rating" onclick="rate(this)">★</span>
+// <span class="rating" onclick="rate(this)">★</span>
+// <span class="rating" onclick="rate(this)">★</span>
+
+// </div>
+// STAR RATING
+// function rate(el){
+
+// let stars = el.parentElement.querySelectorAll(".rating")
+
+// stars.forEach(s => s.classList.remove("active"))
+
+// let index = [...stars].indexOf(el)
+
+// for(let i=0;i<=index;i++){
+// stars[i].classList.add("active")
+// }
+
+// }
+function goToDetails(cakeId, kg){
+
+
+window.location.href = `details.html?id=${cakeId}&weight=${kg}`
+
+}
+</script>
+<script src="js/script.js"></script>
+
+</body>
+</html>

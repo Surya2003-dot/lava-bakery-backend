@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lava Bakery</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="images/six.webp">
+</head>
+<body>
+
+<!-- Top Info Bar -->
+<div class="top-bar py-1 bg-light border-bottom">
+  <div class="container d-flex justify-content-between small">
+    <div>🚚 Same Day Delivery Available</div>
+    <div>📍 Delivering to Virudhachalam</div>
+  </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar bg-white shadow-sm py-2">
+  <div class="container d-flex justify-content-between align-items-center">
+
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold fs-4 text-dark m-0" href="#">
+      <span class="text-danger">Lava</span> Cakes
+    </a>
+
+    <!-- Desktop Search -->
+    <div class="d-none d-lg-block w-50 position-relative">
+      <input type="text" id="desktopSearch"
+             class="form-control rounded-pill ps-4"
+             placeholder="Search cakes, flavours..." >
+      <i class="fa-solid fa-magnifying-glass position-absolute"
+         style="top:50%; left:5px; transform:translateY(-50%);"></i>
+    </div>
+
+    <!-- Icons -->
+    <div class="d-flex align-items-center gap-3">
+
+      <!-- Mobile Search Icon -->
+      <i class="fa-solid fa-magnifying-glass fs-5 d-lg-none"
+         id="mobileSearchIcon"
+         style="cursor:pointer;"></i>
+
+   <a href="cart.html" class="position-relative text-dark">
+
+<i class="fa-solid fa-cart-shopping fs-5"></i>
+
+<span id="cartCount"
+class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill"
+style="font-size:10px;">
+0
+</span>
+   </a>
+<a href="bag.html" class="position-relative text-dark">
+
+<i class="fa-solid fa-bag-shopping fs-5"></i>
+
+<span id="bagCount"
+class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill"
+style="font-size:10px;">
+0
+</span>
+
+</a>
+     <a href="login.html"
+   class="text-dark d-lg-none position-relative"
+   id="mobileUserIcon">
+  
+  <i class="fa-solid fa-user fs-5"></i>
+
+  <!-- login status badge -->
+  <span id="userStatusBadge">
+  </span>
+
+</a>
+<div id="userDropdown" class="user-dropdown">
+  <div id="logoutBtn">Logout</div>
+  <div id="cancelBtn">Cancel</div>
+</div>
+     <!--  Desktop Login Button -->
+  <a href="login.html" id="loginBtn" class="btn btn-outline-dark btn-sm d-none d-lg-block">
+    Login
+  </a>
+
+    </div>
+
+  </div>
+</nav>
+<!-- Full Screen Search Overlay -->
+<div id="searchOverlay" class="search-overlay">
+
+  <div class="search-container">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="m-0">Search</h5>
+      <i class="fa-solid fa-xmark fs-4"
+         id="closeSearch"
+         style="cursor:pointer;"></i>
+    </div>
+
+    <input type="text"
+           id="searchInput"
+           class="form-control form-control-lg"
+           placeholder="Search cakes..."
+           autocomplete="off" onkeypress="mobileSearch(event)">
+<div id="suggestionsBox" class="suggestions-box"></div>
+    <!-- Search History -->
+    <div id="searchHistory" class="mt-3"></div>
+
+  </div>
+
+</div>
+
+<!-- Mobile Search Box -->
+<div class="container d-lg-none mt-2" id="mobileSearchBox" style="display:none;">
+<input type="text"
+id="mobileSearchInput"
+class="form-control rounded-pill"
+placeholder="Search cakes..."
+onkeypress="mobileSearch(event)">
+</div>
+<!--  HERO SECTION -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- Left Content -->
+      <div class="col-lg-6 text-center text-lg-start">
+        <h1 class="hero-title">
+          Freshly Baked <span class="text-danger">Happiness</span> 
+        </h1>
+
+        <p class="hero-subtitle">
+          Celebrate every special moment with our delicious handcrafted cakes.
+          Premium quality ingredients. <i class="text-danger fw-bold" >Same day delivery available</i>.
+        </p>
+
+        <div class="mt-4">
+          <a href="#cakes" class="btn btn-danger btn-lg me-3">
+            Order Now
+          </a>
+
+          <a href="#" class="btn btn-outline-dark btn-lg">
+            Explore Menu
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Image -->
+      <div class="col-lg-6 text-center mt-5 mt-lg-0">
+        <img src="images/one.png"
+             alt="Cake"
+             class="img-fluid hero-img">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Category Icons -->
+<div class="container py-4">
+
+<h4 class="fw-bold mb-2">Select <span class="text-danger">Flavour</span></h4>
+
+<div class="category-slider">
+
+<div class="category-track">
+
+
+<div class="category-item text-center" onclick="openCategory('ALL')">
+<img src="images/one.png" class="category-img">
+<p class="mt-2">All Cakes</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Cheese Cake')">
+<img src="images/two.png" class="category-img">
+<p class="mt-2">Cheese Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Velvet Flavoured Cake')">
+<img src="images/three.png" class="category-img">
+<p class="mt-2">Velvet Flavoured Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Dream Flavoured Cake')">
+<img src="images/six.webp" class="category-img">
+<p class="mt-2">Dream Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Butter Cream Cake')">
+<img src="images/five.png" class="category-img">
+<p class="mt-2">Butter Cream Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Fresh Cream Cake')">
+<img src="images/two.png" class="category-img">
+<p class="mt-2">Fresh Cream Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Lava Special Cake')">
+<img src="images/three.png" class="category-img">
+<p class="mt-2">Lava Special Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Chocolate Flavoured Cake')">
+<img src="images/six.webp" class="category-img">
+<p class="mt-2">Chocolate Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Fruit Flavoured Cake')">
+<img src="images/five.png" class="category-img">
+<p class="mt-2">Fruit Falvoured Cake</p>
+</div>
+
+
+<!-- DUPLICATE ITEMS FOR INFINITE SCROLL -->
+
+<div class="category-item text-center" onclick="openCategory('ALL')">
+<img src="images/one.png" class="category-img">
+<p class="mt-2">All Cakes</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Cheese Cake')">
+<img src="images/two.png" class="category-img">
+<p class="mt-2">Cheese Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Velvet Flavoured Cake')">
+<img src="images/three.png" class="category-img">
+<p class="mt-2">Velvet Flavoured Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Dream Flavoured Cake')">
+<img src="images/six.webp" class="category-img">
+<p class="mt-2">Dream Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Butter Cream Cake')">
+<img src="images/five.png" class="category-img">
+<p class="mt-2">Butter Cream Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Fresh Cream Cake')">
+<img src="images/two.png" class="category-img">
+<p class="mt-2">Fresh Cream Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Lava Special Cake')">
+<img src="images/three.png" class="category-img">
+<p class="mt-2">Lava Special Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Chocolate Flavoured Cake')">
+<img src="images/six.webp" class="category-img">
+<p class="mt-2">Chocolate Cake</p>
+</div>
+
+<div class="category-item text-center" onclick="openCategory('Fruit Flavoured Cake')">
+<img src="images/five.png" class="category-img">
+<p class="mt-2">Fruit Falvoured Cake</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="container pb-5">
+
+  <!-- MOBILE ONLY CAROUSEL -->
+  <div id="promoCarousel" class="carousel slide d-md-none" 
+       data-bs-ride="carousel">
+
+    <div class="carousel-inner">
+
+      <!-- Slide 1 -->
+      <div class="carousel-item active"   >
+        <div class="promo-card p-4 shadow-sm" onclick="openCategory('Chocolate Flavoured Cake')">
+          <div class="row align-items-center">
+            <div class="col-6" >
+              <h4 class="fw-bold mb-2">A Slice of Celebration</h4>
+              <p class="text-muted small">
+                Perfect cakes for birthdays and happy moments.
+              </p>
+              <button class="btn btn-danger btn-sm mt-2"  >
+                Order Now
+              </button>
+            </div>
+            <div class="col-6 text-end">
+              <img src="images/six.webp"
+                   class="img-fluid promo-img">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="carousel-item"  >
+        <div class="promo-card p-4 shadow-sm" onclick="openCategory('Lava Special cake')">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <h4 class="fw-bold mb-2">Trendy Flavours</h4>
+              <p class="text-muted small">
+                Discover new and exciting cake flavours.
+              </p>
+              <button class="btn btn-danger btn-sm mt-2">
+                Order Now
+              </button>
+            </div>
+            <div class="col-6 text-end">
+              <img src="images/one.png"
+                   class="img-fluid promo-img">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Controls -->
+    <button class="carousel-control-prev"
+            type="button"
+            data-bs-target="#promoCarousel"
+            data-bs-slide="prev">
+      <span class="carousel-control-prev-icon custom-arrow"></span>
+    </button>
+
+    <button class="carousel-control-next"
+            type="button"
+            data-bs-target="#promoCarousel"
+            data-bs-slide="next">
+      <span class="carousel-control-next-icon custom-arrow"></span>
+    </button>
+
+  </div>
+
+
+  <!-- MEDIUM & LARGE NORMAL LAYOUT -->
+  <div class="row g-4 d-none d-md-flex">
+
+    <div class="col-md-6">
+      <div class="promo-card p-4 shadow-sm h-100"  onclick="openCategory('Chocolate Flavoured Cake')">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <h4 class="fw-bold mb-2">A Slice of Celebration</h4>
+            <p class="text-muted small">
+              Perfect cakes for birthdays and happy moments.
+            </p>
+            <button class="btn btn-danger btn-sm mt-2">
+              Order Now
+            </button>
+          </div>
+          <div class="col-6 text-end">
+            <img src="images/six.webp"
+                 class="img-fluid promo-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="promo-card p-4 shadow-sm h-100" onclick="openCategory('Lava Special cake')">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <h4 class="fw-bold mb-2">Trendy Flavours</h4>
+            <p class="text-muted small">
+              Discover new and exciting cake flavours.
+            </p>
+            <button class="btn btn-danger btn-sm mt-2">
+              Order Now
+            </button>
+          </div>
+          <div class="col-6 text-end">
+            <img src="images/one.png"
+                 class="img-fluid promo-img">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<!-- --------cakes----- -->
+ <section class="py-5 bg-light" id="cakes">
+  <div class="container">
+
+    <h4 class="fw-bold mb-4">
+     All Cakes 
+     <!-- <span class="text-muted">(5 items)</span> -->
+    </h4>
+
+    <div class="row g-2" id="cakeContainer">
+      <!-- Dynamic Cakes Here -->
+    </div>
+
+  </div>
+</section>
+<footer class="bakery-footer">
+
+<div class="container">
+
+<div class="row gy-4">
+
+<!-- Brand -->
+<div class="col-md-4">
+
+<h4 class="footer-logo">🍰 Lava Bakery</h4>
+
+<p class="footer-desc">
+Freshly baked cakes made with love. Celebrate your
+special moments with our delicious cakes.
+</p>
+
+<div class="social-icons">
+
+<a href="#"><i class="fa-brands fa-instagram"></i></a>
+<a href="#"><i class="fa-brands fa-facebook"></i></a>
+<a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+
+</div>
+
+</div>
+
+<!-- Links -->
+<div class="col-md-4">
+
+<h5 class="footer-title">Quick Links</h5>
+
+<ul class="footer-links">
+
+<li><a href="index.html">Home</a></li>
+<li><a href="#cakes">All Cakes</a></li>
+<li><a href="orders.html">My Orders</a></li>
+<li><a href="#">Contact</a></li>
+
+</ul>
+
+</div>
+
+<!-- Contact -->
+<div class="col-md-4">
+
+<h5 class="footer-title">Contact Us</h5>
+
+<p>📍 Virudhachalam, Tamil Nadu</p>
+<p>📞 +91 98765 43210</p>
+<p>✉ support@lavabakery.com</p>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="footer-bottom text-center">
+
+© 2026 Lava Bakery • Made with ❤️
+
+</div>
+
+</div>
+
+</footer>
+<!--  Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="js/config.js"></script>
+<script src="js/cakes.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Delivery Boys</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#f6f6f6;
+overflow-x:hidden;
+font-family:Arial, sans-serif;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:230px;
+height:100vh;
+background:#111;
+color:white;
+position:fixed;
+left:0;
+top:0;
+padding-top:20px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+padding:12px;
+text-decoration:none;
+}
+
+.sidebar a:hover{
+background:#333;
+}
+
+/* CONTENT */
+.content{
+margin-left:230px;
+padding:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h4 class="text-center mb-4">Admin</h4>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="orders.html">Orders</a>
+<a href="cakes.html">Cakes</a>
+<a href="users.html">Users</a>
+<a href="deliveryboy.html">Delivery Boy</a>
+
+<a href="#" onclick="logout()">Logout</a>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+<h2 class="m-0">Delivery Boys</h2>
+
+<button class="btn btn-success" onclick="openAddModal()">
++ Add Delivery Boy
+</button>
+</div>
+
+<!-- SEARCH -->
+<input type="text" id="search" class="form-control mb-3" placeholder="🔍 Search..." onkeyup="searchData()">
+
+<!-- TABLE -->
+<div class="card p-3 shadow-sm">
+
+<table class="table table-bordered text-center">
+
+<thead class="table-dark">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Phone</th>
+<th>Username</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="table"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal fade" id="addModal">
+<div class="modal-dialog">
+<div class="modal-content p-3">
+
+<h5>Add Delivery Boy</h5>
+
+<input id="name" class="form-control mb-2" placeholder="Name">
+<input id="phone" class="form-control mb-2" placeholder="Phone">
+<input id="username" class="form-control mb-2" placeholder="Username">
+<input id="password" type="password" class="form-control mb-2" placeholder="Password">
+
+<div class="d-flex gap-2">
+<button class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-success w-100" onclick="add()">Add</button>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal fade" id="editModal">
+<div class="modal-dialog">
+<div class="modal-content p-3">
+
+<h5>Edit Delivery Boy</h5>
+
+<input id="editName" class="form-control mb-2" placeholder="Name">
+<input id="editPhone" class="form-control mb-2" placeholder="Phone">
+<input id="editUsername" class="form-control mb-2" placeholder="Username">
+<input id="editPassword" type="password" class="form-control mb-2" placeholder="New Password (optional)">
+
+<div class="d-flex gap-2">
+<button class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+<button class="btn btn-primary w-100" onclick="update()">Update</button>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- TOAST -->
+<div id="toastBox" style="
+position:fixed;
+bottom:20px;
+right:20px;
+background:#28a745;
+color:white;
+padding:10px 15px;
+border-radius:6px;
+display:none;
+z-index:9999;
+"></div>
+  
+
+  <div class="modal fade" id="historyModal">
+<div class="modal-dialog modal-lg">
+<div class="modal-content p-3">
+
+<h5>📜 Delivery History</h5>
+
+<table class="table table-bordered text-center mt-3">
+
+<thead class="table-dark">
+<tr>
+<th>Order ID</th>
+<th>Customer</th>
+<th>Address</th>
+<th>Cake Price</th>
+<th>Delivery Charge</th>
+<th> Total Amount</th>
+<th>Date</th>
+</tr>
+</thead>
+
+<tbody id="historyTable"></tbody>
+
+</table>
+
+</div>
+</div>
+</div>
+<script>
+
+const token = localStorage.getItem("adminToken")
+let allData = []
+let editId = null
+
+if(!token){
+window.location.href="login.html"
+}
+
+//  LOAD
+function load(){
+
+fetch("http://localhost:8080/api/admin/delivery",{
+headers:{ "Authorization":"Bearer "+token }
+})
+.then(res=>res.json())
+.then(data=>{
+allData = data
+render(data)
+})
+
+}
+
+// RENDER
+function render(data){
+
+let html=""
+
+data.forEach(d=>{
+
+html+=`
+<tr>
+<td>${d.id}</td>
+<td>${d.name}</td>
+<td>${d.phone}</td>
+<td>${d.username}</td>
+
+<td>
+<button class="btn btn-sm btn-primary" onclick="openEdit(${d.id})">
+<i class="fa fa-pen"></i>
+</button>
+
+<button class="btn btn-sm btn-danger" onclick="del(${d.id})">
+<i class="fa fa-trash"></i>
+</button>
+
+<button class="btn btn-sm btn-dark" onclick="openHistory(${d.id})">
+<i class="fa fa-clock-rotate-left"></i>
+</button>
+</td>
+</tr>
+`
+
+})
+
+table.innerHTML = html
+
+}
+
+// OPEN ADD
+function openAddModal(){
+new bootstrap.Modal(addModal).show()
+}
+
+//  ADD
+function add(){
+
+let data = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    username: document.getElementById("username").value,
+    password: document.getElementById("password").value
+}
+
+if(!data.name || !data.phone || !data.username || !data.password){
+    showToast("Fill all fields ❌")
+    return
+}
+
+fetch("http://localhost:8080/api/admin/delivery",{
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json",
+        "Authorization":"Bearer "+token
+    },
+    body: JSON.stringify(data)
+})
+.then(()=>{
+    showToast("Added ✅")
+    load()
+    bootstrap.Modal.getInstance(document.getElementById("addModal")).hide()
+    clearForm() 
+})
+}
+function clearForm(){
+document.getElementById("name").value=""
+document.getElementById("phone").value=""
+document.getElementById("username").value=""
+document.getElementById("password").value=""
+}
+
+//  OPEN EDIT
+function openEdit(id){
+
+let d = allData.find(x=>x.id===id)
+
+editId = id
+
+editName.value = d.name
+editPhone.value = d.phone
+editUsername.value = d.username
+editPassword.value = ""
+
+new bootstrap.Modal(editModal).show()
+
+}
+
+//  UPDATE
+function update(){
+
+let data = {
+name: editName.value,
+phone: editPhone.value,
+username: editUsername.value,
+password: editPassword.value
+}
+
+fetch(`http://localhost:8080/api/admin/delivery/${editId}`,{
+method:"PUT",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+token
+},
+body: JSON.stringify(data)
+})
+.then(()=>{
+showToast("Updated ✏️")
+load()
+bootstrap.Modal.getInstance(editModal).hide()
+})
+
+}
+
+//  DELETE
+function del(id){
+
+if(!confirm("Delete?")) return
+
+fetch(`http://localhost:8080/api/admin/delivery/${id}`,{
+method:"DELETE",
+headers:{ "Authorization":"Bearer "+token }
+})
+.then(()=>{
+showToast("Deleted 🗑️")
+load()
+})
+
+}
+
+//  SEARCH
+function searchData(){
+
+let v = search.value.toLowerCase()
+
+let filtered = allData.filter(d=>
+d.name.toLowerCase().includes(v)
+)
+
+render(filtered)
+
+}
+
+//  LOGOUT
+function logout(){
+localStorage.removeItem("adminToken")
+location.href="login.html"
+}
+
+//  TOAST
+function showToast(msg){
+
+toastBox.innerText = msg
+toastBox.style.display = "block"
+toastBox.style.background = msg.includes("❌") ? "#dc3545" : "#28a745"
+
+setTimeout(()=> toastBox.style.display="none",2000)
+
+}
+
+
+//Delivery Boy History
+function openHistory(id){
+
+fetch(`http://localhost:8080/api/admin/delivery/${id}/history`,{
+headers:{
+"Authorization":"Bearer "+token
+}
+})
+.then(res=>res.json())
+.then(data=>{
+
+let html=""
+
+if(data.length === 0){
+html = `<tr><td colspan="5">No deliveries yet ❌</td></tr>`
+}else{
+
+data.forEach(o=>{
+
+html+=`
+<tr>
+<td>${o.orderId}</td>
+<td>${o.customerName}</td>
+<td>${o.address}</td>
+<td>${o.cakePrice}</td>
+<td>${o.deliveryCharge}</td>
+
+<td>₹${o.totalAmount}</td>
+<td>${new Date(o.deliveredAt).toLocaleString()}</td>
+</tr>
+`
+
+})
+
+}
+
+document.getElementById("historyTable").innerHTML = html
+
+new bootstrap.Modal(document.getElementById("historyModal")).show()
+
+})
+}
+// INIT
+load()
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
