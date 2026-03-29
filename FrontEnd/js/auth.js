@@ -68,7 +68,7 @@ emailError.style.display="block";
 return;
 }
 
- fetch("https://lava-bakery-backend.onrender.com/api/auth/send-register-otp",{
+ fetch("https://lava-bakery-backend.onrender.com/auth/send-register-otp",{
 method:"POST",
 
 headers:{
