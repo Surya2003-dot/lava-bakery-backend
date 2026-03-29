@@ -33,7 +33,10 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getServletPath();
-
+        if (request.getMethod().equals("OPTIONS")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         // ✅ SKIP PUBLIC APIs (FAST EXIT)
         if (isPublicPath(path)) {
             filterChain.doFilter(request, response);
