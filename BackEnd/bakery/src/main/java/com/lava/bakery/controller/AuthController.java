@@ -106,7 +106,7 @@ public class AuthController {
             return "Email already exists";
         }
 
-        otpService.sendOtp(email);
+//        otpService.sendOtp(email);
 
         return "OTP sent successfully";
     }
