@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
@@ -28,17 +29,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
                 .csrf(csrf -> csrf.disable())
+                // Link to the configuration source below
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
                 .authorizeHttpRequests(auth -> auth
+                        // THIS LINE IS CRITICAL: Permitting the browser's "preflight" check
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        // ✅ PUBLIC APIs
+
                         .requestMatchers(
                                 "/",
                                 "/api/auth/**",
@@ -49,36 +50,30 @@ public class SecurityConfig {
                                 "/uploads/**"
                         ).permitAll()
 
-                        // ✅ ADMIN APIs
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        // ❗ EVERYTHING ELSE
                         .anyRequest().authenticated()
                 )
-
-                // ✅ JWT FILTER
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
     // 🌐 CORS CONFIG (FULLY FLEXIBLE)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-
         CorsConfiguration config = new CorsConfiguration();
 
-
-        config.setAllowedOriginPatterns(List.of("*"));
+        // Use setAllowedOrigins instead of Patterns for better compatibility
+        config.setAllowedOrigins(List.of(
+                "https://unique-cheesecake-ca8362.netlify.app",
+                "http://localhost:5500"
+        ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
-        config.setAllowedHeaders(List.of("*"));
-
-        config.setAllowCredentials(false);
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-
         return source;
     }
     // 🔐 Password Encoder
