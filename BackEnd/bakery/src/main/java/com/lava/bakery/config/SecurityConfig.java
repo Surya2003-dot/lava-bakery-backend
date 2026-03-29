@@ -32,10 +32,7 @@ public class SecurityConfig {
         http
                 // 1. Disable CSRF for API usage
                 .csrf(csrf -> csrf.disable())
-
-                // 2. Enable CORS using your corsConfigurationSource bean
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
+                .cors(cors -> cors.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -59,25 +56,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-    // 🌐 CORS CONFIG (FULLY FLEXIBLE)
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-
-        // Explicitly allow your Netlify frontend
-        config.setAllowedOrigins(java.util.List.of(
-                "https://unique-cheesecake-ca8362.netlify.app",
-                "http://localhost:5500"
-        ));
-
-        config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(java.util.List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
     }
     // 🔐 Password Encoder
     @Bean
