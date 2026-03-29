@@ -67,19 +67,13 @@ public class SecurityConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        // ✅ Allow all origins (safe for development)
-        config.setAllowedOrigins(List.of("*"
-//                "http://127.0.0.1:5500",
-//                "http://localhost:5500",
-//                "https://unique-cheesecake-ca8362.netlify.app"
-        ));
-        // ✅ Allow all HTTP methods
+
+        config.setAllowedOriginPatterns(List.of("*"));
+
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // ✅ Allow all headers
         config.setAllowedHeaders(List.of("*"));
 
-        // ⚠️ Important for cookies / auth
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -87,7 +81,6 @@ public class SecurityConfig {
 
         return source;
     }
-
     // 🔐 Password Encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
