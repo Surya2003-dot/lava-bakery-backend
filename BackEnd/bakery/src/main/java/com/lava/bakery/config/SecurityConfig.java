@@ -69,7 +69,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "https://unique-cheesecake-ca8362.netlify.app"
+                "https://lava-bakery-backend.vercel.app"
         ));
 
         config.setAllowedMethods(List.of(

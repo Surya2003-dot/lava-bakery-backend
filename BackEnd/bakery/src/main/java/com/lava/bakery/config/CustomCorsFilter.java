@@ -17,7 +17,7 @@ public class CustomCorsFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        res.setHeader("Access-Control-Allow-Origin", "https://unique-cheesecake-ca8362.netlify.app");
+        res.setHeader("Access-Control-Allow-Origin", "https://lava-bakery-backend.vercel.app");
         res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "*");
         res.setHeader("Access-Control-Allow-Credentials", "true");
