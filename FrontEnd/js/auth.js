@@ -68,7 +68,7 @@ emailError.style.display="block";
 return;
 }
 
- fetch("https://lava-bakery-backend.onrender.com/auth/send-register-otp",{
+ fetch("https://lava-bakery-backend.onrender.com/api/auth/send-register-otp",{
 method:"POST",
 
 headers:{
@@ -122,7 +122,8 @@ otpBtn.innerText = "Resend OTP";
 })
 
 .catch(err=>{
-
+console.error("Error:", err);
+  alert("Something went wrong: " + err.message);
 emailError.innerText="OTP send failed";
 emailError.style.display="block";
 

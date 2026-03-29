@@ -31,7 +31,7 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
@@ -70,8 +70,8 @@ public class SecurityConfig {
 
         // ✅ Allow all origins (safe for development)
         config.setAllowedOrigins(List.of(
-                "http://127.0.0.1:5500",
-                "http://localhost:5500",
+//                "http://127.0.0.1:5500",
+//                "http://localhost:5500",
                 "https://unique-cheesecake-ca8362.netlify.app"
         ));
         // ✅ Allow all HTTP methods
