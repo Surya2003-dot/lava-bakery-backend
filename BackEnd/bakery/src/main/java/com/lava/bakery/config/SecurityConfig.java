@@ -55,6 +55,7 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        System.out.println("CORS CONFIG LOADED 🔥"); 
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
                 "https://unique-cheesecake-ca8362.netlify.app"
