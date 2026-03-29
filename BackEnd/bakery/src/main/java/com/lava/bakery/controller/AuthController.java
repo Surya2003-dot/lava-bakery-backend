@@ -96,20 +96,37 @@ public class AuthController {
     public String secure() {
         return "You accessed secured endpoint!";
     }
-
-    @PostMapping("/send-register-otp")
-    public String sendRegisterOtp(@RequestBody Map<String, String> request) {
-
-        String email = request.get("email");
-
-        if (userRepository.findByEmail(email).isPresent()) {
-            return "Email already exists";
-        }
-
+//
+//    @PostMapping("/send-register-otp")
+//    public String sendRegisterOtp(@RequestBody Map<String, String> request) {
+//
+//        String email = request.get("email");
+//
+//        if (userRepository.findByEmail(email).isPresent()) {
+//            return "Email already exists";
+//        }
+//
 //        otpService.sendOtp(email);
+//
+//        return "OTP sent successfully";
+//    }
+@PostMapping("/send-register-otp")
+public String sendRegisterOtp(@RequestBody Map<String, String> request) {
 
-        return "OTP sent successfully";
+    String email = request.get("email");
+
+    if (email == null || email.isEmpty()) {
+        throw new RuntimeException("Email is required");
     }
+
+    if (userRepository.findByEmail(email).isPresent()) {
+        return "Email already exists";
+    }
+
+    otpService.sendOtp(email); // enable this
+
+    return "OTP sent successfully";
+}
 
     @PostMapping("/send-forgot-otp")
     public String sendForgotOtp(@RequestBody Map<String, String> request) {
