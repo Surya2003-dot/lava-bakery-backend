@@ -30,15 +30,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                // 1. Disable CSRF for API usage
                 .csrf(csrf -> csrf.disable())
-                // Link to the configuration source below
+
+                // 2. Enable CORS using your corsConfigurationSource bean
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // THIS LINE IS CRITICAL: Permitting the browser's "preflight" check
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        // 🌟 THIS IS THE KEY LINE: Permit all OPTIONS (preflight) requests
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
 
                         .requestMatchers(
                                 "/",
@@ -62,14 +65,14 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Use setAllowedOrigins instead of Patterns for better compatibility
-        config.setAllowedOrigins(List.of(
+        // Explicitly allow your Netlify frontend
+        config.setAllowedOrigins(java.util.List.of(
                 "https://unique-cheesecake-ca8362.netlify.app",
                 "http://localhost:5500"
         ));
 
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+        config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(java.util.List.of("*"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
