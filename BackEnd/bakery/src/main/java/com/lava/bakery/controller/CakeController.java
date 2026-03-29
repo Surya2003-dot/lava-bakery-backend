@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "https://unique-cheesecake-ca8362.netlify.app")
 @RequestMapping("/api/cakes")
 public class CakeController {
 
