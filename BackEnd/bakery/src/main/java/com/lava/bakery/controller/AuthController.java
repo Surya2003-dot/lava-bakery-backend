@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://unique-cheesecake-ca8362.netlify.app")
 @RequestMapping("/api/auth")
 public class AuthController {
 
