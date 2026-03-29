@@ -37,8 +37,7 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
                         // ✅ PUBLIC APIs
                         .requestMatchers(
                                 "/",
@@ -69,10 +68,10 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // ✅ Allow all origins (safe for development)
-        config.setAllowedOrigins(List.of(
+        config.setAllowedOrigins(List.of("*"
 //                "http://127.0.0.1:5500",
 //                "http://localhost:5500",
-                "https://unique-cheesecake-ca8362.netlify.app"
+//                "https://unique-cheesecake-ca8362.netlify.app"
         ));
         // ✅ Allow all HTTP methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -94,14 +93,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfigurationSource().getCorsConfigurations().get("/**"));
 
-        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
-        bean.setOrder(0);
-        return bean;
-    }
 
 }
