@@ -69,7 +69,8 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "https://lava-bakery-backend.vercel.app"
+                "https://lava-bakery-backend.vercel.app",
+                "https://*.vercel.app"
         ));
 
         config.setAllowedMethods(List.of(
