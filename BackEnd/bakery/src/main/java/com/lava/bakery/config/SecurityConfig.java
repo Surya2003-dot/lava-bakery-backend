@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
+import org.springframework.http.HttpMethod;
 import java.util.List;
 
 @Configuration
@@ -26,19 +26,21 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
                 .authorizeHttpRequests(auth -> auth
+                        // Allow preflight requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // ✅ PUBLIC APIs
+                        // Public APIs
                         .requestMatchers(
                                 "/",
                                 "/api/auth/**",
@@ -49,36 +51,30 @@ public class SecurityConfig {
                                 "/uploads/**"
                         ).permitAll()
 
-                        // ✅ ADMIN APIs
+                        // Admin APIs
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        // ❗ EVERYTHING ELSE
+                        // Everything else
                         .anyRequest().authenticated()
                 )
-
-                // ✅ JWT FILTER
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // 🌐 CORS CONFIG (FULLY FLEXIBLE)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-
         CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOrigins(List.of("https://lava-bakery-backend.vercel.app", "http://localhost:3000"));
-
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://lava-bakery-backend.vercel.app"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
         config.setAllowedHeaders(List.of("*"));
-
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-
         return source;
     }
 
