@@ -37,7 +37,7 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ allow preflight
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/",
                                 "/api/auth/**",
@@ -55,29 +55,29 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-
-        CorsConfiguration config = new CorsConfiguration();
-
-        // ✅ USE THIS (important)
-        config.setAllowedOriginPatterns(List.of(
-                "https://lava-bakery-backend.vercel.app",
-                "https://*.vercel.app"
-        ));
-
-        config.setAllowedMethods(List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS"
-        ));
-
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//
+//        CorsConfiguration config = new CorsConfiguration();
+//
+//
+//        config.setAllowedOriginPatterns(List.of(
+//                "https://lava-bakery-backend.vercel.app",
+//                "https://*.vercel.app"
+//        ));
+//
+//        config.setAllowedMethods(List.of(
+//                "GET", "POST", "PUT", "DELETE", "OPTIONS"
+//        ));
+//
+//        config.setAllowedHeaders(List.of("*"));
+//        config.setAllowCredentials(true);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//
+//        return source;
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
