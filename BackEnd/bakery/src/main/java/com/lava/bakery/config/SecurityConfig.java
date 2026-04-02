@@ -5,6 +5,7 @@ import java.util.List;
 import com.lava.bakery.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
 @Configuration
 @EnableMethodSecurity
@@ -30,74 +32,68 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+    // -------------------- Security Filter Chain --------------------
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
+                .cors() // enables CORS support in Spring Security
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight requests
                         .requestMatchers(
                                 "/",
                                 "/api/auth/**",
                                 "/api/cakes/**",
                                 "/images/**",
                                 "/uploads/**"
-                        ).permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        ).permitAll() // public endpoints
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // admin only
+                        .anyRequest().authenticated() // everything else requires auth
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-    
 
+    // -------------------- CORS Filter --------------------
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000", // dev frontend
+                "https://lava-bakery-backend.vercel.app" // production frontend
+        ));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setExposedHeaders(List.of("Authorization")); // allow JWT header to be read by frontend
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
+    }
+
+    // -------------------- CORS Filter Registration --------------------
+    @Bean
+    public FilterRegistrationBean<CorsFilter> corsFilterRegistration(CorsFilter corsFilter) {
+        FilterRegistrationBean<CorsFilter> registration = new FilterRegistrationBean<>(corsFilter);
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE); // ensures CORS runs before Spring Security
+        return registration;
+    }
+
+    // -------------------- Password Encoder --------------------
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // -------------------- Authentication Manager --------------------
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-            throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }
-    @Bean
-    public org.springframework.web.filter.CorsFilter corsFilter() {
-
-        org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
-
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(java.util.List.of(
-                "http://localhost:3000",
-                "https://lava-bakery-backend.vercel.app"
-        ));
-
-        config.setAllowedHeaders(java.util.List.of("*"));
-        config.setAllowedMethods(java.util.List.of(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS"
-        ));
-
-        org.springframework.web.cors.UrlBasedCorsConfigurationSource source =
-                new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
-
-        source.registerCorsConfiguration("/**", config);
-
-        return new org.springframework.web.filter.CorsFilter(source);
-    }
-    @Bean
-    public org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> corsFilterRegistration(
-            org.springframework.web.filter.CorsFilter corsFilter) {
-
-        org.springframework.boot.web.servlet.FilterRegistrationBean<org.springframework.web.filter.CorsFilter> registration =
-                new org.springframework.boot.web.servlet.FilterRegistrationBean<>(corsFilter);
-
-        registration.setOrder(org.springframework.core.Ordered.HIGHEST_PRECEDENCE);
-
-        return registration;
     }
 }
