@@ -39,7 +39,6 @@ public class CakeController {
 
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String direction,
-
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String flavour,
@@ -165,7 +164,6 @@ public class CakeController {
 //  confirm save
             System.out.println("Saved at: " + filePath.toAbsolutePath());
 
-            //  create cake
             Cake cake = new Cake();
 
             cake.setName(name);
