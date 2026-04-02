@@ -60,9 +60,9 @@ public class SecurityConfig {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOriginPatterns(List.of(
+        config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "https://*.vercel.app"
+                "https://lava-bakery-backend.vercel.app"
         ));
 
         config.setAllowedMethods(List.of(
