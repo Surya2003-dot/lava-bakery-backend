@@ -59,31 +59,31 @@ public class SecurityConfig {
     }
 
     // -------------------- CORS Filter --------------------
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(
-                "http://localhost:3000", // dev frontend
-                "https://lava-bakery-backend.vercel.app/" // production frontend
-        ));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setExposedHeaders(List.of("Authorization")); // allow JWT header to be read by frontend
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return new CorsFilter(source);
-    }
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//        config.setAllowedOrigins(List.of(
+//                "http://localhost:3000", // dev frontend
+//                "https://lava-bakery-backend.vercel.app/" // production frontend
+//        ));
+//        config.setAllowedHeaders(List.of("*"));
+//        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        config.setExposedHeaders(List.of("Authorization")); // allow JWT header to be read by frontend
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//
+//        return new CorsFilter(source);
+//    }
 
     // -------------------- CORS Filter Registration --------------------
-    @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilterRegistration(CorsFilter corsFilter) {
-        FilterRegistrationBean<CorsFilter> registration = new FilterRegistrationBean<>(corsFilter);
-        registration.setOrder(Ordered.HIGHEST_PRECEDENCE); // ensures CORS runs before Spring Security
-        return registration;
-    }
+//    @Bean
+//    public FilterRegistrationBean<CorsFilter> corsFilterRegistration(CorsFilter corsFilter) {
+//        FilterRegistrationBean<CorsFilter> registration = new FilterRegistrationBean<>(corsFilter);
+//        registration.setOrder(Ordered.HIGHEST_PRECEDENCE); // ensures CORS runs before Spring Security
+//        return registration;
+//    }
 
     // -------------------- Password Encoder --------------------
     @Bean
