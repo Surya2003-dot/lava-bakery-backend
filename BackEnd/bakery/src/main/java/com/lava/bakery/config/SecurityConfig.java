@@ -55,30 +55,28 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//
-//        CorsConfiguration config = new CorsConfiguration();
-//
-//
-//        config.setAllowedOriginPatterns(List.of(
-//                "https://lava-bakery-backend.vercel.app",
-//                "https://*.vercel.app"
-//        ));
-//
-//        config.setAllowedMethods(List.of(
-//                "GET", "POST", "PUT", "DELETE", "OPTIONS"
-//        ));
-//
-//        config.setAllowedHeaders(List.of("*"));
-//        config.setAllowCredentials(true);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//
-//        return source;
-//    }
+    @Bean
+public CorsConfigurationSource corsConfigurationSource() {
 
+    CorsConfiguration config = new CorsConfiguration();
+
+    config.setAllowedOrigins(List.of(
+            "https://lava-bakery-backend.vercel.app",
+            "http://localhost:3000"
+    ));
+
+    config.setAllowedMethods(List.of(
+            "GET", "POST", "PUT", "DELETE", "OPTIONS"
+    ));
+
+    config.setAllowedHeaders(List.of("*"));
+    config.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+
+    return source;
+}
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
