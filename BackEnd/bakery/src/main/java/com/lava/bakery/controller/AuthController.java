@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(value = "https://lava-bakery-backend.vercel.app")
+//@CrossOrigin(origins = "https://lava-bakery-backend.vercel.app")
 @RequestMapping("/api/auth")
 public class AuthController {
 
