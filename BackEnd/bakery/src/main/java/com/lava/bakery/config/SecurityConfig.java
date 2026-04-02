@@ -65,7 +65,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000", // dev frontend
-                "https://lava-bakery-backend.vercel.app" // production frontend
+                "https://lava-bakery-backend.vercel.app/" // production frontend
         ));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
