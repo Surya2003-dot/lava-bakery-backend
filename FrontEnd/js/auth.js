@@ -15,7 +15,7 @@ fetch(`${API_BASE_URL}/auth/user/login`,{
 method:"POST",
 
 headers:{
-"Content-Type":"application/json","Access-Control-Allow-Origin": "*"
+"Content-Type":"application/json"
 },
 
 body:JSON.stringify({
@@ -72,7 +72,7 @@ return;
 method:"POST",
 
 headers:{
-"Content-Type":"application/json","Access-Control-Allow-Origin": "*"
+"Content-Type":"application/json"
 },
 
 body:JSON.stringify({
@@ -200,7 +200,7 @@ fetch(`${API_BASE_URL}/auth/register`,{
 method:"POST",
 
 headers:{
-"Content-Type":"application/json","Access-Control-Allow-Origin": "*"
+"Content-Type":"application/json"
 },
 
 body:JSON.stringify({
@@ -268,7 +268,7 @@ fetch(`${API_BASE_URL}/auth/send-forgot-otp`,{
 method:"POST",
 
 headers:{
-"Content-Type":"application/json","Access-Control-Allow-Origin": "*"
+"Content-Type":"application/json"
 },
 
 body:JSON.stringify({
