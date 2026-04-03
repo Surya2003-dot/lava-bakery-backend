@@ -138,8 +138,11 @@ public class OrderController {
     @GetMapping("/pending-count")
     public Map<String,Integer> getPendingCount(Authentication authentication){
 
-        String email = authentication.getName();
+        if(authentication == null){
+            return Map.of("count",0);
+        }
 
+        String email = authentication.getName();
         int count = orderService.getPendingCountByEmail(email);
 
         return Map.of("count",count);

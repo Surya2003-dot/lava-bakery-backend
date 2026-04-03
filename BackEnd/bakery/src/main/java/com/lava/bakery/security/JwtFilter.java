@@ -90,7 +90,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private boolean isPublicPath(String path) {
         return path.startsWith("/api/auth") ||
                 path.startsWith("/api/cakes") ||
-                path.startsWith("/api/orders") ||
+//                path.startsWith("/api/orders") ||
                 path.startsWith("/api/delivery") ||
                 path.startsWith("/images") ||
                 path.startsWith("/uploads") ||
