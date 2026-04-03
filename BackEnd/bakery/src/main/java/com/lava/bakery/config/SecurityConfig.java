@@ -26,8 +26,6 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -39,16 +37,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/cakes/**").permitAll() // ✅ GET only = public
+                        .requestMatchers(HttpMethod.GET, "/api/cakes/**").permitAll()
                         .requestMatchers("/uploads/**", "/images/**").permitAll()
-                        .anyRequest().authenticated()                                 // ✅ POST/PUT/DELETE need auth
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-    @Bean
-    @Bean
+
+    @Bean  // ✅ Only ONE @Bean here
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
@@ -57,12 +55,9 @@ public class SecurityConfig {
                 "http://127.0.0.1:5500",
                 "https://lavacakes.vercel.app"
         ));
-
         config.setAllowedMethods(List.of(
                 "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
         ));
-
-        // ❌ Never use "*" with allowCredentials(true)
         config.setAllowedHeaders(List.of(
                 "Authorization",
                 "Content-Type",
@@ -70,7 +65,6 @@ public class SecurityConfig {
                 "Origin",
                 "X-Requested-With"
         ));
-
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
@@ -79,7 +73,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-    // 🔐 Password Encoder
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
