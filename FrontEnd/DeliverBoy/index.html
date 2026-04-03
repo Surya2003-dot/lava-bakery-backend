@@ -112,7 +112,7 @@ toast.show()
 function getOrder(){
 
 let id = document.getElementById("orderId").value
-let token = localStorage.getItem("token")
+let token = localStorage.getItem("deliveryToken")
 
 if(!id){
     showToast("Enter Order ID ❌","danger")
@@ -200,7 +200,7 @@ function updateStatus(){
         return
     }
 
-    let token = localStorage.getItem("token")
+    let token = localStorage.getItem("deliveryToken")
     let deliveryBoyId = localStorage.getItem("deliveryBoyId")
 if(!deliveryBoyId){
     showToast("Login expired ❌","danger")
@@ -229,8 +229,7 @@ function markDelivered(){
         showToast("Load order first ❌","danger")
         return
     }
-
-    let token = localStorage.getItem("token")
+let token = localStorage.getItem("deliveryToken")
 
     fetch(`https://lava-bakery-backend.onrender.com/api/orders/${currentOrderId}/status?status=DELIVERED`,{
         method:"PUT",
