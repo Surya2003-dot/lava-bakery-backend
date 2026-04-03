@@ -1,8 +1,10 @@
 # ==============================
 # MAVEN
 # ==============================
-target/
-
+# Allow only JAR file for Docker
+!target/*.jar
+# Ignore everything in target
+target/*
 # ==============================
 # MAVEN WRAPPER
 # ==============================
