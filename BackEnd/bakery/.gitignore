@@ -1,19 +1,12 @@
 # ==============================
 # MAVEN
 # ==============================
-
-# Ignore everything in target
-target/*
-
-# Allow only JAR file for Docker
-!target/*.jar
-
+target/
 
 # ==============================
 # MAVEN WRAPPER
 # ==============================
 .mvn/wrapper/maven-wrapper.jar
-
 
 # ==============================
 # STS / SPRING TOOL SUITE
@@ -26,7 +19,6 @@ target/*
 .springBeans
 .sts4-cache
 
-
 # ==============================
 # INTELLIJ
 # ==============================
@@ -34,7 +26,6 @@ target/*
 *.iws
 *.iml
 *.ipr
-
 
 # ==============================
 # NETBEANS
@@ -47,7 +38,6 @@ target/*
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
-
 
 # ==============================
 # VS CODE
