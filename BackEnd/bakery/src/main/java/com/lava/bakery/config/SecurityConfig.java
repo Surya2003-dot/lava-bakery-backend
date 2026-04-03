@@ -38,7 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/delivery/login").permitAll()
                         .requestMatchers("/api/delivery/**").hasRole("DELIVERY")
-                        .requestMatchers("/api/orders/**").hasAnyRole("ADMIN","DELIVERY")
+                        .requestMatchers("/api/orders/**").permitAll()
                         .requestMatchers("/api/cakes/**").permitAll()
                         .requestMatchers("/uploads/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
