@@ -77,6 +77,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
+            if (user == null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                List.of(new SimpleGrantedAuthority("ROLE_DELIVERY"))
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
 
         } catch (Exception e) {
             // ❗ Never break request flow

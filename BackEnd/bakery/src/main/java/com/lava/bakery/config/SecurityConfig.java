@@ -38,6 +38,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/delivery/login").permitAll()
+                        .requestMatchers("/api/orders/**")
+                        .hasAnyRole("ADMIN","DELIVERY")
                         .requestMatchers(HttpMethod.GET, "/api/cakes/**").permitAll()
                         .requestMatchers("/uploads/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
