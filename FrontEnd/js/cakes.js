@@ -220,8 +220,8 @@ return
 }
 
 fetch("https://lava-bakery-backend.onrender.com/api/cart",{
-// headers:{ "Authorization":"Bearer "+token }
-headers:{"Access-Control-Allow-Origin":"*" + token}
+
+headers:{"Authorization":"Bearer "+token}
 })
 .then(res=>res.json())
 .then(data=>{
