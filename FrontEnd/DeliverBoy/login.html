@@ -90,7 +90,7 @@ function login(){
     })
     .then(data => {
         console.log("LOGIN RESPONSE:", data)
-        localStorage.setItem("token", data.token)
+       localStorage.setItem("deliveryToken", data.token)
         localStorage.setItem("deliveryUser", username)
         localStorage.setItem("deliveryBoyId", data.id)
 
