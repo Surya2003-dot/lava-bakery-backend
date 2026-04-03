@@ -37,58 +37,48 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Allow preflight requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // Public APIs
-                        .requestMatchers(
-                                "/",
-                                "/api/auth/**",
-                                "/api/cakes/**",
-                                "/api/orders/**",
-                                "/api/delivery/**",
-                                "/images/**",
-                                "/uploads/**"
-                        ).permitAll()
-
-                        // Admin APIs
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        // Everything else
-                        .anyRequest().authenticated()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/cakes/**").permitAll() // ✅ GET only = public
+                        .requestMatchers("/uploads/**", "/images/**").permitAll()
+                        .anyRequest().authenticated()                                 // ✅ POST/PUT/DELETE need auth
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
     @Bean
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
         config.setAllowedOrigins(List.of(
-                "http://localhost:3000",
-                "http://localhost:5500",      // for Live Server dev
+                "http://localhost:5500",
                 "http://127.0.0.1:5500",
                 "https://lavacakes.vercel.app"
         ));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+        config.setAllowedMethods(List.of(
+                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
+        ));
+
+        // ❌ Never use "*" with allowCredentials(true)
         config.setAllowedHeaders(List.of(
                 "Authorization",
                 "Content-Type",
-                "X-Requested-With",
                 "Accept",
                 "Origin",
-                "Access-Control-Request-Method",
-                "Access-Control-Request-Headers"
-        ));   // allow all headers to avoid mismatch
+                "X-Requested-With"
+        ));
+
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
-        config.setMaxAge(3600L);   // cache preflight for 1 hour
+        config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }
-
     // 🔐 Password Encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
