@@ -100,7 +100,7 @@ margin-bottom:15px;
 
 <h4 class="text-center mb-4">Admin</h4>
 
-<a href="dashboard.html">Dashboard</a>
+<a href="index.html">Dashboard</a>
 <a href="orders.html">Orders</a>
 <a href="cakes.html">Cakes</a>
 <a href="users.html">Users</a>
@@ -207,10 +207,15 @@ const dashTo = document.getElementById("dashTo")
 
 // ================= LOAD DASHBOARD =================
 function loadDashboard(){
-
+if(!token){
+    window.location.href="login.html";
+    return;
+}
 const filter = dashFilter.value
 
-let url = `https://lava-bakery-backend.onrender.com/admin/dashboard?filter=${filter}`
+const API_BASE_URL = "https://lava-bakery-backend.onrender.com";
+
+let url = `${API_BASE_URL}/admin/dashboard?filter=${filter}`;
 
 // custom case
 if(filter === "custom"){
@@ -222,7 +227,6 @@ if(!from || !to) return
 
 url += `&from=${from}&to=${to}`
 }
-
 fetch(url,{
 method:"GET",
 headers:{
@@ -230,25 +234,30 @@ headers:{
 "Content-Type":"application/json"
 }
 })
-.then(res=>res.json())
+.then(res=>{
+    if(!res.ok){
+        throw new Error("Unauthorized / Forbidden");
+    }
+    return res.json();
+})
 .then(data=>{
 
-if(!data) return
+if(!data) return;
 
-document.getElementById("totalOrders").innerText = data.totalOrders
-document.getElementById("pending").innerText = data.pending
-document.getElementById("preparing").innerText = data.preparing
-document.getElementById("completed").innerText = data.completed
-document.getElementById("outForDelivery").innerText = data.outForDelivery
-document.getElementById("delivered").innerText = data.delivered
-document.getElementById("cancelled").innerText = data.cancelled
-document.getElementById("revenue").innerText = "₹" + data.totalRevenue
+document.getElementById("totalOrders").innerText = data.totalOrders;
+document.getElementById("pending").innerText = data.pending;
+document.getElementById("preparing").innerText = data.preparing;
+document.getElementById("completed").innerText = data.completed;
+document.getElementById("outForDelivery").innerText = data.outForDelivery;
+document.getElementById("delivered").innerText = data.delivered;
+document.getElementById("cancelled").innerText = data.cancelled;
+document.getElementById("revenue").innerText = "₹" + data.totalRevenue;
 
 })
 .catch(err=>{
-console.error("Dashboard error:", err)
-})
+console.error("Dashboard error:", err);
 
+});
 }
 
 // ================= FILTER CHANGE =================
