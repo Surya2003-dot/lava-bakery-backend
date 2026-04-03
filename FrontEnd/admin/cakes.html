@@ -253,7 +253,7 @@ font-size:11px;
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
 <h4 class="text-center mb-4">Admin</h4>
-<a href="dashboard.html">Dashboard</a>
+<a href="index.html">Dashboard</a>
 <a href="orders.html">Orders</a>
 <a href="cakes.html">Cakes</a>
 <a href="users.html">Users</a>
@@ -568,7 +568,7 @@ Add Cake
 Cancel
 </button>
 
-<button class="btn btn-primary w-100" onclick="updateCake()">
+<button class="btn btn-primary w-100"   onclick="updateCake()">
 Update Cake
 </button>
 </div>
@@ -933,7 +933,7 @@ if(editOffer.value){
     formData.append("offerPercentage", editOffer.value)
 }
 formData.append("badge", editBadge.value)
-formData.append("available", editAvailable.checked)
+formData.append("available", editAvailable.checked ? "true" : "false")
 formData.append("featured", editFeatured.value === "true")
 formData.append("preparationTimeHours", editPrepTime.value)
 formData.append("rating", editRating.value)
@@ -959,13 +959,23 @@ method:"PUT",
 headers:{ "Authorization":"Bearer "+token },
 body: formData
 })
-.then(res=>res.json())
-.then(()=>{
-showToast("Updated ✅")
-loadCakes()
-bootstrap.Modal.getInstance(editModal).hide()
+.then(res=>{
+    if(!res.ok){
+        return res.text().then(err=>{
+            throw new Error(err || "Update failed ❌");
+        });
+    }
+    return res.json();
 })
-
+.then(()=>{
+    showToast("Cake Updated Successfully ✅");
+    loadCakes();
+    bootstrap.Modal.getInstance(editModal).hide();
+})
+.catch(err=>{
+    console.error(err);
+    showToast(err.message || "Update failed ❌");
+});
 }
 
 
