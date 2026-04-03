@@ -291,8 +291,8 @@ if(!token){
 if(badge) badge.innerText=0
 return
 }
+fetch(`${API_BASE_URL}/cart`,{
 
-fetch("https://lava-bakery-backend.onrender.com/api/cart",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -316,16 +316,18 @@ if(!token){
 if(badge) badge.innerText = 0
 return
 }
-
-fetch("https://lava-bakery-backend.onrender.com/api/orders/pending-count",{
+fetch(`${API_BASE_URL}/orders/pending-count`,{
 headers:{
 "Authorization":"Bearer "+token
 }
 })
-.then(res=>res.json())
+.then(res=>{
+if(!res.ok){
+throw new Error("Forbidden / Unauthorized")
+}
+return res.json()
+})
 .then(data=>{
-
-console.log(data)   // debug
 
 let count = data.count || data.pendingCount || 0
 
@@ -353,8 +355,7 @@ if(!token){
 window.location.href="login.html"
 return
 }
-
-fetch("https://lava-bakery-backend.onrender.com/api/cart/add",{
+fetch(`${API_BASE_URL}/cart/add`,{
 
 method:"POST",
 
@@ -389,8 +390,7 @@ return
 }
 
 if(btn.classList.contains("cart-active")){
-
-fetch("https://lava-bakery-backend.onrender.com/api/cart",{
+fetch(`${API_BASE_URL}/cart`,{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -400,7 +400,7 @@ let item=cart.find(c=>c.cakeId==id)
 
 if(item){
 
-fetch(`https://lava-bakery-backend.onrender.com/api/cart/${item.id}`,{
+fetch(`${API_BASE_URL}/cart/${item.id}`,{
 method:"DELETE",
 headers:{ "Authorization":"Bearer "+token }
 })
@@ -414,8 +414,8 @@ updateCartCount()
 })
 
 }else{
+fetch(`${API_BASE_URL}/cart/add`,{
 
-fetch("https://lava-bakery-backend.onrender.com/api/cart/add",{
 
 method:"POST",
 
@@ -445,8 +445,7 @@ function restoreCartIcons(){
 let token=localStorage.getItem("token")
 
 if(!token) return
-
-fetch("https://lava-bakery-backend.onrender.com/api/cart",{
+fetch(`${API_BASE_URL}/cart`,{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -512,19 +511,23 @@ if(!token){
 if(badge) badge.innerText=0
 return
 }
-
-fetch("https://lava-bakery-backend.onrender.com/api/orders/pending-count",{
+fetch(`${API_BASE_URL}/orders/pending-count`,{
 headers:{ "Authorization":"Bearer "+token }
 })
-.then(res=>res.json())
-.then(data=>{
-
-if(badge){
-badge.innerText = data.count
+.then(res=>{
+if(!res.ok){
+throw new Error("Forbidden")
 }
-
+return res.json()
 })
-
+.then(data=>{
+if(badge){
+badge.innerText = data.count || 0
+}
+})
+.catch(err=>{
+console.log("Bag count error",err)
+})
 }
 // ===============================
 // category filter
