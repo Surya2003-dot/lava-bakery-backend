@@ -241,7 +241,7 @@ public class CakeService {
         if(image != null && !image.isEmpty()){
 
             String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-            String path = "uploads/" + fileName;
+            String path = "/app/uploads/" + fileName;
 
             Files.copy(image.getInputStream(), Paths.get(path));
 
@@ -348,7 +348,7 @@ public class CakeService {
 
         //  2. DELETE IMAGE
         try {
-            String imagePath = "uploads/" + Paths.get(cake.getImageUrl()).getFileName();
+            String imagePath = "/app/uploads/" + Paths.get(cake.getImageUrl()).getFileName();
             Files.deleteIfExists(Paths.get(imagePath));
         } catch (Exception e) {
             System.out.println("Image delete failed ❌");
