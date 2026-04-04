@@ -7,10 +7,10 @@ import com.lava.bakery.repository.CakeRepository;
 import com.lava.bakery.repository.CartRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import org.springframework.web.multipart.MultipartFile;
-
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import java.util.Map;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -18,7 +18,8 @@ import java.util.*;
 public class CakeService {
     private final CartRepository cartRepository;
     private final CakeRepository cakeRepository;
-
+    @Autowired
+    private Cloudinary cloudinary;
     public CakeService(CakeRepository cakeRepository, CartRepository cartRepository) {
         this.cakeRepository = cakeRepository;
         this.cartRepository = cartRepository;
@@ -223,10 +224,11 @@ public class CakeService {
         cake.setOfferPercentage(offerPercentage);
         cake.setBadge(badge);
         cake.setAvailable(available);
-        if(!available){
 
+        if(!available){
             cartRepository.deleteByCakeId(id);
         }
+
         cake.setFeatured(featured);
         cake.setPreparationTimeHours(preparationTimeHours);
         cake.setRating(rating);
@@ -237,19 +239,43 @@ public class CakeService {
         cake.setMinOrderKg(minOrderKg);
         cake.setMaxOrderKg(maxOrderKg);
 
-        // IMAGE UPDATE
+        // 🔥 IMAGE UPDATE (OLD DELETE + NEW UPLOAD)
         if(image != null && !image.isEmpty()){
 
-            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-            String path = "/app/uploads/" + fileName;
+            try {
+                // 🔴 1. DELETE OLD IMAGE
+                String oldImageUrl = cake.getImageUrl();
 
-            Files.copy(image.getInputStream(), Paths.get(path));
+                if(oldImageUrl != null && oldImageUrl.contains("cloudinary")){
 
-            cake.setImageUrl("/uploads/" + fileName);
+                    String publicId = oldImageUrl
+                            .substring(oldImageUrl.lastIndexOf("/") + 1)
+                            .split("\\.")[0];
+
+                    cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+
+                    System.out.println("Old image deleted ✅");
+                }
+
+            } catch (Exception e){
+                System.out.println("Old image delete failed ❌");
+            }
+
+            // 🟢 2. UPLOAD NEW IMAGE
+            Map uploadResult = cloudinary.uploader().upload(
+                    image.getBytes(),
+                    ObjectUtils.emptyMap()
+            );
+
+            String imageUrl = uploadResult.get("secure_url").toString();
+
+            // 🟢 3. SET NEW IMAGE
+            cake.setImageUrl(imageUrl);
         }
 
         return convertToDTO(cakeRepository.save(cake));
     }
+
     public List<CakeResponseDTO> getFeaturedCakes(){
 
         return cakeRepository
@@ -343,18 +369,28 @@ public class CakeService {
         Cake cake = cakeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cake not found"));
 
-        //  1. REMOVE FROM CART
+        // 1. REMOVE FROM CART
         cartRepository.deleteByCakeId(id);
 
-        //  2. DELETE IMAGE
+        // 2. DELETE IMAGE FROM CLOUDINARY
         try {
-            String imagePath = "/app/uploads/" + Paths.get(cake.getImageUrl()).getFileName();
-            Files.deleteIfExists(Paths.get(imagePath));
+
+            String imageUrl = cake.getImageUrl();
+
+            // Extract public_id
+            String publicId = imageUrl
+                    .substring(imageUrl.lastIndexOf("/") + 1)
+                    .split("\\.")[0];
+
+            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+
+            System.out.println("Image deleted from Cloudinary ✅");
+
         } catch (Exception e) {
-            System.out.println("Image delete failed ❌");
+            System.out.println("Cloudinary delete failed ❌");
         }
 
-        //  3. DELETE CAKE
+        // 3. DELETE CAKE
         cakeRepository.deleteById(id);
     }
 

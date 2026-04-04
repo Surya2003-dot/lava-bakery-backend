@@ -1,5 +1,5 @@
 package com.lava.bakery.controller;
-
+import java.util.Map;
 import com.lava.bakery.dto.CakeResponseDTO;
 import com.lava.bakery.entity.Cake;
 import com.lava.bakery.service.CakeService;
@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 
 import java.util.List;
 
@@ -18,6 +18,8 @@ public class CakeController {
 
     private final CakeService cakeService;
 
+    @Autowired
+    private Cloudinary cloudinary;
     public CakeController(CakeService cakeService) {
         this.cakeService = cakeService;
     }
@@ -121,45 +123,23 @@ public class CakeController {
             @RequestParam(required = false) Double dailyCapacityKg,
             @RequestParam(required = false) Double minOrderKg,
             @RequestParam(required = false) Double maxOrderKg,
-            @RequestParam(value = "image") MultipartFile image
-
+            @RequestParam("image") MultipartFile image
 
     ) {
 
         try {
 
-            System.out.println(" API HIT");
-
-            //  image check
             if (image == null || image.isEmpty()) {
                 throw new RuntimeException("Image missing");
             }
 
-            //  file name
-            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-
-            //  folder path
-            java.nio.file.Path uploadPath = Paths.get(System.getProperty("user.dir"), "uploads");
-
-            //  create folder
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            System.out.println("Image Name: " + image.getOriginalFilename());
-            System.out.println("Image Size: " + image.getSize());
-
-            java.nio.file.Path filePath = uploadPath.resolve(fileName);
-
-//  save
-            Files.copy(
-                    image.getInputStream(),
-                    filePath,
-                    java.nio.file.StandardCopyOption.REPLACE_EXISTING
+            // 🔥 Upload to Cloudinary
+            Map uploadResult = cloudinary.uploader().upload(
+                    image.getBytes(),
+                    ObjectUtils.emptyMap()
             );
 
-//  confirm save
-            System.out.println("Saved at: " + filePath.toAbsolutePath());
+            String imageUrl = uploadResult.get("secure_url").toString();
 
             Cake cake = new Cake();
 
@@ -183,16 +163,16 @@ public class CakeController {
             cake.setMinOrderKg(minOrderKg);
             cake.setMaxOrderKg(maxOrderKg);
 
-            cake.setImageUrl("/uploads/" + fileName);
+            // ✅ Cloudinary URL
+            cake.setImageUrl(imageUrl);
 
             return cakeService.addCake(cake);
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Error: " + e.getMessage());
+            throw new RuntimeException("Upload failed: " + e.getMessage());
         }
     }
-
     @PutMapping("/update-with-image/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public CakeResponseDTO updateCakeWithImage(
