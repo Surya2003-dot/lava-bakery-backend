@@ -309,18 +309,21 @@ window.location.href="login.html"
 
 // LOAD USER ORDERS
 fetch("https://lava-bakery-backend.onrender.com/api/orders/my-orders",{
-headers:{
-"Authorization":"Bearer "+token
-}
+  headers:{
+    "Authorization":"Bearer "+token
+  }
 })
-.then(res=>res.json())
-.then(data=>{
-
-let orders = data
-
-renderOrders(orders)
-
+.then(res => {
+    if (!res.ok) throw new Error("Request failed");
+    return res.text();
 })
+.then(text => {
+    let data = text ? JSON.parse(text) : [];
+    renderOrders(data);
+})
+.catch(err=>{
+    console.log("Order fetch error", err);
+});
 function renderOrders(orders){
 
 let container = document.getElementById("ordersContainer")
