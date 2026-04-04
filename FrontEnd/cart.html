@@ -199,34 +199,33 @@ headers:{
 }
 
 })
-.then(res=>res.json())
-.then(cart=>{
+.then(res=>{
+    if(!res.ok){
+        throw new Error("Cart fetch failed: "+res.status)
+    }
+    return res.text();
+})
+.then(text=>{
+    let cart = text ? JSON.parse(text) : [];
 
-let container = document.getElementById("cartItems")
+    let container = document.getElementById("cartItems")
+    container.innerHTML=""
 
-container.innerHTML=""
+    if(!Array.isArray(cart) || cart.length===0){
 
-if(!Array.isArray(cart) || cart.length===0){
+        container.innerHTML=`
+        <div class="text-center mt-5">
+        <h4>Your cart is empty</h4>
+        <a href="index.html" class="btn btn-danger mt-3">
+        Continue Shopping
+        </a>
+        </div>
+        `
+        return
+    }
 
-container.innerHTML=`
-
-<div class="text-center mt-5">
-
-<h4>Your cart is empty</h4>
-
-<a href="index.html" class="btn btn-danger mt-3">
-Continue Shopping
-</a>
-
-</div>
-
-`
-
-return
-
-}
-
-cart.forEach(item=>{
+    cart.forEach(item=>{
+        // same code continue
 
 container.innerHTML+=`
 <div class="col-6 col-md-4 col-lg-3 p-1">

@@ -1,4 +1,3 @@
-
 function login(){
 
 const email=document.getElementById("email").value;
@@ -11,45 +10,41 @@ emailError.style.display="none";
 passwordError.style.display="none";
 
 fetch(`${API_BASE_URL}/auth/user/login`,{
-
 method:"POST",
-
 headers:{
 "Content-Type":"application/json"
 },
-
 body:JSON.stringify({
 email:email,
 password:password
 })
-
 })
 
 .then(res=>{
-
-if(!res.ok){
-throw new Error("Invalid");
-}
-
-return res.json();
-
+    if(!res.ok){
+        throw new Error("Invalid login");
+    }
+    return res.text(); // 🔥 FIX
 })
 
-.then(data=>{
+.then(text=>{
+    const data = text ? JSON.parse(text) : null;
 
-localStorage.setItem("token",data.token);
+    if(!data || !data.token){
+        throw new Error("No token");
+    }
 
-window.location.href="index.html";
+    localStorage.setItem("token",data.token);
 
+    console.log("LOGIN TOKEN:", data.token); // 🔥 DEBUG
+
+    window.location.href="index.html";
 })
 
 .catch(err=>{
-
-emailError.style.display="block";
-passwordError.style.display="block";
-
+    emailError.style.display="block";
+    passwordError.style.display="block";
 });
-
 }
 function sendOtp(){
 
