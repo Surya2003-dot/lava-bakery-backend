@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             // ✅ No token → allow request
             if (header == null || !header.startsWith("Bearer ")) {
-                filterChain.doFilter(request, response);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
@@ -74,7 +74,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                 new UsernamePasswordAuthenticationToken(
                                         username,
                                         null,
-                                        List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()))
+                                        List.of(new SimpleGrantedAuthority(role))
                                 );
 
                         SecurityContextHolder.getContext().setAuthentication(auth);
