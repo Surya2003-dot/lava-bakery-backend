@@ -725,7 +725,7 @@ html+=`
 
 ${cake.badge ? `<span class="badge-label ${cake.badge === 'Hot Seller' ? 'hot-seller' : 'best-seller'}">${cake.badge}</span>` : ''}
 
-<img src="https://lava-bakery-backend.onrender.com/${cake.imageUrl.replace(/^\/+/, '')}">
+<img src="${cake.imageUrl}">
 
 <span class="prep-time-badge">
 <i class="fa-solid fa-clock"></i>
@@ -899,8 +899,7 @@ editDailyCapacityKg.value = cake.dailyCapacityKg ?? ""
 editMinOrderKg.value = cake.minOrderKg ?? ""
 editMaxOrderKg.value = cake.maxOrderKg ?? ""
 
-document.getElementById("editImagePreview").src =
-"https://lava-bakery-backend.onrender.com/" + cake.imageUrl.replace(/^\/+/, "")
+document.getElementById("editImagePreview").src = cake.imageUrl;
 
 new bootstrap.Modal(editModal).show()
 }
