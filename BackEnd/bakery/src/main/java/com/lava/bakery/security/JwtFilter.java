@@ -55,8 +55,12 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = header.substring(7);
 
             // ✅ Validate token
+//            if (!jwtUtil.validateToken(token)) {
+//                filterChain.doFilter(request, response);
+//                return;
+//            }
             if (!jwtUtil.validateToken(token)) {
-                filterChain.doFilter(request, response);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
             String username = jwtUtil.extractEmail(token);
