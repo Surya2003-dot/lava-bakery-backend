@@ -177,7 +177,7 @@ document.getElementById("cakeDesc").innerText = product.description
 document.getElementById("cakeWeight").innerText =
 (product.weight) + " KG"
 document.getElementById("cakePrice").innerText = cakePrice
-document.getElementById("cakeImg").src = "https://lava-bakery-backend.onrender.com" + product.image
+document.getElementById("cakeImg").src = product.image;
 
 
 updateTotal()
@@ -326,7 +326,7 @@ userEmail: localStorage.getItem("email"),
 
 cake: product.name,
 
-image: "https://lava-bakery-backend.onrender.com" + product.image,
+image: product.image,
 
 kg: kg,
 

@@ -256,7 +256,7 @@ container.innerHTML=`
 <div class="border-0 p-4">
 <div class="text-center">
 
-<img src="https://lava-bakery-backend.onrender.com${cake.imageUrl}"
+<img src="${cake.imageUrl}"
 class="img-fluid product-main-image"
 style="max-height:420px;object-fit:contain;">
 
@@ -454,7 +454,7 @@ style="cursor:pointer;">
 
 ${cake.badge ? `<span class="badge-label ${cake.badge === 'Hot Seller' ? 'hot-seller' : 'best-seller'}">${cake.badge}</span>` : ''}
 
-<img src="https://lava-bakery-backend.onrender.com${cake.imageUrl}" alt="${cake.name}">
+<img src="${cake.imageUrl}" alt="${cake.name}">
 
 <span class="prep-time-badge">
 <i class="fa-solid fa-clock"></i>
