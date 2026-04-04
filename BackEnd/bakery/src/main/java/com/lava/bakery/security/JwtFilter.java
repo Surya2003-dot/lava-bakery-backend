@@ -59,27 +59,40 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+            String username = jwtUtil.extractEmail(token);
+            String role = jwtUtil.extractRole(token);
 
-            String email = jwtUtil.extractEmail(token);
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            User user = userRepository.findByEmail(email).orElse(null);
+                if (role.equals("ROLE_USER") || role.equals("ROLE_ADMIN")) {
 
-            if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    // ✅ USER / ADMIN flow
+                    User user = userRepository.findByEmail(username).orElse(null);
 
-                String role = user.getRole().getName();
+                    if (user != null) {
+                        UsernamePasswordAuthenticationToken auth =
+                                new UsernamePasswordAuthenticationToken(
+                                        username,
+                                        null,
+                                        List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()))
+                                );
 
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(
-                                email,
-                                null,
-                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                        );
+                        SecurityContextHolder.getContext().setAuthentication(auth);
+                    }
 
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            }
+                } else if (role.equals("ROLE_DELIVERY")) {
 
+                    // ✅ DELIVERY flow
+                    UsernamePasswordAuthenticationToken auth =
+                            new UsernamePasswordAuthenticationToken(
+                                    username,
+                                    null,
+                                    List.of(new SimpleGrantedAuthority(role))
+                            );
 
-        } catch (Exception e) {
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+            } catch (Exception e) {
             // ❗ Never break request flow
             System.out.println("JWT Error: " + e.getMessage());
         }
@@ -92,7 +105,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return path.startsWith("/api/auth") ||
 //                path.startsWith("/api/cakes") ||
 //                path.startsWith("/api/orders") ||
-                path.startsWith("/api/delivery") ||
+                path.startsWith("/api/delivery/login") ||
                 path.startsWith("/images") ||
                 path.startsWith("/uploads") ||
                 path.equals("/");
