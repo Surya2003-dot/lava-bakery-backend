@@ -154,6 +154,14 @@ onkeypress="mobileSearch(event)">
 <div class="row g-3" id="relatedCakes"></div>
 
 </section>
+<div class="toast-container position-fixed top-0 end-0 p-3">
+  <div id="liveToast" class="toast align-items-center text-bg-dark border-0">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMsg">Message</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
+</div>
 <footer class="bakery-footer">
 
 <div class="container">
@@ -195,14 +203,7 @@ special moments with our delicious cakes.
 </ul>
 
 </div>
-<div class="toast-container position-fixed top-0 end-0 p-3">
-  <div id="liveToast" class="toast align-items-center text-bg-dark border-0">
-    <div class="d-flex">
-      <div class="toast-body" id="toastMsg">Message</div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-    </div>
-  </div>
-</div>
+
 <!-- Contact -->
 <div class="col-md-4">
 
@@ -563,17 +564,11 @@ restoreCartIcons()
 // }
 function buyNow(){
 
-    if(!window.cake){
-        showToast("Cake not loaded yet ❌","danger")
-        return
-    }
-
     let token = localStorage.getItem("token")
 
+    // ❌ Not logged
     if(!token){
         showToast("Please login first ❌","danger")
-
-        localStorage.setItem("redirectAfterLogin", window.location.href)
 
         setTimeout(()=>{
             window.location.href = "login.html"
@@ -582,14 +577,10 @@ function buyNow(){
         return
     }
 
+    // ✅ Logged → direct checkout
     let weightEl = document.querySelector('input[name="weight"]:checked')
 
-    if(!weightEl){
-        showToast("Please select weight ❌","danger")
-        return
-    }
-
-    let weight = weightEl.value
+    let weight = weightEl ? weightEl.value : 1
 
     let product={
         id:window.cake.id,
@@ -604,11 +595,7 @@ function buyNow(){
 
     localStorage.setItem("buyNowCake",JSON.stringify(product))
 
-    // showToast("","success")
-
-    // setTimeout(()=>{
-    //     window.location.href="checkout.html"
-    // },800)
+    window.location.href="checkout.html"
 }
 // =============================
 // Weight Price
