@@ -1,4 +1,4 @@
-package com.lava.bakery.service;  // ✅ ADD THIS LINE
+package com.lava.bakery.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,26 +15,16 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
-    public void sendOtp(String email, String otp){
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
+    public void sendOtp(String email, String otp) {
+        SimpleMailMessage message = new SimpleMailMessage();
 
-            message.setFrom(fromEmail);
-            message.setTo(email);
-            message.setSubject("Lava Bakery OTP Verification");
+        message.setFrom(fromEmail);
+        message.setTo(email);
+        message.setSubject("Lava Bakery OTP Verification");
+        message.setText("Your OTP is: " + otp + "\nValid for 5 minutes");
 
-            message.setText(
-                    "Your OTP is: " + otp +
-                            "\nValid for 5 minutes"
-            );
+        mailSender.send(message);  // ✅ No try/catch — throws if fails
 
-            mailSender.send(message);
-
-            System.out.println("✅ MAIL SENT SUCCESS");
-
-        } catch (Exception e) {
-            System.out.println("❌ MAIL FAILED");
-            e.printStackTrace();
-        }
+        System.out.println("✅ MAIL SENT SUCCESS to: " + email);
     }
 }
