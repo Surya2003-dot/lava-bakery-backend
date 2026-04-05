@@ -12,18 +12,18 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
+    @Value("${spring.mail.from}")
     private String fromEmail;
 
     public void sendOtp(String email, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setFrom(fromEmail);
+        message.setFrom(fromEmail);  // ✅ now sends from surya.developer15@gmail.com
         message.setTo(email);
         message.setSubject("Lava Bakery OTP Verification");
         message.setText("Your OTP is: " + otp + "\nValid for 5 minutes");
 
-        mailSender.send(message);  // ✅ No try/catch — throws if fails
+        mailSender.send(message);
 
         System.out.println("✅ MAIL SENT SUCCESS to: " + email);
     }
