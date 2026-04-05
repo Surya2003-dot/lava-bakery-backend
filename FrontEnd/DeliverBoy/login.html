@@ -92,7 +92,8 @@ function login(){
         console.log("LOGIN RESPONSE:", data)
        localStorage.setItem("deliveryToken", data.token)
         localStorage.setItem("deliveryUser", username)
-        localStorage.setItem("deliveryBoyId", data.id)
+       console.log("DELIVERY ID:", data.id)
+localStorage.setItem("deliveryBoyId", data.id)
 
         showToast("Login Successful ✅","success")
 

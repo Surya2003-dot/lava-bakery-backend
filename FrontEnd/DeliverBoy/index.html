@@ -201,7 +201,8 @@ function updateStatus(){
     }
 
     let token = localStorage.getItem("deliveryToken")
-    let deliveryBoyId = localStorage.getItem("deliveryBoyId")
+    // let deliveryBoyId = localStorage.getItem("deliveryBoyId")
+    let deliveryBoyId = Number(localStorage.getItem("deliveryBoyId"))
 if(!deliveryBoyId){
     showToast("Login expired ❌","danger")
     return
