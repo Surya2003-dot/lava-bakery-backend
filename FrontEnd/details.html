@@ -541,6 +541,39 @@ restoreCartIcons()
 // BUY NOW
 // =============================
 
+// function buyNow(){
+
+//     let token = localStorage.getItem("token")
+
+//     if(!token){
+//         showToast("Please login first ❌","danger")
+
+//         localStorage.setItem("redirectAfterLogin", window.location.href)
+
+//         setTimeout(()=>{
+//             window.location.href = "login.html"
+//         },1000)
+
+//         return
+//     }
+// let weight=document.querySelector('input[name="weight"]:checked').value
+
+// let product={
+// id:window.cake.id,
+// name:window.cake.name,
+// description:window.cake.description,
+// image:window.cake.imageUrl,
+// price:window.cake.pricePerKg,
+// weight:parseFloat(weight),
+// shapes: window.cake.shapes,
+// preparationTimeHours: window.cake.preparationTimeHours
+// }
+
+// localStorage.setItem("buyNowCake",JSON.stringify(product))
+
+// window.location.href="checkout.html"
+
+// }
 function buyNow(){
 
     let token = localStorage.getItem("token")
@@ -556,23 +589,34 @@ function buyNow(){
 
         return
     }
-let weight=document.querySelector('input[name="weight"]:checked').value
 
-let product={
-id:window.cake.id,
-name:window.cake.name,
-description:window.cake.description,
-image:window.cake.imageUrl,
-price:window.cake.pricePerKg,
-weight:parseFloat(weight),
-shapes: window.cake.shapes,
-preparationTimeHours: window.cake.preparationTimeHours
-}
+    let weightEl = document.querySelector('input[name="weight"]:checked')
 
-localStorage.setItem("buyNowCake",JSON.stringify(product))
+    if(!weightEl){
+        showToast("Please select weight ❌","danger")
+        return
+    }
 
-window.location.href="checkout.html"
+    let weight = weightEl.value
 
+    let product={
+        id:window.cake.id,
+        name:window.cake.name,
+        description:window.cake.description,
+        image:window.cake.imageUrl,
+        price:window.cake.pricePerKg,
+        weight:parseFloat(weight),
+        shapes: window.cake.shapes,
+        preparationTimeHours: window.cake.preparationTimeHours
+    }
+
+    localStorage.setItem("buyNowCake",JSON.stringify(product))
+
+    showToast("Redirecting to checkout 🚀","success")
+
+    setTimeout(()=>{
+        window.location.href="checkout.html"
+    },800)
 }
 // =============================
 // Weight Price
