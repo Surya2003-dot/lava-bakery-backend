@@ -376,7 +376,6 @@ function loadSlots(prepTime){
     let selectedDate = document.getElementById("deliveryDate").value
     let todayDate = new Date().toISOString().split("T")[0]
 
-  
     dropdown.innerHTML = `<option value="">Select Slot</option>`
 
     if(selectedDate === todayDate){
@@ -398,7 +397,16 @@ function loadSlots(prepTime){
     .then(res => res.json())
     .then(data => {
 
-        data.tomorrow.forEach(s => {
+        console.log("SLOTS API:", data) // 🔥 DEBUG
+
+        let slots = data.tomorrow || data.slots || data
+
+        if(!slots || slots.length === 0){
+            dropdown.innerHTML = `<option>No slots available</option>`
+            return
+        }
+
+        slots.forEach(s => {
 
             let formatted = formatTimeSlot(s)
 
