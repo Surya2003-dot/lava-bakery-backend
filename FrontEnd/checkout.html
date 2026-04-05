@@ -393,11 +393,34 @@ function loadSlots(prepTime){
 
     dropdown.disabled = false
 
-    fetch(`https://lava-bakery-backend.onrender.com/api/orders/delivery-slots?prepTime=${prepTime}`)
-    .then(res => res.json())
+    let token = localStorage.getItem("token")
+
+    fetch(`https://lava-bakery-backend.onrender.com/api/orders/delivery-slots?prepTime=${prepTime}`,{
+        headers:{
+            "Authorization":"Bearer " + token
+        }
+    })
+    .then(res => {
+
+        if(res.status === 401){
+            showToast("Login expired ❌","danger")
+
+            setTimeout(()=>{
+                window.location.href = "login.html"
+            },1000)
+
+            return Promise.reject("Unauthorized")
+        }
+
+        if(!res.ok){
+            throw new Error("API Error")
+        }
+
+        return res.json()
+    })
     .then(data => {
 
-        console.log("SLOTS API:", data) // 🔥 DEBUG
+        console.log("SLOTS API:", data)
 
         let slots = data.tomorrow || data.slots || data
 
@@ -412,11 +435,16 @@ function loadSlots(prepTime){
 
             dropdown.innerHTML += `<option value="${formatted}">
             ${formatted}</option>`
-
         })
 
     })
+    .catch(err => {
+        console.error("Slot Error:", err)
+        dropdown.innerHTML = `<option>Error loading slots</option>`
+    })
 }
+
+
 document.getElementById("deliveryDate").addEventListener("change", () => {
     loadSlots(product.preparationTimeHours)
 })
