@@ -67,8 +67,8 @@ public class DeliveryBoyController {
             return ResponseEntity.status(401).body("Invalid username or password ❌");
         }
 
-        String token = jwtUtil.generateToken(boy.getUsername(), "ROLE_DELIVERY");
-
+       
+        String token = jwtUtil.generateToken(boy.getUsername(), "DELIVERY");
         return ResponseEntity.ok(Map.of(
                 "token", token,
                 "id", boy.getId()
