@@ -112,6 +112,6 @@ public class JwtFilter extends OncePerRequestFilter {
 //                path.startsWith("/api/orders") ||
                 path.startsWith("/api/delivery/login") ||
                 path.startsWith("/images") ||
-                path.startsWith("/uploads") ||
+                path.startsWith("/uploads") 
     }
 }
