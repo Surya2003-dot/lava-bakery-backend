@@ -106,12 +106,21 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     // 🔥 CLEAN METHOD (BEST PRACTICE)
+    @Override
+    protected void doFilterInternal(...) {
+
+        // your logic here
+
+        filterChain.doFilter(request, response);
+    }
+
+    // ✅ OUTSIDE method
     private boolean isPublicPath(String path) {
         return path.startsWith("/api/auth") ||
 //                path.startsWith("/api/cakes/search") ||
-//                path.startsWith("/api/orders") ||
                 path.startsWith("/api/delivery/login") ||
                 path.startsWith("/images") ||
-                path.startsWith("/uploads") 
+                path.startsWith("/uploads") ||
+                path.equals("/");
     }
 }
