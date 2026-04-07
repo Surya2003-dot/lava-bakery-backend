@@ -106,13 +106,13 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     // 🔥 CLEAN METHOD (BEST PRACTICE)
-    @Override
-    protected void doFilterInternal(...) {
+//    @Override
+//    protected void doFilterInternal(...) {
 
         // your logic here
-
-        filterChain.doFilter(request, response);
-    }
+//
+//        filterChain.doFilter(request, response);
+//    }
 
     // ✅ OUTSIDE method
     private boolean isPublicPath(String path) {
