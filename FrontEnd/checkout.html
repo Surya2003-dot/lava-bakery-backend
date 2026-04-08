@@ -5,10 +5,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Lava Cakes - Checkout</title>
+<title>laava Cakes - Checkout</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="icon" href="images/six.webp">
+<link rel="icon" href="images/laavaIcon.png">
 
 <style>
 
@@ -299,7 +299,7 @@ let phone = document.getElementById("phone").value
 let message = document.getElementById("cakeMessage").value
 let date = document.getElementById("deliveryDate").value
 let slot = document.getElementById("deliverySlot").value
-fetch(`https://lava-bakery-backend.onrender.com/api/orders/place?cakeId=${cakeId}&kg=${kg}&deliveryAddress=${encodeURIComponent(address)}&phoneNumber=${phone}&paymentMethod=CASH_ON_DELIVERY&eggType=EGG&cakeMessage=${encodeURIComponent(message)}&deliveryDate=${date}&deliverySlot=${slot}&cakeShape=${encodeURIComponent(shape)}&cakePrice=${cakePrice}&deliveryCharge=${deliveryCharge}`,{
+fetch(`https://laava-bakery-backend.onrender.com/api/orders/place?cakeId=${cakeId}&kg=${kg}&deliveryAddress=${encodeURIComponent(address)}&phoneNumber=${phone}&paymentMethod=CASH_ON_DELIVERY&eggType=EGG&cakeMessage=${encodeURIComponent(message)}&deliveryDate=${date}&deliverySlot=${slot}&cakeShape=${encodeURIComponent(shape)}&cakePrice=${cakePrice}&deliveryCharge=${deliveryCharge}`,{
 
 method:"POST",
 
@@ -389,7 +389,7 @@ function loadSlots(prepTime){
 
     let token = localStorage.getItem("token")
 
-    fetch(`https://lava-bakery-backend.onrender.com/api/orders/delivery-slots?prepTime=${prepTime}`,{
+    fetch(`https://laava-bakery-backend.onrender.com/api/orders/delivery-slots?prepTime=${prepTime}`,{
         headers:{
             "Authorization":"Bearer " + token
         }
