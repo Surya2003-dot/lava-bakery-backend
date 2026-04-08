@@ -200,7 +200,7 @@ window.location.href="login.html"
 //  LOAD
 function load(){
 
-fetch("https://laava-bakery-backend.onrender.com/api/admin/delivery",{
+fetch("https://lava-bakery-backend.onrender.com/api/admin/delivery",{
 headers:{ "Authorization":"Bearer "+token }
 })
 .then(res=>res.json())
@@ -267,7 +267,7 @@ if(!data.name || !data.phone || !data.username || !data.password){
     return
 }
 
-fetch("https://laava-bakery-backend.onrender.com/api/admin/delivery",{
+fetch("https://lava-bakery-backend.onrender.com/api/admin/delivery",{
     method:"POST",
     headers:{
         "Content-Type":"application/json",
@@ -315,7 +315,7 @@ username: editUsername.value,
 password: editPassword.value
 }
 
-fetch(`https://laava-bakery-backend.onrender.com/api/admin/delivery/${editId}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/admin/delivery/${editId}`,{
 method:"PUT",
 headers:{
 "Content-Type":"application/json",
@@ -336,7 +336,7 @@ function del(id){
 
 if(!confirm("Delete?")) return
 
-fetch(`https://laava-bakery-backend.onrender.com/api/admin/delivery/${id}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/admin/delivery/${id}`,{
 method:"DELETE",
 headers:{ "Authorization":"Bearer "+token }
 })
@@ -381,7 +381,7 @@ setTimeout(()=> toastBox.style.display="none",2000)
 //Delivery Boy History
 function openHistory(id){
 
-fetch(`https://laava-bakery-backend.onrender.com/api/admin/delivery/${id}/history`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/admin/delivery/${id}/history`,{
 headers:{
 "Authorization":"Bearer "+token
 }

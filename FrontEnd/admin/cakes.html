@@ -293,7 +293,7 @@ class="form-select"
 onchange="applyFilter()">
 <option value="">All Flavours</option>
 <option>Butter Cream Cake</option>
-<option>laava Special Cake</option>
+<option>Lava Special Cake</option>
 <option>Chocolate Flavoured Cake</option>
 <option>Fruit Flavoured Cake</option>
 <option>Cheese Cake</option>
@@ -359,7 +359,7 @@ onchange="applyFilter()">
 <option value="">Select Flavour</option>
 <option>Fresh Cream Cake</option>
 <option>Butter Cream Cake</option>
-<option>laava Special Cake</option>
+<option>Lava Special Cake</option>
 <option>Chocolate Flavoured Cake</option>
 <option>Fruit Flavoured Cake</option>
 <option>Cheese Cake</option>
@@ -700,7 +700,7 @@ let name = document.getElementById("adminSearch")?.value || ""
 let flavour = document.getElementById("filterFlavour")?.value || ""
 let available = document.getElementById("filterAvailable")?.value
 
-let url = "https://laava-bakery-backend.onrender.com/api/cakes/search?"
+let url = "https://lava-bakery-backend.onrender.com/api/cakes/search?"
 
 if(name) url += "name=" + encodeURIComponent(name) + "&"
 if(flavour) url += "flavour=" + encodeURIComponent(flavour) + "&"
@@ -850,7 +850,7 @@ return
 
 formData.append("image", imageInput.files[0])
 
-fetch("https://laava-bakery-backend.onrender.com/api/cakes/add-with-image",{
+fetch("https://lava-bakery-backend.onrender.com/api/cakes/add-with-image",{
 method:"POST",
 headers:{ "Authorization":"Bearer "+token },
 body: formData
@@ -953,7 +953,7 @@ if(editImageFile.files[0]){
 formData.append("image", editImageFile.files[0])
 }
 
-fetch(`https://laava-bakery-backend.onrender.com/api/cakes/update-with-image/${editId}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/cakes/update-with-image/${editId}`,{
 method:"PUT",
 headers:{ "Authorization":"Bearer "+token },
 body: formData
@@ -983,7 +983,7 @@ function deleteCake(id){
 
 if(!confirm("Delete this cake? ❗")) return
 
-fetch(`https://laava-bakery-backend.onrender.com/api/cakes/${id}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/cakes/${id}`,{
 method:"DELETE",
 headers:{ "Authorization":"Bearer "+token }
 })
