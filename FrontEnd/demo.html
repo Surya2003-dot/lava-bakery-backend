@@ -3,27 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lava Cakes - Banners</title>
+<title>Lava Cakes</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ===== GLOBAL ===== */
 body {
-  background: #f8f9fa;
-  font-family: 'Segoe UI', sans-serif;
+  background: #fdf9f7;
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
 }
 
 /* ===== HERO ===== */
 .hero-section {
   width: 100%;
-  padding: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .hero-animate {
   opacity: 0;
-  transform: translateY(50px) scale(0.95);
-  animation: heroEnter 1.2s ease forwards;
+  transform: translateY(40px) scale(0.97);
+  animation: heroEnter 1s cubic-bezier(.22,1,.36,1) forwards;
 }
 
 @keyframes heroEnter {
@@ -34,40 +38,403 @@ body {
   width: 100%;
   height: auto;
   max-height: 90vh;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
-  margin: auto;
   cursor: pointer;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
-.hero-img:hover { transform: scale(1.02); }
+.hero-img:hover { transform: scale(1.015); }
 
-/* ===== PROMO SLIDER ===== */
+/* ===== FLAVOUR SECTION ===== */
+.flavour-section {
+  position: relative;
+  padding: 72px 24px 80px;
+  background: #fdf9f7;
+  overflow: hidden;
+}
+
+.flavour-section::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(224,49,32,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.flavour-section::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(224,49,32,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.section-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #c0392b;
+  background: linear-gradient(135deg, #fde8e5, #ffd6d0);
+  border-radius: 40px;
+  padding: 6px 16px;
+  margin-bottom: 18px;
+}
+
+.eyebrow-dot {
+  width: 5px;
+  height: 5px;
+  background: #e03120;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.5; }
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 900;
+  color: #1a1009;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.section-title em {
+  font-style: italic;
+  color: #e03120;
+  position: relative;
+  display: inline-block;
+}
+
+.section-title em::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #e03120, #ff7043);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: drawLine 0.9s cubic-bezier(.22,1,.36,1) 0.7s forwards;
+}
+
+@keyframes drawLine { to { transform: scaleX(1); } }
+
+.section-sub {
+  font-size: 15px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* Grid */
+.flavour-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 960px) {
+  .flavour-grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+}
+
+@media (max-width: 640px) {
+  .flavour-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .flavour-section { padding: 48px 14px 60px; }
+}
+
+/* Card */
+.flavour-card {
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  border: 1.5px solid rgba(224,49,32,0.09);
+  transition: transform 0.4s cubic-bezier(.25,.8,.25,1), box-shadow 0.4s ease, border-color 0.3s;
+  opacity: 0;
+  transform: translateY(40px) scale(0.94);
+  animation: cardReveal 0.6s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+.flavour-card.extra-card { display: none; }
+.flavour-card.extra-card.visible { display: block; }
+
+@keyframes cardReveal {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.flavour-card:nth-child(1) { animation-delay: 0.05s; }
+.flavour-card:nth-child(2) { animation-delay: 0.13s; }
+.flavour-card:nth-child(3) { animation-delay: 0.21s; }
+.flavour-card:nth-child(4) { animation-delay: 0.29s; }
+.flavour-card:nth-child(5) { animation-delay: 0.37s; }
+.flavour-card:nth-child(6) { animation-delay: 0.45s; }
+.flavour-card:nth-child(7) { animation-delay: 0.53s; }
+.flavour-card:nth-child(8) { animation-delay: 0.61s; }
+
+.flavour-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 24px 48px rgba(224,49,32,0.14), 0 8px 20px rgba(0,0,0,0.06);
+  border-color: rgba(224,49,32,0.28);
+}
+
+/* Card image */
+.card-img-wrap {
+  position: relative;
+  overflow: hidden;
+  height: 155px;
+  background: #fde8e5;
+}
+
+@media (max-width: 640px) { .card-img-wrap { height: 115px; } }
+
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.55s cubic-bezier(.25,.8,.25,1);
+}
+
+.flavour-card:hover .card-img-wrap img { transform: scale(1.12); }
+
+/* Badge */
+.card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e03120;
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.85);
+  transition: opacity 0.3s, transform 0.3s;
+  box-shadow: 0 3px 10px rgba(224,49,32,0.35);
+}
+
+.flavour-card:hover .card-badge {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Shine */
+.card-shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+  transform: translateX(-110%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.flavour-card:hover .card-shine { transform: translateX(110%); }
+
+/* Card body */
+.card-body {
+  padding: 16px 16px 18px;
+}
+
+@media (max-width: 640px) { .card-body { padding: 11px 11px 14px; } }
+
+.card-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1009;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 640px) { .card-name { font-size: 13px; } }
+
+.card-desc {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.card-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-tag {
+  font-size: 11px;
+  background: #fff3f2;
+  color: #c0392b;
+  border-radius: 30px;
+  padding: 4px 11px;
+  font-weight: 600;
+  border: 1px solid rgba(224,49,32,0.12);
+}
+
+.card-btn {
+  width: 30px;
+  height: 30px;
+  background: #f7f7f7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.flavour-card:hover .card-btn {
+  background: #e03120;
+  transform: translateX(3px);
+}
+
+.card-btn svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: #999;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.3s;
+}
+
+.flavour-card:hover .card-btn svg { stroke: #fff; }
+
+/* Toggle button */
+.btn-wrap { text-align: center; margin-top: 44px; }
+
+.view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #e03120;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 36px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.25s, box-shadow 0.3s;
+  box-shadow: 0 10px 28px rgba(224,49,32,0.3);
+  letter-spacing: 0.2px;
+}
+
+.view-all-btn:hover {
+  background: #c0271a;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(224,49,32,0.38);
+}
+
+.view-all-btn:active { transform: scale(0.97); }
+
+.btn-icon-wrap {
+  width: 20px;
+  height: 20px;
+  background: rgba(255,255,255,0.22);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s;
+}
+
+.view-all-btn:hover .btn-icon-wrap { transform: rotate(180deg); }
+
+.btn-icon-wrap svg {
+  width: 11px;
+  height: 11px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ===== PROMO SECTION ===== */
+.promo-section {
+  background: #fff;
+  padding: 56px 0 64px;
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.promo-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.promo-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 700;
+  color: #1a1009;
+  margin-bottom: 28px;
+}
+
+.promo-heading span {
+  color: #e03120;
+  font-style: italic;
+}
+
 .promo-wrapper {
   position: relative;
-  padding: 0 30px;
+  padding: 0 38px;
 }
 
 #promoSlider {
   display: flex;
   gap: 20px;
-  overflow-x: hidden;       /* FIX: hide overflow — manual scroll control only */
-  scroll-behavior: auto;    /* FIX: controlled per action, not globally */
+  overflow-x: hidden;
+  scroll-behavior: auto;
 }
 
 .promo-card {
-  flex: 0 0 calc(50% - 10px);  /* FIX: accounts for the 20px gap */
-  border-radius: 15px;
+  flex: 0 0 calc(50% - 10px);
+  border-radius: 18px;
   overflow: hidden;
-  transition: 0.3s;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
   aspect-ratio: 2 / 1;
   cursor: pointer;
+  border: 1.5px solid rgba(0,0,0,0.06);
 }
 
 .promo-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  transform: translateY(-8px) scale(1.025);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.14);
 }
 
 .promo-img {
@@ -75,264 +442,331 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 15px;
+  border-radius: 18px;
 }
 
-/* ===== ARROWS ===== */
+@media (max-width: 768px) {
+  .promo-card { flex: 0 0 100%; }
+  .promo-wrapper { padding: 0 32px; }
+}
+
+/* Arrows */
 .arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  /* background: red; */
-  color:red;
-  border: none;
-  /* padding: 10px 15px; */
-  /* border-radius: 50%; */
+  width: 38px;
+  height: 38px;
+  background: #fff;
+  border: 1.5px solid rgba(224,49,32,0.2);
+  border-radius: 50%;
+  color: #e03120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 10;
   cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-.arrow-left  { left: -5px; }
-.arrow-right { right: -5px; }
+.arrow:hover {
+  background: #e03120;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(224,49,32,0.3);
+}
 
-/* ===== DOTS ===== */
+.arrow-left  { left: -4px; }
+.arrow-right { right: -4px; }
+
+/* Dots */
 #promoDots {
   text-align: center;
-  margin-top: 12px;
+  margin-top: 18px;
 }
 
 #promoDots span {
   display: inline-block;
   width: 6px;
   height: 6px;
-  margin: 4px;
+  margin: 0 4px;
   background: #ddd;
   border-radius: 50%;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background 0.3s, transform 0.3s, width 0.3s;
 }
 
 #promoDots span.active {
-  background: #ff0000;
-  transform: scale(1.5);
+  background: #e03120;
+  transform: scale(1.4);
+  width: 18px;
+  border-radius: 3px;
 }
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .hero-img {
-    width: 100%;
-    height: auto;
-    max-height: none;
-  }
-  .promo-card {
-    flex: 0 0 100%;
-  }
-}
-
 </style>
 </head>
-
 <body>
 
 <!-- ===== HERO ===== -->
 <section class="hero-section">
-  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3500">
     <div class="carousel-inner hero-animate" id="heroCarouselInner"></div>
   </div>
 </section>
 
-<!-- ===== PROMO SLIDER ===== -->
-<section class="container pb-5 pt-4">
+<!-- ===== FLAVOURS ===== -->
+<section class="flavour-section">
+  <div class="section-inner">
 
-  <h4 class="mb-3">🎯 Promo Offers</h4>
+    <div class="section-header">
+      <div class="section-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Our Collection
+      </div>
+      <h2 class="section-title">Pick Your <em>Flavour</em></h2>
+      <p class="section-sub">Handcrafted with love — every bite tells a story</p>
+    </div>
 
-  <div class="promo-wrapper">
-    <button class="arrow arrow-left"  onclick="scrollPromo(-1)">&#10094;</button>
-    <div id="promoSlider"></div>
-    <button class="arrow arrow-right" onclick="scrollPromo(1)">&#10095;</button>
+    <div class="flavour-grid" id="flavourGrid">
+
+      <div class="flavour-card" onclick="openCategory('Fresh Cream Cake')">
+        <div class="card-img-wrap">
+          <img src="images/two.png" alt="Fresh Cream" onerror="this.src='https://placehold.co/400x300/fde8e5/c0392b?text=Fresh+Cream'">
+          <div class="card-badge">Popular</div>
+          <div class="card-shine"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Fresh Cream</div>
+          <div class="card-desc">Light & airy whipped cream finish</div>
+          <div class="card-footer-row">
+            <span class="card-tag">Signature</span>
+            <div class="card-btn"><svg viewBox="0 0 16 16"><polyline points="4 8 12 8"/><polyline points="9 5 12 8 9 11"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flavour-card" onclick="openCategory('Chocolate Flavoured Cake')">
+        <div class="card-img-wrap">
+          <img src="images/three.png" alt="Chocolate" onerror="this.src='https://placehold.co/400x300/fde8e5/c0392b?text=Chocolate'">
+          <div class="card-badge">Best Seller</div>
+          <div class="card-shine"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Chocolate</div>
+          <div class="card-desc">Rich dark chocolate indulgence</div>
+          <div class="card-footer-row">
+            <span class="card-tag">Classic</span>
+            <div class="card-btn"><svg viewBox="0 0 16 16"><polyline points="4 8 12 8"/><polyline points="9 5 12 8 9 11"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flavour-card" onclick="openCategory('Velvet Flavoured Cake')">
+        <div class="card-img-wrap">
+          <img src="images/one.png" alt="Velvet" onerror="this.src='https://placehold.co/400x300/fde8e5/c0392b?text=Velvet'">
+          <div class="card-badge">New</div>
+          <div class="card-shine"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Velvet</div>
+          <div class="card-desc">Velvety smooth red velvet layers</div>
+          <div class="card-footer-row">
+            <span class="card-tag">Premium</span>
+            <div class="card-btn"><svg viewBox="0 0 16 16"><polyline points="4 8 12 8"/><polyline points="9 5 12 8 9 11"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flavour-card" onclick="openCategory('Butter Cream Cake')">
+        <div class="card-img-wrap">
+          <img src="images/five.png" alt="Butter Cream" onerror="this.src='https://placehold.co/400x300/fde8e5/c0392b?text=Butter+Cream'">
+          <div class="card-badge">Favourite</div>
+          <div class="card-shine"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Butter Cream</div>
+          <div class="card-desc">Silky smooth buttercream frosting</div>
+          <div class="card-footer-row">
+            <span class="card-tag">Classic</span>
+            <div class="card-btn"><svg viewBox="0 0 16 16"><polyline points="4 8 12 8"/><polyline points="9 5 12 8 9 11"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flavour-card extra-card" onclick="openCategory('Fruit Cake')">
+        <div class="card-img-wrap">
+          <img src="images/six.webp" alt="Fruit" onerror="this.src='https://placehold.co/400x300/fde8e5/c0392b?text=Fruit'">
+          <div class="card-badge">Seasonal</div>
+          <div class="card-shine"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Fruit</div>
+          <div class="card-desc">Bursting with fresh seasonal fruits</div>
+          <div class="card-footer-row">
+            <span class="card-tag">Fresh</span>
+            <div class="card-btn"><svg viewBox="0 0 16 16"><polyline points="4 8 12 8"/><polyline points="9 5 12 8 9 11"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flavour-card extra-card" onclick="openCategory('Lava Special Cake')">
+        <div class="card-img-wrap">
+          <img src="images/three.png" alt="Lava Special" onerror="this.src='https://placehold.co/400x300/fde8e5/c0392b?text=Lava+Special'">
+          <div class="card-badge">Chef's Pick</div>
+          <div class="card-shine"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-name">Lava Special</div>
+          <div class="card-desc">Molten lava centre — our signature</div>
+          <div class="card-footer-row">
+            <span class="card-tag">Exclusive</span>
+            <div class="card-btn"><svg viewBox="0 0 16 16"><polyline points="4 8 12 8"/><polyline points="9 5 12 8 9 11"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="btn-wrap">
+      <button class="view-all-btn" id="viewAllBtn" onclick="toggleFlavours()">
+        <span id="viewBtnText">View All Flavours</span>
+        <div class="btn-icon-wrap" id="viewBtnIcon">
+          <svg viewBox="0 0 16 16"><polyline points="4 6 8 10 12 6"/></svg>
+        </div>
+      </button>
+    </div>
+
   </div>
-
-  <div class="text-center mt-3" id="promoDots"></div>
-
 </section>
 
-<script>
+<!-- ===== PROMO SLIDER ===== -->
+<section class="promo-section">
+  <div class="promo-inner">
 
+    <h3 class="promo-heading">🎯 <span>Promo</span> Offers</h3>
+
+    <div class="promo-wrapper">
+      <button class="arrow arrow-left"  onclick="scrollPromo(-1)">&#10094;</button>
+      <div id="promoSlider"></div>
+      <button class="arrow arrow-right" onclick="scrollPromo(1)">&#10095;</button>
+    </div>
+
+    <div id="promoDots"></div>
+
+  </div>
+</section>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
 const BASE = "https://lava-bakery-backend.onrender.com/api/banner-images";
 
-/* =========================================================
-   HERO CAROUSEL
-   ========================================================= */
+/* ---- HERO ---- */
 fetch(BASE + "/hero")
-  .then(res => res.json())
+  .then(r => r.json())
   .then(data => {
-    const container = document.getElementById("heroCarouselInner");
-
-    container.classList.remove("hero-animate");
-    void container.offsetWidth;               // reflow to restart animation
-    container.classList.add("hero-animate");
-
-    container.innerHTML = data.map((b, i) => `
+    const wrap = document.getElementById("heroCarouselInner");
+    wrap.innerHTML = data.map((b, i) => `
       <div class="carousel-item ${i === 0 ? "active" : ""}">
         <img src="${b.imageUrl}" class="hero-img" onclick="goTo('${b.link}')">
       </div>
     `).join("");
   });
 
+/* ---- FLAVOURS ---- */
+let flavoursExpanded = false;
 
-/* =========================================================
-   PROMO SLIDER  —  FULLY FIXED
-   =========================================================
+function toggleFlavours() {
+  flavoursExpanded = !flavoursExpanded;
 
-   FIXES APPLIED:
-   1. Removed duplicate startAutoScroll() definition.
-   2. jumpTo() adds +perView offset so clones are skipped correctly.
-   3. dotClick() uses scrollToIndex() (respects clone offset) not raw scrollTo().
-   4. buildSlider() passes real data.length to dot creation, not cloned count.
-   5. checkBoundary() uses an isTransitioning guard to prevent scroll-fight jitter.
-   6. scroll-behavior toggled per action (smooth vs auto), not set globally.
-   7. getSlideWidth() measures actual card width + gap for pixel-perfect scrolling.
-   ========================================================= */
+  const extras = document.querySelectorAll('.extra-card');
+  const btnText = document.getElementById('viewBtnText');
 
-let realData        = [];   // original items from API
-let currentIndex    = 0;    // active real-data slide index (0-based)
-let isTransitioning = false; // guard: blocks boundary fix during smooth scroll
-let autoTimer       = null;
+  extras.forEach(card => {
+    card.classList.toggle('visible', flavoursExpanded);
+  });
 
-/* --- helpers --- */
+  btnText.textContent = flavoursExpanded ? 'Show Less' : 'View All Flavours';
+}
+
+function openCategory(name) {
+  console.log("Navigate to:", name);
+}
+
+/* ---- PROMO SLIDER ---- */
+let realData = [];
+let currentIndex = 0;
+let autoTimer = null;
+
 function getPerView() {
   return window.innerWidth <= 768 ? 1 : 2;
 }
 
-function getTotalSlides() {
-  return Math.ceil(realData.length / getPerView());
-}
-
-/* width of one full "slide step" = perView cards + their gaps */
-function getSlideWidth() {
-  const slider  = document.getElementById("promoSlider");
-  const card    = slider.querySelector(".promo-card");
-  if (!card) return slider.clientWidth;
-  const gap     = 20;
-  return (card.offsetWidth + gap) * getPerView();
-}
-
-/* --- build slider DOM from data array --- */
 function buildSlider(data) {
   realData = data;
 
-  const slider      = document.getElementById("promoSlider");
-  const dotsEl      = document.getElementById("promoDots");
-  const perView     = getPerView();
-  const totalSlides = getTotalSlides();
+  const slider = document.getElementById("promoSlider");
+  const dots = document.getElementById("promoDots");
 
-  /* Infinite clone pattern:
-     [ last perView items (start-clone) ] + [ real items ] + [ first perView items (end-clone) ] */
-  const cloned = [
-    ...data.slice(-perView),
-    ...data,
-    ...data.slice(0, perView)
-  ];
-
-  slider.innerHTML = cloned.map(p => `
+  slider.innerHTML = data.map(p => `
     <div class="promo-card">
       <img src="${p.imageUrl}" class="promo-img" onclick="goTo('${p.link}')">
     </div>
   `).join("");
 
-  /* FIX 4: dots count based on real items, not cloned */
-  dotsEl.innerHTML = "";
-  for (let i = 0; i < totalSlides; i++) {
-    dotsEl.innerHTML += `<span onclick="dotClick(${i})"></span>`;
+  // dots
+  dots.innerHTML = "";
+  const total = Math.ceil(data.length / getPerView());
+
+  for (let i = 0; i < total; i++) {
+    dots.innerHTML += `<span onclick="dotClick(${i})"></span>`;
   }
 
   currentIndex = 0;
-  setTimeout(() => jumpTo(0, false), 60); // silent jump past start-clones
+  updateSlider();
   updateDots();
 }
 
-/* --- instant (no animation) jump to a real-data index --- */
-function jumpTo(idx, animated) {
-  const slider  = document.getElementById("promoSlider");
+function updateSlider() {
+  const slider = document.getElementById("promoSlider");
+  const card = slider.querySelector(".promo-card");
+  if (!card) return;
+
+  const width = card.offsetWidth + 20;
   const perView = getPerView();
-  const slideW  = getSlideWidth();
 
-  /* FIX 2: +perView skips the start-clone block */
-  const target = (idx + perView) * slideW;
+  slider.scrollTo({
+    left: currentIndex * width * perView,
+    behavior: "smooth"
+  });
+}
 
-  /* FIX 6: toggle scroll-behavior per action */
-  slider.style.scrollBehavior = animated ? "smooth" : "auto";
-  slider.scrollLeft = target;
+function scrollPromo(dir) {
+  const total = Math.ceil(realData.length / getPerView());
+  currentIndex = (currentIndex + dir + total) % total;
 
-  currentIndex = idx;
+  updateSlider();
   updateDots();
+  resetAutoScroll();
 }
 
-/* --- smooth scroll to a real-data index (wraps via clone trick) --- */
-function scrollToIndex(idx) {
-  if (isTransitioning) return;
-
-  const totalSlides = getTotalSlides();
-  idx = ((idx % totalSlides) + totalSlides) % totalSlides; // normalise
-
-  isTransitioning = true;
-  jumpTo(idx, true);
-
-  /* FIX 5: release guard after animation finishes */
-  setTimeout(() => {
-    isTransitioning = false;
-  }, 420);
+function dotClick(i) {
+  currentIndex = i;
+  updateSlider();
+  updateDots();
+  resetAutoScroll();
 }
 
-/* --- silently reset scroll position when entering clone zone --- */
-function checkBoundary() {
-  if (isTransitioning) return; /* FIX 5: no fighting during animation */
-
-  const slider      = document.getElementById("promoSlider");
-  const perView     = getPerView();
-  const slideW      = getSlideWidth();
-  const totalSlides = getTotalSlides();
-
-  const realStart = perView * slideW;                  // scrollLeft of real slide 0
-  const realEnd   = (perView + totalSlides) * slideW;  // scrollLeft after last real slide
-
-  if (slider.scrollLeft < realStart - 2) {
-    /* in start-clone zone → jump to last real slide */
-    slider.style.scrollBehavior = "auto";
-    slider.scrollLeft = realEnd - slideW;
-    currentIndex = totalSlides - 1;
-    updateDots();
-  } else if (slider.scrollLeft >= realEnd - 2) {
-    /* in end-clone zone → jump to first real slide */
-    slider.style.scrollBehavior = "auto";
-    slider.scrollLeft = realStart;
-    currentIndex = 0;
-    updateDots();
-  }
-}
-
-/* --- sync dots to currentIndex --- */
 function updateDots() {
   document.querySelectorAll("#promoDots span").forEach((dot, i) => {
     dot.classList.toggle("active", i === currentIndex);
   });
 }
 
-/* --- public: arrow buttons --- */
-function scrollPromo(direction) {
-  resetAutoScroll();
-  scrollToIndex(currentIndex + direction);
-}
-
-/* --- public: dot click (FIX 3: uses scrollToIndex, not raw scrollTo) --- */
-function dotClick(idx) {
-  resetAutoScroll();
-  scrollToIndex(idx);
-}
-
-/* --- FIX 1: single startAutoScroll definition --- */
+/* ---- AUTO SCROLL ---- */
 function startAutoScroll() {
-  autoTimer = setInterval(() => scrollToIndex(currentIndex + 1), 3000);
+  autoTimer = setInterval(() => {
+    scrollPromo(1);
+  }, 3000);
 }
 
 function resetAutoScroll() {
@@ -340,36 +774,25 @@ function resetAutoScroll() {
   startAutoScroll();
 }
 
-/* scroll event: boundary detection ONLY — no index/dot calc here */
-document.getElementById("promoSlider").addEventListener("scroll", checkBoundary);
-
-/* rebuild on resize */
-let resizeTimer;
-window.addEventListener("resize", () => {
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    if (realData.length) buildSlider(realData);
-  }, 200);
-});
-
-/* fetch & init */
+/* ---- FETCH PROMO ---- */
 fetch(BASE + "/promo")
-  .then(res => res.json())
+  .then(r => r.json())
   .then(data => {
     buildSlider(data);
     startAutoScroll();
   });
 
-
-/* =========================================================
-   UTILITY
-   ========================================================= */
 function goTo(link) {
   if (link) window.location.href = link;
 }
 
+/* ---- RESIZE ---- */
+window.addEventListener("resize", () => {
+  if (realData.length) buildSlider(realData);
+});
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstra p@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
