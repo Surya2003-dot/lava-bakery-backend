@@ -34,6 +34,53 @@ height:200px;
 object-fit:cover;
 border-radius:12px 12px 0 0;
 }
+.whatsapp-float {
+  position: fixed;
+  bottom: 18px;
+  right: 18px;
+  z-index: 999;
+  text-decoration: none;
+
+  background: #25D366;
+  color: white;
+
+  /* 🔥 Controlled responsive (not too big) */
+  width: clamp(40px, 4vw, 50px);
+  height: clamp(40px, 4vw, 50px);
+
+  font-size: clamp(22px, 2.8vw, 26px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+
+  transition: all 0.3s ease;
+}
+
+
+@media (max-width: 576px) {
+  .whatsapp-float {
+    bottom: 15px;
+    right: 15px;
+  }
+}
+.whatsapp-float {
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37,211,102, 0.7); }
+  70% { box-shadow: 0 0 0 15px rgba(37,211,102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37,211,102, 0); }
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  background: #1ebe5d;
+}
 
 </style>
 
@@ -159,6 +206,10 @@ onkeypress="mobileSearch(event)">
 <div class="row" id="cakeContainer" style="margin-top:90px;"></div>
 
 </div>
+<!-- WhatsApp Floating Icon -->
+<a href="https://wa.me/6379295869" target="_blank" class="whatsapp-float">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
 <footer class="bakery-footer">
 
 <div class="container">
