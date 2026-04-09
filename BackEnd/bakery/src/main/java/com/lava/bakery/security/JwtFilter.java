@@ -119,6 +119,7 @@ public class JwtFilter extends OncePerRequestFilter {
         return path.startsWith("/api/auth") ||
                 path.startsWith("/api/cakes/search") ||
                 path.startsWith("/api/cakes/all") ||
+                path.startsWith("/api/banner-images") ||
                 path.startsWith("/api/cakes/featured") ||
                 path.matches("/api/cakes/\\d+") ||
                 path.startsWith("/api/cakes/flavour") ||
