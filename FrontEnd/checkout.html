@@ -216,7 +216,7 @@ let cakePrice = 0
 
 if(product){
 
-cakePrice = product.price * (product.weight || 1)
+cakePrice = product.price
 let shape = product.shapes || ""
 document.getElementById("cakeprep").innerText =
 "Preparation Time: " + product.preparationTimeHours + " hr"
@@ -348,7 +348,7 @@ let phone = document.getElementById("phone").value
 let message = document.getElementById("cakeMessage").value
 let date = document.getElementById("deliveryDate").value
 let slot = document.getElementById("deliverySlot").value
-fetch(`https://lava-bakery-backend.onrender.com/api/orders/place?cakeId=${cakeId}&kg=${kg}&deliveryAddress=${encodeURIComponent(address)}&phoneNumber=${phone}&paymentMethod=CASH_ON_DELIVERY&eggType=EGG&cakeMessage=${encodeURIComponent(message)}&deliveryDate=${date}&deliverySlot=${slot}&cakeShape=${encodeURIComponent(shape)}&cakePrice=${cakePrice}&deliveryCharge=${deliveryCharge}`,{
+fetch(`https://lava-bakery-backend.onrender.com/api/orders/place?cakeId=${cakeId}&kg=${kg}&deliveryAddress=${encodeURIComponent(address)}&phoneNumber=${phone}&paymentMethod=CASH_ON_DELIVERY&eggType=${product.type.toUpperCase()}&cakeMessage=${encodeURIComponent(message)}&deliveryDate=${date}&deliverySlot=${slot}&cakeShape=${encodeURIComponent(shape)}&cakePrice=${cakePrice}&deliveryCharge=${deliveryCharge}`,{
 
 method:"POST",
 
