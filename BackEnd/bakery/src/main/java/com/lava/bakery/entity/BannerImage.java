@@ -20,7 +20,8 @@ public class BannerImage {
     private boolean active = true;
 
     private String link; //  redirect URL
-
+    @Column(name = "public_id")
+    private String publicId;
     // ===== GETTERS & SETTERS =====
 
     public Long getId() { return id; }
@@ -39,4 +40,12 @@ public class BannerImage {
 
     public String getLink() { return link; }
     public void setLink(String link) { this.link = link; }
+
+    public String getPublicId() {
+        return publicId;
+    }
+
+    public void setPublicId(String publicId) {
+        this.publicId = publicId;
+    }
 }

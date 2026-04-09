@@ -36,6 +36,7 @@ public class BannerImageService {
         );
 
         String imageUrl = uploadResult.get("secure_url").toString();
+        String publicId = uploadResult.get("public_id").toString(); // 🔥 ADD THIS
 
         BannerType bannerType = BannerType.valueOf(type.toUpperCase());
 
@@ -52,6 +53,7 @@ public class BannerImageService {
 
         BannerImage img = new BannerImage();
         img.setImageUrl(imageUrl);
+        img.setPublicId(publicId);
         img.setType(bannerType);
         img.setPosition(position);
         img.setActive(true);
@@ -73,6 +75,23 @@ public class BannerImageService {
     }
 
     public void delete(Long id){
+
+        BannerImage img = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Banner not found"));
+
+        try {
+            if(img.getPublicId() != null){
+
+                cloudinary.uploader().destroy(
+                        img.getPublicId(),
+                        ObjectUtils.emptyMap()
+                );
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         repo.deleteById(id);
     }
 
