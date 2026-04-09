@@ -20,7 +20,7 @@ body{
 .hero-section{
   width:100%;
   padding:0;
-  background:#f8f9fa; /* same as page */
+  /* background:#f8f9fa; same as page */
 }
 
 .hero-animate{
@@ -45,11 +45,11 @@ body{
 }
 
 .hero-img:hover{ transform: scale(1.02); }
-@media(max-width:768px){
+/* @media(max-width:768px){
   .hero-img{
-    max-height:300px; /* clean mobile view */
+    max-height:300px; 
   }
-}
+} */
 /* ===== PROMO SLIDER ===== */
 
 .promo-wrapper{
@@ -105,7 +105,11 @@ body{
 /* ===== RESPONSIVE ===== */
 
 @media(max-width:768px){
-  .hero-img{ height:250px; }
+  .hero-img{
+    width:100%;
+    height:auto;
+    max-height:none;  
+  }
   .promo-card{ flex:0 0 100%; }
 }
 #promoDots span{
