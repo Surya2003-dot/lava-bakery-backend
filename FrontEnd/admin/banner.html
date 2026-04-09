@@ -1,93 +1,158 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <title>Admin Banner</title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-body{margin:0;font-family:Arial;background:#f6f6f6;}
 
+body{
+margin:0;
+font-family:Arial;
+background:#f6f6f6;
+}
+
+/* Sidebar */
 .sidebar{
-width:230px;height:100vh;background:#111;color:white;
-position:fixed;left:0;top:0;padding-top:20px;
+width:230px;
+height:100vh;
+background:#111;
+color:white;
+position:fixed;
+left:0;
+top:0;
+padding-top:20px;
 }
-.sidebar a{display:block;color:white;padding:12px;text-decoration:none;}
-.sidebar a:hover{background:#333;}
 
-.content{margin-left:230px;padding:20px;}
+.sidebar a{
+display:block;
+color:white;
+padding:12px;
+text-decoration:none;
+}
 
+.sidebar a:hover{
+background:#333;
+}
+
+/* Content */
+.content{
+margin-left:230px;
+padding:20px;
+}
+
+/* Card */
 .card-box{
-background:#fff;padding:20px;border-radius:12px;
+background:#fff;
+padding:20px;
+border-radius:12px;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
-transition:0.3s;
 }
-.card-box:hover{transform:scale(1.03);}
 
+/* Preview (KEEP SAME) */
+.preview-container{
+width:200px;
+height:140px;
+background:#fafafa;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+border:1px solid #ddd;
+}
+
+#previewImg{
+max-width:100%;
+max-height:100%;
+object-fit:contain;
+}
+
+/* Banner Image */
 .banner-img{
-width:100%;height:140px;object-fit:contain;
-background:#fafafa;border-radius:10px;
+width:100%;
+height:140px;
+object-fit:contain;
+background:#fafafa;
+border-radius:10px;
 }
 
-.dragging{opacity:0.5;border:2px dashed #000;}
+#suggestions{
+position:absolute;
+width:100%;
+z-index:999;
+}
 
-/* Slider */
-.slider{
-width:100%;height:250px;overflow:hidden;
-border-radius:12px;margin-bottom:20px;
-position:relative;
-}
-.slide{
-position:absolute;width:100%;height:100%;
-opacity:0;transition:1s;
-}
-.slide.active{opacity:1;}
-.slide img{width:100%;height:100%;object-fit:cover;}
 </style>
+
 </head>
 
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar">
 <h4 class="text-center">Admin</h4>
-<a href="#">Dashboard</a>
-<a href="#">Banners</a>
+<a href="index.html">Dashboard</a>
+<a href="orders.html">Orders</a>
+<a href="cakes.html">Cakes</a>
+<a href="banner.html">Banners</a>
+<a href="users.html">Users</a>
 <a href="#" onclick="logout()">Logout</a>
 </div>
 
+<!-- Content -->
 <div class="content">
 
 <h4>🎯 Banner Management</h4>
 
-<!-- 🔥 LIVE SLIDER -->
-<div class="slider" id="slider"></div>
-
 <!-- ADD -->
 <div class="card-box mb-3">
+
 <input type="file" id="image" class="form-control mb-3">
+
+<div class="preview-container mb-3">
+<img id="previewImg" style="display:none;">
+</div>
+
 <select id="type" class="form-control mb-2">
 <option value="HERO">HERO</option>
 <option value="PROMO">PROMO</option>
 </select>
+
 <input type="number" id="position" class="form-control mb-2" placeholder="Position">
+
+<input type="text" id="cakeSearch" class="form-control mb-2" placeholder="Search Cake...">
+<div id="suggestions" class="list-group"></div>
+
 <button class="btn btn-success w-100" onclick="uploadBanner()">Upload Banner</button>
+
 </div>
 
-<h5>🔥 Hero Section (Drag & Drop)</h5>
+<!-- HERO -->
+<h5 class="mt-4">🔥 Hero Section</h5>
 <div class="row" id="heroSection"></div>
 
-<h5>🎯 Promo Section</h5>
+<!-- PROMO -->
+<h5 class="mt-4">🎯 Promo Section</h5>
 <div class="row" id="promoSection"></div>
 
 </div>
+<!-- ONLY JS PART CHANGED — HTML SAME -->
 
 <script>
 
 const API = "https://lava-bakery-backend.onrender.com/api/banner-images";
-let token = localStorage.getItem("adminToken");
+const CAKE_API = "https://lava-bakery-backend.onrender.com/api/cakes";
 
-// ===== FETCH HELPER =====
+let token = localStorage.getItem("adminToken");
+let cakes = [];
+let selectedLink = "";
+
+// ===== COMMON FETCH =====
 function authFetch(url, options = {}) {
 return fetch(url,{
 ...options,
@@ -96,9 +161,54 @@ headers:{
 "Authorization":"Bearer "+token
 }
 }).then(res=>{
-if(!res.ok) throw new Error(res.status);
+if(!res.ok) throw new Error("API Error "+res.status);
 return res.text();
 }).then(t=> t?JSON.parse(t):{});
+}
+
+// ===== LOAD CAKES =====
+authFetch(CAKE_API)
+.then(data=> cakes = data)
+.catch(err=> console.error("Cake load error:", err));
+
+// ===== IMAGE PREVIEW =====
+document.getElementById("image").addEventListener("change", function(){
+let file = this.files[0];
+if(file){
+let img = document.getElementById("previewImg");
+img.src = URL.createObjectURL(file);
+img.style.display = "block";
+}
+});
+
+// ===== CAKE SEARCH =====
+document.getElementById("cakeSearch").addEventListener("input", function(){
+
+let value = this.value.toLowerCase();
+let box = document.getElementById("suggestions");
+box.innerHTML = "";
+
+if(!value) return;
+
+cakes.filter(c => c.name.toLowerCase().includes(value))
+.slice(0,5)
+.forEach(c => {
+
+box.innerHTML += `
+<div class="list-group-item"
+onclick="selectCake('${c.name}',${c.id})">
+${c.name}
+</div>
+`;
+
+});
+
+});
+
+function selectCake(name,id){
+document.getElementById("cakeSearch").value = name;
+selectedLink = `details.html?id=${id}`;
+document.getElementById("suggestions").innerHTML="";
 }
 
 // ===== UPLOAD =====
@@ -106,12 +216,18 @@ function uploadBanner(){
 
 let file = document.getElementById("image").files[0];
 let type = document.getElementById("type").value;
-let pos = document.getElementById("position").value || 1;
+let pos = document.getElementById("position").value;
+
+if(!file){
+alert("Select image ❌");
+return;
+}
 
 let fd = new FormData();
 fd.append("image",file);
 fd.append("type",type);
-fd.append("position",pos);
+fd.append("position",pos||1);
+fd.append("link",selectedLink); // 🔥 IMPORTANT
 
 fetch(API+"/upload",{
 method:"POST",
@@ -119,53 +235,72 @@ headers:{"Authorization":"Bearer "+token},
 body:fd
 })
 .then(()=>{
-showToast("Uploaded ✅");
+alert("Uploaded ✅");
 loadBanners();
+})
+.catch(err=>{
+console.error(err);
+alert("Upload Failed ❌");
 });
 }
 
-// ===== LOAD =====
+// ===== LOAD BANNERS =====
 function loadBanners(){
 
-authFetch(API).then(data=>{
+authFetch(API)
+.then(data=>{
 
-let hero="",promo="",slides="";
-
-data.sort((a,b)=>a.position-b.position);
+let heroHTML = "";
+let promoHTML = "";
 
 data.forEach(b=>{
 
-let card=`
+let card = `
 <div class="col-md-3 mb-3 draggable" draggable="true" data-id="${b.id}">
+
 <div class="card-box">
 
 <img src="${b.imageUrl}" class="banner-img mb-2">
 
-<p>Pos: ${b.position}</p>
+<p><b>Pos:</b> ${b.position}</p>
+<p>${b.active ? "Active ✅":"Inactive ❌"}</p>
+
+<input type="number" value="${b.position}"
+onchange="updatePosition(${b.id},this.value)"
+class="form-control mb-2">
+
+<div class="d-flex gap-2 mb-2">
+
+<button class="btn btn-warning w-100"
+onclick="toggle(${b.id})">
+${b.active ? "Deactivate" : "Activate"}
+</button>
 
 <button class="btn btn-danger w-100"
-onclick="del(${b.id})">Delete</button>
+onclick="del(${b.id})">
+Delete
+</button>
 
 </div>
+
+</div>
+
 </div>
 `;
 
-if(b.type==="HERO"){
-hero+=card;
-slides+=`<div class="slide"><img src="${b.imageUrl}"></div>`;
-}else{
-promo+=card;
-}
+if(b.type === "HERO") heroHTML += card;
+else promoHTML += card;
 
 });
 
-document.getElementById("heroSection").innerHTML=hero;
-document.getElementById("promoSection").innerHTML=promo;
-document.getElementById("slider").innerHTML=slides;
+document.getElementById("heroSection").innerHTML = heroHTML;
+document.getElementById("promoSection").innerHTML = promoHTML;
 
-initDrag();
-startSlider();
+initDrag(); // 🔥 drag feature
 
+})
+.catch(err=>{
+console.error("Banner error:", err);
 });
 }
 
@@ -193,7 +328,6 @@ container.appendChild(dragging);
 
 }
 
-// ===== UPDATE POSITION =====
 function updateOrder(){
 
 let items=document.querySelectorAll("#heroSection .draggable");
@@ -203,60 +337,32 @@ let id=el.getAttribute("data-id");
 authFetch(API+"/position/"+id+"?position="+(index+1),{method:"PUT"});
 });
 
-showToast("Reordered 🔄");
 }
 
-// ===== SLIDER =====
-function startSlider(){
-
-let slides=document.querySelectorAll(".slide");
-let i=0;
-
-if(slides.length===0) return;
-
-slides[0].classList.add("active");
-
-setInterval(()=>{
-slides[i].classList.remove("active");
-i=(i+1)%slides.length;
-slides[i].classList.add("active");
-},3000);
-
-}
-
-// ===== DELETE =====
+// ===== ACTIONS =====
 function del(id){
-authFetch(API+"/"+id,{method:"DELETE"})
-.then(()=>{
-showToast("Deleted ❌");
-loadBanners();
-});
+authFetch(API+"/"+id,{method:"DELETE"}).then(loadBanners);
 }
 
-// ===== TOAST =====
-function showToast(msg){
-let t=document.createElement("div");
-t.innerText=msg;
-t.style.position="fixed";
-t.style.bottom="20px";
-t.style.right="20px";
-t.style.background="#000";
-t.style.color="#fff";
-t.style.padding="10px 20px";
-t.style.borderRadius="8px";
-document.body.appendChild(t);
-setTimeout(()=>t.remove(),2000);
+function toggle(id){
+authFetch(API+"/toggle/"+id,{method:"PUT"}).then(loadBanners);
+}
+
+function updatePosition(id,pos){
+authFetch(API+"/position/"+id+"?position="+pos,{method:"PUT"}).then(loadBanners);
 }
 
 // ===== LOGOUT =====
 function logout(){
 localStorage.removeItem("adminToken");
-location.href="login.html";
+window.location.href="login.html";
 }
 
 loadBanners();
 
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
