@@ -107,7 +107,7 @@ z-index:999;
 <!-- Content -->
 <div class="content">
 
-<h4>🎯 Banner Management</h4>
+<h4> Banner Management</h4>
 
 <!-- ADD -->
 <div class="card-box mb-3">
@@ -150,11 +150,25 @@ z-index:999;
 <div class="row" id="heroSection"></div>
 
 <!-- PROMO -->
-<h5 class="mt-4">🎯 Promo Section</h5>
+<h5 class="mt-4"> Promo Section (1200 × 600 px)</h5>
 <div class="row" id="promoSection"></div>
 
 </div>
-<!-- ONLY JS PART CHANGED — HTML SAME -->
+<!-- TOAST -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+
+  <div id="liveToast" class="toast align-items-center text-bg-success border-0" role="alert">
+    
+    <div class="d-flex">
+      <div class="toast-body" id="toastMsg">
+        Success
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+
+  </div>
+
+</div>
 
 <script>
 
@@ -205,7 +219,7 @@ let type = document.getElementById("type").value;
 let pos = document.getElementById("position").value;
 
 if(!file){
-alert("Select image ❌");
+showToast("Please select image ❌", "warning");
 return;
 }
 
@@ -232,12 +246,12 @@ headers:{"Authorization":"Bearer "+token},
 body:fd
 })
 .then(()=>{
-alert("Uploaded ✅");
+showToast("Uploaded Successfully ✅", "success");
 loadBanners();
 })
 .catch(err=>{
 console.error(err);
-alert("Upload Failed ❌");
+showToast("Upload Failed ❌", "danger");
 });
 }
 
@@ -293,7 +307,7 @@ else promoHTML += card;
 document.getElementById("heroSection").innerHTML = heroHTML;
 document.getElementById("promoSection").innerHTML = promoHTML;
 
-initDrag(); // 🔥 drag feature
+initDrag();
 
 })
 .catch(err=>{
@@ -400,6 +414,20 @@ function loadFlavourCakes(){
   }
 
   cakeSelect.style.display = "block";
+}
+// ========== Toast ============ 
+function showToast(message, type="success"){
+
+  let toastEl = document.getElementById("liveToast");
+  let msg = document.getElementById("toastMsg");
+
+  // change color
+  toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+
+  msg.innerText = message;
+
+  let toast = new bootstrap.Toast(toastEl);
+  toast.show();
 }
 </script>
 
