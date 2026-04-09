@@ -3,162 +3,156 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Lava Cakes - Banners</title>
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
 
 /* ===== GLOBAL ===== */
-body{
-  background:#f8f9fa;
+body {
+  background: #f8f9fa;
   font-family: 'Segoe UI', sans-serif;
 }
 
 /* ===== HERO ===== */
-.hero-section{
-  width:100%;
-  padding:0;
-  /* background:#f8f9fa; same as page */
+.hero-section {
+  width: 100%;
+  padding: 0;
 }
 
-.hero-animate{
+.hero-animate {
   opacity: 0;
   transform: translateY(50px) scale(0.95);
   animation: heroEnter 1.2s ease forwards;
 }
 
-@keyframes heroEnter{
-  to{ opacity:1; transform: translateY(0) scale(1);}
+@keyframes heroEnter {
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.hero-img{
-  width:100%;
-  height:auto;         
-  max-height:90vh;      
-  object-fit:contain;   
-  display:block;
-  margin:auto;
-  cursor:pointer;
-  transition:transform 0.4s ease;
+.hero-img {
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+  cursor: pointer;
+  transition: transform 0.4s ease;
 }
 
-.hero-img:hover{ transform: scale(1.02); }
-/* @media(max-width:768px){
-  .hero-img{
-    max-height:300px; 
-  }
-} */
+.hero-img:hover { transform: scale(1.02); }
+
 /* ===== PROMO SLIDER ===== */
-
-.promo-wrapper{
-  position:relative;
+.promo-wrapper {
+  position: relative;
+  padding: 0 30px;
 }
 
-#promoSlider{
-  display:flex;
-  gap:20px;
-  overflow-x:auto;
-  scroll-behavior:smooth;
+#promoSlider {
+  display: flex;
+  gap: 20px;
+  overflow-x: hidden;       /* FIX: hide overflow — manual scroll control only */
+  scroll-behavior: auto;    /* FIX: controlled per action, not globally */
 }
 
-#promoSlider::-webkit-scrollbar{
-  display:none;
+.promo-card {
+  flex: 0 0 calc(50% - 10px);  /* FIX: accounts for the 20px gap */
+  border-radius: 15px;
+  overflow: hidden;
+  transition: 0.3s;
+  aspect-ratio: 2 / 1;
+  cursor: pointer;
 }
 
-.promo-card{
-  flex:0 0 50%;
-  border-radius:15px;
-  overflow:hidden;
-  transition:0.3s;
+.promo-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
-.promo-card:hover{
-  transform:translateY(-10px) scale(1.03);
-  box-shadow:0 15px 35px rgba(0,0,0,0.2);
+.promo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 15px;
 }
 
-.promo-img{
-  width:100%;
-  height:220px;
-  object-fit:cover;
-  cursor:pointer;
+/* ===== ARROWS ===== */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /* background: red; */
+  color:red;
+  border: none;
+  /* padding: 10px 15px; */
+  /* border-radius: 50%; */
+  z-index: 10;
+  cursor: pointer;
 }
 
-/* arrows */
-.arrow{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  background:#000;
-  color:#fff;
-  border:none;
-  padding:10px 15px;
-  border-radius:50%;
-  z-index:10;
+.arrow-left  { left: -5px; }
+.arrow-right { right: -5px; }
+
+/* ===== DOTS ===== */
+#promoDots {
+  text-align: center;
+  margin-top: 12px;
 }
 
-.arrow-left{ left:-10px; }
-.arrow-right{ right:-10px; }
+#promoDots span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 4px;
+  background: #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#promoDots span.active {
+  background: #ff0000;
+  transform: scale(1.5);
+}
 
 /* ===== RESPONSIVE ===== */
-
-@media(max-width:768px){
-  .hero-img{
-    width:100%;
-    height:auto;
-    max-height:none;  
+@media (max-width: 768px) {
+  .hero-img {
+    width: 100%;
+    height: auto;
+    max-height: none;
   }
-  .promo-card{ flex:0 0 100%; }
+  .promo-card {
+    flex: 0 0 100%;
+  }
 }
-#promoDots span{
-  display:inline-block;
-  width:6px;        
-  height:6px;
-  margin:4px;
-  background:#ddd;    
-  border-radius:50%;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-#promoDots span.active{
-  background:#ff0000; 
-  transform:scale(1.5);
-}
-
 
 </style>
 </head>
 
 <body>
 
-<!-- HERO -->
+<!-- ===== HERO ===== -->
 <section class="hero-section">
-  
-
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-      <div class="carousel-inner hero-animate" id="heroCarouselInner"></div>
-    </div>
-
- 
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel-inner hero-animate" id="heroCarouselInner"></div>
+  </div>
 </section>
 
-<!-- PROMO SLIDER -->
-<section class="container pb-5">
+<!-- ===== PROMO SLIDER ===== -->
+<section class="container pb-5 pt-4">
 
-<h4 class="mb-3">🎯 Promo Offers</h4>
+  <h4 class="mb-3">🎯 Promo Offers</h4>
 
-<div class="promo-wrapper">
+  <div class="promo-wrapper">
+    <button class="arrow arrow-left"  onclick="scrollPromo(-1)">&#10094;</button>
+    <div id="promoSlider"></div>
+    <button class="arrow arrow-right" onclick="scrollPromo(1)">&#10095;</button>
+  </div>
 
-<button class="arrow arrow-left" onclick="scrollPromo(-1)">❮</button>
-
-<div id="promoSlider"></div>
-<div class="text-center mt-3" id="promoDots"></div>
-<button class="arrow arrow-right" onclick="scrollPromo(1)">❯</button>
-
-</div>
+  <div class="text-center mt-3" id="promoDots"></div>
 
 </section>
 
@@ -166,155 +160,216 @@ body{
 
 const BASE = "https://lava-bakery-backend.onrender.com/api/banner-images";
 
-
-// ===== HERO =====
+/* =========================================================
+   HERO CAROUSEL
+   ========================================================= */
 fetch(BASE + "/hero")
-.then(res => res.json())
-.then(data => {
-
-    let container = document.getElementById("heroCarouselInner");
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("heroCarouselInner");
 
     container.classList.remove("hero-animate");
-    void container.offsetWidth;
+    void container.offsetWidth;               // reflow to restart animation
     container.classList.add("hero-animate");
 
-    container.innerHTML = "";
-
-    data.forEach((b, index) => {
-        container.innerHTML += `
-        <div class="carousel-item ${index === 0 ? "active" : ""}">
-            <img src="${b.imageUrl}" 
-                 class="hero-img"
-                 onclick="goTo('${b.link}')">
-        </div>`;
-    });
-
-});
+    container.innerHTML = data.map((b, i) => `
+      <div class="carousel-item ${i === 0 ? "active" : ""}">
+        <img src="${b.imageUrl}" class="hero-img" onclick="goTo('${b.link}')">
+      </div>
+    `).join("");
+  });
 
 
-// ===== RESPONSIVE LOGIC =====
-function getCardsPerView(){
+/* =========================================================
+   PROMO SLIDER  —  FULLY FIXED
+   =========================================================
+
+   FIXES APPLIED:
+   1. Removed duplicate startAutoScroll() definition.
+   2. jumpTo() adds +perView offset so clones are skipped correctly.
+   3. dotClick() uses scrollToIndex() (respects clone offset) not raw scrollTo().
+   4. buildSlider() passes real data.length to dot creation, not cloned count.
+   5. checkBoundary() uses an isTransitioning guard to prevent scroll-fight jitter.
+   6. scroll-behavior toggled per action (smooth vs auto), not set globally.
+   7. getSlideWidth() measures actual card width + gap for pixel-perfect scrolling.
+   ========================================================= */
+
+let realData        = [];   // original items from API
+let currentIndex    = 0;    // active real-data slide index (0-based)
+let isTransitioning = false; // guard: blocks boundary fix during smooth scroll
+let autoTimer       = null;
+
+/* --- helpers --- */
+function getPerView() {
   return window.innerWidth <= 768 ? 1 : 2;
 }
 
+function getTotalSlides() {
+  return Math.ceil(realData.length / getPerView());
+}
 
-// ===== CREATE DOTS =====
-function createDots(totalCards){
+/* width of one full "slide step" = perView cards + their gaps */
+function getSlideWidth() {
+  const slider  = document.getElementById("promoSlider");
+  const card    = slider.querySelector(".promo-card");
+  if (!card) return slider.clientWidth;
+  const gap     = 20;
+  return (card.offsetWidth + gap) * getPerView();
+}
 
-  let dotsContainer = document.getElementById("promoDots");
-  dotsContainer.innerHTML = "";
+/* --- build slider DOM from data array --- */
+function buildSlider(data) {
+  realData = data;
 
-  let perView = getCardsPerView();
-  let totalSlides = Math.ceil(totalCards / perView);
+  const slider      = document.getElementById("promoSlider");
+  const dotsEl      = document.getElementById("promoDots");
+  const perView     = getPerView();
+  const totalSlides = getTotalSlides();
 
-  for(let i=0; i<totalSlides; i++){
-    dotsContainer.innerHTML += `<span onclick="goToSlide(${i})"></span>`;
+  /* Infinite clone pattern:
+     [ last perView items (start-clone) ] + [ real items ] + [ first perView items (end-clone) ] */
+  const cloned = [
+    ...data.slice(-perView),
+    ...data,
+    ...data.slice(0, perView)
+  ];
+
+  slider.innerHTML = cloned.map(p => `
+    <div class="promo-card">
+      <img src="${p.imageUrl}" class="promo-img" onclick="goTo('${p.link}')">
+    </div>
+  `).join("");
+
+  /* FIX 4: dots count based on real items, not cloned */
+  dotsEl.innerHTML = "";
+  for (let i = 0; i < totalSlides; i++) {
+    dotsEl.innerHTML += `<span onclick="dotClick(${i})"></span>`;
   }
-}
 
-
-// ===== PROMO =====
-fetch(BASE + "/promo")
-.then(res => res.json())
-.then(data => {
-
-    let slider = document.getElementById("promoSlider");
-    slider.innerHTML = "";
-
-    data.forEach(p => {
-        slider.innerHTML += `
-        <div class="promo-card">
-            <img src="${p.imageUrl}" 
-                 class="promo-img"
-                 onclick="goTo('${p.link}')">
-        </div>`;
-    });
-
-    createDots(data.length);
-    updateDots();
-    startAutoScroll();
-
-});
-
-
-// ===== AUTO SCROLL =====
-let scrollInterval;
-
-function startAutoScroll(){
-  scrollInterval = setInterval(()=>{
-    scrollPromo(1);
-  },3000);
-}
-
-
-// ===== SCROLL =====
-function scrollPromo(direction){
-
-  let slider = document.getElementById("promoSlider");
-
-  slider.scrollBy({
-    left: direction * slider.clientWidth,
-    behavior: "smooth"
-  });
-
-  setTimeout(updateDots, 400);
-}
-
-
-// ===== DOT UPDATE =====
-function updateDots(){
-
-  let slider = document.getElementById("promoSlider");
-  let dots = document.querySelectorAll("#promoDots span");
-
-  let index = Math.round(slider.scrollLeft / slider.clientWidth);
-
-  dots.forEach(d => d.classList.remove("active"));
-
-  if(dots[index]){
-    dots[index].classList.add("active");
-  }
-}
-
-
-// ===== DOT CLICK =====
-function goToSlide(index){
-
-  let slider = document.getElementById("promoSlider");
-
-  slider.scrollTo({
-    left: index * slider.clientWidth,
-    behavior: "smooth"
-  });
-
-  setTimeout(updateDots, 400);
-}
-
-
-// ===== SCROLL EVENT =====
-document.getElementById("promoSlider").addEventListener("scroll", updateDots);
-
-
-// ===== RESIZE FIX (🔥 IMPORTANT) =====
-window.addEventListener("resize", () => {
-
-  let totalCards = document.querySelectorAll(".promo-card").length;
-
-  createDots(totalCards);
+  currentIndex = 0;
+  setTimeout(() => jumpTo(0, false), 60); // silent jump past start-clones
   updateDots();
+}
 
+/* --- instant (no animation) jump to a real-data index --- */
+function jumpTo(idx, animated) {
+  const slider  = document.getElementById("promoSlider");
+  const perView = getPerView();
+  const slideW  = getSlideWidth();
+
+  /* FIX 2: +perView skips the start-clone block */
+  const target = (idx + perView) * slideW;
+
+  /* FIX 6: toggle scroll-behavior per action */
+  slider.style.scrollBehavior = animated ? "smooth" : "auto";
+  slider.scrollLeft = target;
+
+  currentIndex = idx;
+  updateDots();
+}
+
+/* --- smooth scroll to a real-data index (wraps via clone trick) --- */
+function scrollToIndex(idx) {
+  if (isTransitioning) return;
+
+  const totalSlides = getTotalSlides();
+  idx = ((idx % totalSlides) + totalSlides) % totalSlides; // normalise
+
+  isTransitioning = true;
+  jumpTo(idx, true);
+
+  /* FIX 5: release guard after animation finishes */
+  setTimeout(() => {
+    isTransitioning = false;
+  }, 420);
+}
+
+/* --- silently reset scroll position when entering clone zone --- */
+function checkBoundary() {
+  if (isTransitioning) return; /* FIX 5: no fighting during animation */
+
+  const slider      = document.getElementById("promoSlider");
+  const perView     = getPerView();
+  const slideW      = getSlideWidth();
+  const totalSlides = getTotalSlides();
+
+  const realStart = perView * slideW;                  // scrollLeft of real slide 0
+  const realEnd   = (perView + totalSlides) * slideW;  // scrollLeft after last real slide
+
+  if (slider.scrollLeft < realStart - 2) {
+    /* in start-clone zone → jump to last real slide */
+    slider.style.scrollBehavior = "auto";
+    slider.scrollLeft = realEnd - slideW;
+    currentIndex = totalSlides - 1;
+    updateDots();
+  } else if (slider.scrollLeft >= realEnd - 2) {
+    /* in end-clone zone → jump to first real slide */
+    slider.style.scrollBehavior = "auto";
+    slider.scrollLeft = realStart;
+    currentIndex = 0;
+    updateDots();
+  }
+}
+
+/* --- sync dots to currentIndex --- */
+function updateDots() {
+  document.querySelectorAll("#promoDots span").forEach((dot, i) => {
+    dot.classList.toggle("active", i === currentIndex);
+  });
+}
+
+/* --- public: arrow buttons --- */
+function scrollPromo(direction) {
+  resetAutoScroll();
+  scrollToIndex(currentIndex + direction);
+}
+
+/* --- public: dot click (FIX 3: uses scrollToIndex, not raw scrollTo) --- */
+function dotClick(idx) {
+  resetAutoScroll();
+  scrollToIndex(idx);
+}
+
+/* --- FIX 1: single startAutoScroll definition --- */
+function startAutoScroll() {
+  autoTimer = setInterval(() => scrollToIndex(currentIndex + 1), 3000);
+}
+
+function resetAutoScroll() {
+  clearInterval(autoTimer);
+  startAutoScroll();
+}
+
+/* scroll event: boundary detection ONLY — no index/dot calc here */
+document.getElementById("promoSlider").addEventListener("scroll", checkBoundary);
+
+/* rebuild on resize */
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (realData.length) buildSlider(realData);
+  }, 200);
 });
 
+/* fetch & init */
+fetch(BASE + "/promo")
+  .then(res => res.json())
+  .then(data => {
+    buildSlider(data);
+    startAutoScroll();
+  });
 
-// ===== REDIRECT =====
-function goTo(link){
-  if(link){
-    window.location.href = link;
-  }
+
+/* =========================================================
+   UTILITY
+   ========================================================= */
+function goTo(link) {
+  if (link) window.location.href = link;
 }
 
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
