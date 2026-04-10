@@ -386,7 +386,8 @@ cursor:pointer;
 display:flex;
 gap:25px;
 width:max-content;
-animation:scroll 20s linear infinite;
+/* animation:scroll 20s linear infinite; */
+animation: none;
 }
 
 .category-item{

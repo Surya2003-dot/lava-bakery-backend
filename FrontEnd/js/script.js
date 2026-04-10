@@ -623,3 +623,51 @@ dropdown.style.display="none"
 })
 
 })
+
+// =============== flavour scroll ================
+// ===============================
+// CATEGORY AUTO + MANUAL SCROLL
+// ===============================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const slider = document.querySelector(".category-slider");
+  const track = document.querySelector(".category-track");
+
+  if (!slider || !track) return;
+
+  let scrollSpeed = 0.5;
+  let autoScroll;
+
+  // ▶ START AUTO SCROLL
+  function startAutoScroll() {
+    autoScroll = setInterval(() => {
+      slider.scrollLeft += scrollSpeed;
+
+      // infinite loop reset
+      if (slider.scrollLeft >= track.scrollWidth / 2) {
+        slider.scrollLeft = 0;
+      }
+    }, 10);
+  }
+
+  // ⛔ STOP AUTO
+  function stopAutoScroll() {
+    clearInterval(autoScroll);
+  }
+
+  // ▶ INIT
+  startAutoScroll();
+
+  // 🖱️ MOUSE EVENTS
+  slider.addEventListener("mouseenter", stopAutoScroll);
+  slider.addEventListener("mouseleave", startAutoScroll);
+
+  // 📱 TOUCH EVENTS
+  slider.addEventListener("touchstart", stopAutoScroll);
+
+  slider.addEventListener("touchend", () => {
+    setTimeout(startAutoScroll, 1000); // smooth resume
+  });
+
+}); 
