@@ -426,6 +426,7 @@ overflow-x:auto;
 scrollbar-width:none;
 overflow:hidden;
 width:100%;
+ -webkit-overflow-scrolling: touch;
 }
 
 .category-slider::-webkit-scrollbar{

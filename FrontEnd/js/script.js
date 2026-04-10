@@ -625,10 +625,6 @@ dropdown.style.display="none"
 })
 
 // =============== flavour scroll ================
-// ===============================
-// CATEGORY AUTO + MANUAL SCROLL
-// ===============================
-
 document.addEventListener("DOMContentLoaded", () => {
 
   const slider = document.querySelector(".category-slider");
@@ -636,38 +632,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!slider || !track) return;
 
-  let scrollSpeed = 0.5;
-  let autoScroll;
+  let scrollSpeed = 0.4;
+  let isUserInteracting = false;
+  let animationId;
 
-  // ▶ START AUTO SCROLL
-  function startAutoScroll() {
-    autoScroll = setInterval(() => {
+  function autoScroll() {
+    if (!isUserInteracting) {
       slider.scrollLeft += scrollSpeed;
 
-      // infinite loop reset
+      // infinite loop
       if (slider.scrollLeft >= track.scrollWidth / 2) {
         slider.scrollLeft = 0;
       }
-    }, 10);
+    }
+
+    animationId = requestAnimationFrame(autoScroll);
   }
 
-  // ⛔ STOP AUTO
-  function stopAutoScroll() {
-    clearInterval(autoScroll);
-  }
+  autoScroll();
 
-  // ▶ INIT
-  startAutoScroll();
+  // =========================
+  // MOBILE FIX 🔥
+  // =========================
 
-  // 🖱️ MOUSE EVENTS
-  slider.addEventListener("mouseenter", stopAutoScroll);
-  slider.addEventListener("mouseleave", startAutoScroll);
-
-  // 📱 TOUCH EVENTS
-  slider.addEventListener("touchstart", stopAutoScroll);
-
-  slider.addEventListener("touchend", () => {
-    setTimeout(startAutoScroll, 1000); // smooth resume
+  slider.addEventListener("touchstart", () => {
+    isUserInteracting = true;
   });
 
-}); 
+  slider.addEventListener("touchmove", () => {
+    isUserInteracting = true;
+  });
+
+  slider.addEventListener("touchend", () => {
+    setTimeout(() => {
+      isUserInteracting = false;
+    }, 1200); // smooth resume
+  });
+
+  // =========================
+  // DESKTOP
+  // =========================
+
+  slider.addEventListener("mouseenter", () => {
+    isUserInteracting = true;
+  });
+
+  slider.addEventListener("mouseleave", () => {
+    isUserInteracting = false;
+  });
+
+});
