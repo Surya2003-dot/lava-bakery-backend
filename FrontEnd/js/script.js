@@ -623,3 +623,43 @@ dropdown.style.display="none"
 })
 
 })
+
+
+
+
+const slider = document.querySelector(".category-slider")
+const track = document.querySelector(".category-track")
+
+let autoScroll
+
+function startAutoScroll(){
+  track.style.animation = "scroll 20s linear infinite"
+}
+
+function stopAutoScroll(){
+  track.style.animation = "none"
+}
+
+// START AUTO SCROLL
+startAutoScroll()
+
+// 🖐️ When user touches / scrolls → STOP
+slider.addEventListener("touchstart", stopAutoScroll)
+slider.addEventListener("mousedown", stopAutoScroll)
+
+// 🖐️ When user releases → START again
+slider.addEventListener("touchend", ()=>{
+  setTimeout(startAutoScroll, 2000)
+})
+
+slider.addEventListener("mouseup", ()=>{
+  setTimeout(startAutoScroll, 2000)
+})
+
+// Optional: while scrolling
+slider.addEventListener("scroll", ()=>{
+  stopAutoScroll()
+
+  clearTimeout(autoScroll)
+  autoScroll = setTimeout(startAutoScroll, 2000)
+})

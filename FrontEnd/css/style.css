@@ -423,7 +423,8 @@ animation-play-state:paused;
 .category-slider{
 overflow-x:auto;
 scrollbar-width:none;
-overflow:hidden;
+/* overflow:hidden; */
+ scroll-behavior: smooth;
 width:100%;
 }
 
