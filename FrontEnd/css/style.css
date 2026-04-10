@@ -386,8 +386,7 @@ cursor:pointer;
 display:flex;
 gap:25px;
 width:max-content;
-/* animation:scroll 20s linear infinite; */
-animation: none;
+animation:scroll 20s linear infinite;
 }
 
 .category-item{
@@ -426,7 +425,6 @@ overflow-x:auto;
 scrollbar-width:none;
 overflow:hidden;
 width:100%;
- -webkit-overflow-scrolling: touch;
 }
 
 .category-slider::-webkit-scrollbar{
