@@ -663,3 +663,17 @@ slider.addEventListener("scroll", ()=>{
   clearTimeout(autoScroll)
   autoScroll = setTimeout(startAutoScroll, 2000)
 })
+
+// hero banner
+
+fetch("https://lava-bakery-backend.onrender.com/api/banner-images/hero")
+  .then(r => r.json())
+  .then(data => {
+    const wrap = document.getElementById("heroCarouselInner");
+    wrap.innerHTML = data.map((b, i) => `
+      <div class="carousel-item ${i === 0 ? "active" : ""}">
+        <img src="${b.imageUrl}" class="hero-img" onclick="goTo('${b.link}')">
+      </div>
+    `).join("");
+  });
+  

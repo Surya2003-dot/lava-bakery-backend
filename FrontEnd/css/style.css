@@ -458,7 +458,7 @@ display:none;
   }
 }
 /* HERO SECTION */
-.hero-section {
+/* .hero-section {
   background: linear-gradient(135deg, #fff5f2, #ffe4e1);
   padding: 80px 0;
   position: relative;
@@ -480,17 +480,17 @@ display:none;
 .hero-img {
   max-width: 450px;
   animation: float 4s ease-in-out infinite;
-}
+} */
 
 /* Floating animation */
-@keyframes float {
+/* @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-15px); }
   100% { transform: translateY(0px); }
-}
+} */
 
 /* Responsive */
-@media (max-width: 991px) {
+/* @media (max-width: 991px) {
   .hero-title {
     font-size: 36px;
   }
@@ -508,19 +508,19 @@ display:none;
   .hero-subtitle {
     font-size: 15px;
   }
-}
+} */
 
 
 /* 📱 MOBILE STYLE ONLY */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
 
   .hero-section {
     padding: 40px 20px;
     text-align: center;
-  }
+  } */
 
   /* Cake center small */
-  .hero-img {
+  /* .hero-img {
     position: absolute;
     top: 55%;
     left: 50%;
@@ -530,10 +530,10 @@ display:none;
     opacity: 0.2;
     
     animation: shakeCake 3s ease-in-out infinite;
-  }
+  } */
 
   /* Text above image */
-  .hero-section .container {
+  /* .hero-section .container {
     position: relative;
     z-index: 2;
   }
@@ -549,15 +549,43 @@ display:none;
     color: black;
   }
 
-}
+} */
 
 /* 🎂 Smooth Shake Animation */
-@keyframes shakeCake {
+/* @keyframes shakeCake {
   0% { transform: translate(-50%, -50%) rotate(0deg); }
   25% { transform: translate(-50%, -50%) rotate(3deg); }
   50% { transform: translate(-50%, -50%) rotate(0deg); }
   75% { transform: translate(-50%, -50%) rotate(-3deg); }
   100% { transform: translate(-50%, -50%) rotate(0deg); }
+} */
+
+/* ===== HERO ===== */
+.hero-section {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  margin-top: 70px;
+}
+
+.hero-animate {
+  opacity: 0;
+  transform: translateY(40px) scale(0.97);
+  animation: heroEnter 1s cubic-bezier(.22,1,.36,1) forwards;
+}
+
+@keyframes heroEnter {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hero-img {
+  width: 100%;
+  height: auto;
+  max-height: 90vh;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.5s ease;
 }
 
 /* 🔴 Red Arrows */
@@ -946,4 +974,16 @@ text-align:center;
 }
 .active-type {
   box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+}
+.laava-animate {
+  background: linear-gradient(90deg, #ff0000, #ff7b00, #ff0000);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: laavaGradient 3s linear infinite;
+}
+
+@keyframes laavaGradient {
+  0% { background-position: 0%; }
+  100% { background-position: 200%; }
 }
