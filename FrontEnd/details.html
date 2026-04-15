@@ -241,7 +241,7 @@ const API_BASE_URL = "https://lava-bakery-backend.onrender.com/api";
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 const selectedWeightFromCard = parseFloat(params.get("weight"));
-
+let selectedType = "egg";
 // =============================
 // LOAD CAKE DETAILS
 // =============================
@@ -351,7 +351,7 @@ Buy Now
 
 `
 generateWeights(cake);
-
+handleTypeVisibility(cake.type);
 updateCartButton()
 
 }
@@ -643,7 +643,9 @@ function buyNow(){
 // }
 function updatePrice(){
 
-  let weight = document.querySelector('input[name="weight"]:checked').value;
+  // let weight = document.querySelector('input[name="weight"]:checked').value;
+  let weightEl = document.querySelector('input[name="weight"]:checked');
+let weight = weightEl ? parseFloat(weightEl.value) : 1;
 
   let basePrice = window.cake.pricePerKg * weight;
 
@@ -697,7 +699,8 @@ weights.forEach(i => {
         input.checked = true;
 
         document.getElementById("selectedWeight").innerText = i + " KG";
-        document.getElementById("cakePrice").innerText = cake.pricePerKg * i;
+        // document.getElementById("cakePrice").innerText = cake.pricePerKg * i;
+        updatePrice();
     }
 
     input.onchange = updatePrice;
@@ -731,28 +734,28 @@ function showToast(msg, type="dark"){
 // =====================
 // let selectedType = "egg"; // default
 
-// function selectType(type){
-//   selectedType = type;
+function selectType(type){
+  selectedType = type;
 
-//   let eggBtn = document.getElementById("eggBtn");
-//   let egglessBtn = document.getElementById("egglessBtn");
+  let eggBtn = document.getElementById("eggBtn");
+  let egglessBtn = document.getElementById("egglessBtn");
 
-//   if(type === "egg"){
-//     eggBtn.classList.add("btn-danger","active-type");
-//     eggBtn.classList.remove("btn-outline-danger");
+  if(type === "egg"){
+    eggBtn.classList.add("btn-danger","active-type");
+    eggBtn.classList.remove("btn-outline-danger");
 
-//     egglessBtn.classList.add("btn-outline-success");
-//     egglessBtn.classList.remove("btn-success","active-type");
-//   }else{
-//     egglessBtn.classList.add("btn-success","active-type");
-//     egglessBtn.classList.remove("btn-outline-success");
+    egglessBtn.classList.add("btn-outline-success");
+    egglessBtn.classList.remove("btn-success","active-type");
+  }else{
+    egglessBtn.classList.add("btn-success","active-type");
+    egglessBtn.classList.remove("btn-outline-success");
 
-//     eggBtn.classList.add("btn-outline-danger");
-//     eggBtn.classList.remove("btn-danger","active-type");
-//   }
+    eggBtn.classList.add("btn-outline-danger");
+    eggBtn.classList.remove("btn-danger","active-type");
+  }
 
-//   updatePrice();
-// }
+  updatePrice();
+}
 function handleTypeVisibility(cakeType){
   let eggBtn = document.getElementById("eggBtn");
   let egglessBtn = document.getElementById("egglessBtn");
