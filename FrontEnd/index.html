@@ -329,122 +329,23 @@ onkeypress="mobileSearch(event)">
 </div>
 
 
-<div class="container pb-5">
+<section class="promo-section">
 
-  <!-- MOBILE ONLY CAROUSEL -->
-  <div id="promoCarousel" class="carousel slide d-md-none" 
-       data-bs-ride="carousel">
 
-    <div class="carousel-inner">
-
-      <!-- Slide 1 -->
-      <div class="carousel-item active"   >
-        <div class="promo-card p-4 shadow-sm" onclick="openCategory('Chocolate Flavoured Cake')">
-          <div class="row align-items-center">
-            <div class="col-6" >
-              <h4 class="fw-bold mb-2">A Slice of Celebration</h4>
-              <p class="text-muted small">
-                Perfect cakes for birthdays and happy moments.
-              </p>
-              <button class="btn btn-danger btn-sm mt-2"  >
-                Order Now
-              </button>
-            </div>
-            <div class="col-6 text-end">
-              <img src="images/six.webp"
-                   class="img-fluid promo-img">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Slide 2 -->
-      <div class="carousel-item"  >
-        <div class="promo-card p-4 shadow-sm" onclick="openCategory('Lava Special cake')">
-          <div class="row align-items-center">
-            <div class="col-6">
-              <h4 class="fw-bold mb-2">Trendy Flavours</h4>
-              <p class="text-muted small">
-                Discover new and exciting cake flavours.
-              </p>
-              <button class="btn btn-danger btn-sm mt-2">
-                Order Now
-              </button>
-            </div>
-            <div class="col-6 text-end">
-              <img src="images/one.png"
-                   class="img-fluid promo-img">
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Controls -->
-    <button class="carousel-control-prev"
-            type="button"
-            data-bs-target="#promoCarousel"
-            data-bs-slide="prev">
-      <span class="carousel-control-prev-icon custom-arrow"></span>
-    </button>
-
-    <button class="carousel-control-next"
-            type="button"
-            data-bs-target="#promoCarousel"
-            data-bs-slide="next">
-      <span class="carousel-control-next-icon custom-arrow"></span>
-    </button>
-
+  <!-- 100vw track — no padding, full bleed -->
+  <div class="promo-track-wrapper">
+    <div id="promoSlider"></div>
   </div>
+ <div class="promo-controls">
+  <button class="arrow" onclick="scrollPromo(-1)">&#10094;</button>
 
+  <div id="promoDots"></div>
 
-  <!-- MEDIUM & LARGE NORMAL LAYOUT -->
-  <div class="row g-4 d-none d-md-flex">
-
-    <div class="col-md-6">
-      <div class="promo-card p-4 shadow-sm h-100"  onclick="openCategory('Chocolate Flavoured Cake')">
-        <div class="row align-items-center">
-          <div class="col-6">
-            <h4 class="fw-bold mb-2">A Slice of Celebration</h4>
-            <p class="text-muted small">
-              Perfect cakes for birthdays and happy moments.
-            </p>
-            <button class="btn btn-danger btn-sm mt-2">
-              Order Now
-            </button>
-          </div>
-          <div class="col-6 text-end">
-            <img src="images/six.webp"
-                 class="img-fluid promo-img">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="promo-card p-4 shadow-sm h-100" onclick="openCategory('Lava Special cake')">
-        <div class="row align-items-center">
-          <div class="col-6">
-            <h4 class="fw-bold mb-2">Trendy Flavours</h4>
-            <p class="text-muted small">
-              Discover new and exciting cake flavours.
-            </p>
-            <button class="btn btn-danger btn-sm mt-2">
-              Order Now
-            </button>
-          </div>
-          <div class="col-6 text-end">
-            <img src="images/one.png"
-                 class="img-fluid promo-img">
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
+  <button class="arrow" onclick="scrollPromo(1)">&#10095;</button>
 </div>
+
+</section>
+
 <!-- --------cakes----- -->
  <section class="py-5 bg-light" id="cakes">
   <div class="container">

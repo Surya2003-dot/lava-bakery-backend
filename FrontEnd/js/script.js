@@ -626,44 +626,41 @@ dropdown.style.display="none"
 
 
 
-
 const slider = document.querySelector(".category-slider")
 const track = document.querySelector(".category-track")
 
-let autoScroll
+if (slider && track) {
 
-function startAutoScroll(){
-  track.style.animation = "scroll 20s linear infinite"
+  let autoScroll
+
+  function startAutoScroll(){
+    track.style.animation = "scroll 20s linear infinite"
+  }
+
+  function stopAutoScroll(){
+    track.style.animation = "none"
+  }
+
+  startAutoScroll()
+
+  slider.addEventListener("touchstart", stopAutoScroll)
+  slider.addEventListener("mousedown", stopAutoScroll)
+
+  slider.addEventListener("touchend", ()=>{
+    setTimeout(startAutoScroll, 2000)
+  })
+
+  slider.addEventListener("mouseup", ()=>{
+    setTimeout(startAutoScroll, 2000)
+  })
+
+  slider.addEventListener("scroll", ()=>{
+    stopAutoScroll()
+    clearTimeout(autoScroll)
+    autoScroll = setTimeout(startAutoScroll, 2000)
+  })
+
 }
-
-function stopAutoScroll(){
-  track.style.animation = "none"
-}
-
-// START AUTO SCROLL
-startAutoScroll()
-
-// 🖐️ When user touches / scrolls → STOP
-slider.addEventListener("touchstart", stopAutoScroll)
-slider.addEventListener("mousedown", stopAutoScroll)
-
-// 🖐️ When user releases → START again
-slider.addEventListener("touchend", ()=>{
-  setTimeout(startAutoScroll, 2000)
-})
-
-slider.addEventListener("mouseup", ()=>{
-  setTimeout(startAutoScroll, 2000)
-})
-
-// Optional: while scrolling
-slider.addEventListener("scroll", ()=>{
-  stopAutoScroll()
-
-  clearTimeout(autoScroll)
-  autoScroll = setTimeout(startAutoScroll, 2000)
-})
-
 // hero banner
 
 fetch("https://lava-bakery-backend.onrender.com/api/banner-images/hero")
@@ -677,3 +674,138 @@ fetch("https://lava-bakery-backend.onrender.com/api/banner-images/hero")
     `).join("");
   });
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ---- PROMO SLIDER ---- */
+let realData   = [];
+let currentIdx = 0;
+let autoTimer  = null;
+
+function getPerView() {
+  return window.innerWidth >= 640 ? 2 : 1;
+}
+
+function totalPages() {
+  if (!realData.length) return 1;
+  return Math.ceil(realData.length / getPerView());
+}
+
+function buildSlider(data) {
+  realData   = data;
+  currentIdx = 0;
+
+  const slider = document.getElementById("promoSlider");
+  slider.style.transition = "none";
+  slider.style.transform  = "translateX(0)";
+
+  slider.innerHTML = data.map(p => `
+    <div class="promo-card">
+      <img src="${p.imageUrl}" class="promo-img" onclick="goTo('${p.link}')">
+    </div>
+  `).join("");
+
+  rebuildDots();
+}
+
+function rebuildDots() {
+  const dots  = document.getElementById("promoDots");
+  const total = totalPages();
+  dots.innerHTML = "";
+  for (let i = 0; i < total; i++) {
+    dots.innerHTML += `<span onclick="dotClick(${i})"></span>`;
+  }
+  updateDots();
+}
+
+function applyTransform(animate) {
+  const slider = document.getElementById("promoSlider");
+  const cards  = slider.querySelectorAll(".promo-card");
+  if (!cards.length) return;
+
+  const gap       = 12;                        /* must match CSS gap */
+  const cardWidth = cards[0].offsetWidth;      /* vw-based, always correct */
+  const perView   = getPerView();
+  const shift     = currentIdx * perView * (cardWidth + gap);
+
+  slider.style.transition = animate
+    ? "transform 0.45s cubic-bezier(.22,1,.36,1)"
+    : "none";
+  slider.style.transform = `translateX(-${shift}px)`;
+}
+
+function scrollPromo(dir) {
+  currentIdx = (currentIdx + dir + totalPages()) % totalPages();
+  applyTransform(true);
+  updateDots();
+  resetAutoScroll();
+}
+
+function dotClick(i) {
+  currentIdx = i;
+  applyTransform(true);
+  updateDots();
+  resetAutoScroll();
+}
+
+function updateDots() {
+  document.querySelectorAll("#promoDots span").forEach((d, i) =>
+    d.classList.toggle("active", i === currentIdx)
+  );
+}
+function startAutoScroll() {
+  if (autoTimer) clearInterval(autoTimer); // safer
+  autoTimer = setInterval(() => {
+    scrollPromo(1);
+  }, 3000);
+}
+
+function resetAutoScroll() {
+  clearInterval(autoTimer);
+  startAutoScroll();
+}
+
+/* Fetch & init */
+fetch( "https://lava-bakery-backend.onrender.com/api/banner-images/promo")
+  .then(r => r.json())
+  .then(data => {
+    buildSlider(data);
+    requestAnimationFrame(() => {
+      applyTransform(false);
+      startAutoScroll();
+    },200);
+  });
+
+function goTo(link) {
+  if (link) window.location.href = link;
+}
+
+/* Resize handler */
+let resizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (!realData.length) return;
+    currentIdx = 0;
+    rebuildDots();
+    requestAnimationFrame(() => applyTransform(false));
+  }, 150);
+});
