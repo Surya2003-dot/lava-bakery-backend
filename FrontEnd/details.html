@@ -729,29 +729,54 @@ function showToast(msg, type="dark"){
 // ===================== 
 // egg/eggless
 // =====================
-let selectedType = "egg"; // default
+// let selectedType = "egg"; // default
 
-function selectType(type){
-  selectedType = type;
+// function selectType(type){
+//   selectedType = type;
 
+//   let eggBtn = document.getElementById("eggBtn");
+//   let egglessBtn = document.getElementById("egglessBtn");
+
+//   if(type === "egg"){
+//     eggBtn.classList.add("btn-danger","active-type");
+//     eggBtn.classList.remove("btn-outline-danger");
+
+//     egglessBtn.classList.add("btn-outline-success");
+//     egglessBtn.classList.remove("btn-success","active-type");
+//   }else{
+//     egglessBtn.classList.add("btn-success","active-type");
+//     egglessBtn.classList.remove("btn-outline-success");
+
+//     eggBtn.classList.add("btn-outline-danger");
+//     eggBtn.classList.remove("btn-danger","active-type");
+//   }
+
+//   updatePrice();
+// }
+function handleTypeVisibility(cakeType){
   let eggBtn = document.getElementById("eggBtn");
   let egglessBtn = document.getElementById("egglessBtn");
 
-  if(type === "egg"){
-    eggBtn.classList.add("btn-danger","active-type");
-    eggBtn.classList.remove("btn-outline-danger");
+  if(cakeType === "both"){
+    // rendu button um show
+    eggBtn.style.display = "inline-block";
+    egglessBtn.style.display = "inline-block";
 
-    egglessBtn.classList.add("btn-outline-success");
-    egglessBtn.classList.remove("btn-success","active-type");
-  }else{
-    egglessBtn.classList.add("btn-success","active-type");
-    egglessBtn.classList.remove("btn-outline-success");
-
-    eggBtn.classList.add("btn-outline-danger");
-    eggBtn.classList.remove("btn-danger","active-type");
+    // default select egg
+    selectType("egg");
   }
+  else if(cakeType === "egg"){
+    eggBtn.style.display = "inline-block";
+    egglessBtn.style.display = "none";
 
-  updatePrice();
+    selectType("egg");
+  }
+  else if(cakeType === "eggless"){
+    eggBtn.style.display = "none";
+    egglessBtn.style.display = "inline-block";
+
+    selectType("eggless");
+  }
 }
 </script>
 <script src="js/script.js"></script>
