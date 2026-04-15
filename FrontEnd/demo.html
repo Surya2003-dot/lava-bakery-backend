@@ -49,22 +49,34 @@ body {
 /* ===== PROMO SECTION ===== */
 .promo-section {
   background: #fff;
-  padding: 56px 0 64px;
+  padding: 40px 0 52px;
   border-top: 1px solid rgba(0,0,0,0.05);
+  width: 100%;
 }
 
-.promo-inner {
-  max-width: 1040px;
-  margin: 0 auto;
-  padding: 0 24px;
+/*
+  Header: title + arrows
+  Padded and centred with max-width — stays readable on all sizes
+*/
+.promo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 0 16px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .promo-heading {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(22px, 4vw, 30px);
+  font-size: clamp(20px, 4vw, 28px);
   font-weight: 700;
   color: #1a1009;
-  margin-bottom: 28px;
+  margin: 0;
+  flex: 1;
 }
 
 .promo-heading span {
@@ -72,80 +84,105 @@ body {
   font-style: italic;
 }
 
-.promo-wrapper {
-  position: relative;
-  padding: 0 38px;
-}
-
-#promoSlider {
+/* Arrows — top-right inline with heading */
+/* .arrow-group {
   display: flex;
-  gap: 20px;
-  overflow-x: hidden;
-  scroll-behavior: auto;
-}
+  gap: 8px;
+  flex-shrink: 0;
+} */
 
-.promo-card {
-  flex: 0 0 calc(50% - 10px);
-  border-radius: 18px;
-  overflow: hidden;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-  aspect-ratio: 2 / 1;
-  cursor: pointer;
-  border: 1.5px solid rgba(0,0,0,0.06);
-}
-
-.promo-card:hover {
-  transform: translateY(-8px) scale(1.025);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.14);
-}
-
-.promo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 18px;
-}
-
-@media (max-width: 768px) {
-  .promo-card { flex: 0 0 100%; }
-  .promo-wrapper { padding: 0 32px; }
-}
-
-/* Arrows */
 .arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   background: #fff;
-  border: 1.5px solid rgba(224,49,32,0.2);
+  border: 1.5px solid rgba(224,49,32,0.25);
   border-radius: 50%;
   color: #e03120;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s, box-shadow 0.3s;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  font-size: 13px;
+  transition: background 0.25s, box-shadow 0.25s, color 0.25s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  user-select: none;
 }
 
 .arrow:hover {
   background: #e03120;
   color: #fff;
-  box-shadow: 0 6px 18px rgba(224,49,32,0.3);
+  box-shadow: 0 4px 14px rgba(224,49,32,0.3);
 }
 
-.arrow-left  { left: -4px; }
-.arrow-right { right: -4px; }
+/*
+  Track: TRUE full viewport width — no max-width, no padding.
+  overflow:hidden clips the off-screen cards.
+*/
+.promo-track-wrapper {
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Flex container moved by JS transform */
+#promoSlider {
+  display: flex;
+  gap: 12px;
+  will-change: transform;
+}
+
+/*
+  ─── CARD SIZING (key fix) ───────────────────────────────────────
+  Mobile  < 640px  → 1 card  = 100vw         aspect 16/7
+  Tablet  640–1023 → 2 cards = ~50vw each    aspect 16/6
+  Desktop ≥ 1024px → 2 cards = ~50vw each    aspect 16/6
+  
+  Using vw units means cards always fill the viewport regardless
+  of any parent max-width constraint. Gap is 12px so each card
+  in a 2-up view = (100vw - 12px) / 2.
+  ─────────────────────────────────────────────────────────────────
+*/
+.promo-card {
+  flex: 0 0 100vw;
+  height: auto;
+  aspect-ratio: 1200 / 450; /* exact banner ratio */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff; /* important for contain spacing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+@media (min-width: 640px) {
+  .promo-card {
+    flex: 0 0 calc((100vw - 12px) / 2);
+  }
+}
+@media (min-width: 1024px) {
+  .promo-card {
+    flex: 0 0 calc((100vw - 12px) / 2);
+    aspect-ratio: 16 / 6;
+    border-radius: 16px;
+  }
+}
+
+.promo-card:hover {
+  transform: translateY(-5px) scale(1.012);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.12);
+}
+
+.promo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* 🔥 MAIN FIX (no crop) */
+  object-position: center;
+}
 
 /* Dots */
 #promoDots {
   text-align: center;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
 #promoDots span {
@@ -161,7 +198,7 @@ body {
 
 #promoDots span.active {
   background: #e03120;
-  transform: scale(1.4);
+  transform: scale(1.3);
   width: 18px;
   border-radius: 3px;
 }
@@ -178,19 +215,23 @@ body {
 
 <!-- ===== PROMO SLIDER ===== -->
 <section class="promo-section">
-  <div class="promo-inner">
 
+  <!-- Title + Arrows — padded header row -->
+  <div class="promo-header">
     <h3 class="promo-heading">🎯 <span>Promo</span> Offers</h3>
-
-    <div class="promo-wrapper">
-      <button class="arrow arrow-left"  onclick="scrollPromo(-1)">&#10094;</button>
-      <div id="promoSlider"></div>
-      <button class="arrow arrow-right" onclick="scrollPromo(1)">&#10095;</button>
+    <div class="arrow-group">
+      <button class="arrow" onclick="scrollPromo(-1)" aria-label="Previous">&#10094;</button>
+      <button class="arrow" onclick="scrollPromo(1)"  aria-label="Next">&#10095;</button>
     </div>
-
-    <div id="promoDots"></div>
-
   </div>
+
+  <!-- 100vw track — no padding, full bleed -->
+  <div class="promo-track-wrapper">
+    <div id="promoSlider"></div>
+  </div>
+
+  <div id="promoDots"></div>
+
 </section>
 
 <!-- ===== SCRIPTS ===== -->
@@ -210,19 +251,25 @@ fetch(BASE + "/hero")
   });
 
 /* ---- PROMO SLIDER ---- */
-let realData = [];
-let currentIndex = 0;
-let autoTimer = null;
+let realData   = [];
+let currentIdx = 0;
+let autoTimer  = null;
 
 function getPerView() {
-  return window.innerWidth <= 768 ? 1 : 2;
+  return window.innerWidth >= 640 ? 2 : 1;
+}
+
+function totalPages() {
+  return Math.ceil(realData.length / getPerView());
 }
 
 function buildSlider(data) {
-  realData = data;
+  realData   = data;
+  currentIdx = 0;
 
   const slider = document.getElementById("promoSlider");
-  const dots = document.getElementById("promoDots");
+  slider.style.transition = "none";
+  slider.style.transform  = "translateX(0)";
 
   slider.innerHTML = data.map(p => `
     <div class="promo-card">
@@ -230,60 +277,57 @@ function buildSlider(data) {
     </div>
   `).join("");
 
-  // dots
-  dots.innerHTML = "";
-  const total = Math.ceil(data.length / getPerView());
+  rebuildDots();
+}
 
+function rebuildDots() {
+  const dots  = document.getElementById("promoDots");
+  const total = totalPages();
+  dots.innerHTML = "";
   for (let i = 0; i < total; i++) {
     dots.innerHTML += `<span onclick="dotClick(${i})"></span>`;
   }
-
-  currentIndex = 0;
-  updateSlider();
   updateDots();
 }
 
-function updateSlider() {
+function applyTransform(animate) {
   const slider = document.getElementById("promoSlider");
-  const card = slider.querySelector(".promo-card");
-  if (!card) return;
+  const cards  = slider.querySelectorAll(".promo-card");
+  if (!cards.length) return;
 
-  const width = card.offsetWidth + 20;
-  const perView = getPerView();
+  const gap       = 12;                        /* must match CSS gap */
+  const cardWidth = cards[0].offsetWidth;      /* vw-based, always correct */
+  const perView   = getPerView();
+  const shift     = currentIdx * perView * (cardWidth + gap);
 
-  slider.scrollTo({
-    left: currentIndex * width * perView,
-    behavior: "smooth"
-  });
+  slider.style.transition = animate
+    ? "transform 0.45s cubic-bezier(.22,1,.36,1)"
+    : "none";
+  slider.style.transform = `translateX(-${shift}px)`;
 }
 
 function scrollPromo(dir) {
-  const total = Math.ceil(realData.length / getPerView());
-  currentIndex = (currentIndex + dir + total) % total;
-
-  updateSlider();
+  currentIdx = (currentIdx + dir + totalPages()) % totalPages();
+  applyTransform(true);
   updateDots();
   resetAutoScroll();
 }
 
 function dotClick(i) {
-  currentIndex = i;
-  updateSlider();
+  currentIdx = i;
+  applyTransform(true);
   updateDots();
   resetAutoScroll();
 }
 
 function updateDots() {
-  document.querySelectorAll("#promoDots span").forEach((dot, i) => {
-    dot.classList.toggle("active", i === currentIndex);
-  });
+  document.querySelectorAll("#promoDots span").forEach((d, i) =>
+    d.classList.toggle("active", i === currentIdx)
+  );
 }
 
-/* ---- AUTO SCROLL ---- */
 function startAutoScroll() {
-  autoTimer = setInterval(() => {
-    scrollPromo(1);
-  }, 3000);
+  autoTimer = setInterval(() => scrollPromo(1), 3000);
 }
 
 function resetAutoScroll() {
@@ -291,25 +335,34 @@ function resetAutoScroll() {
   startAutoScroll();
 }
 
-/* ---- FETCH PROMO ---- */
+/* Fetch & init */
 fetch(BASE + "/promo")
   .then(r => r.json())
   .then(data => {
     buildSlider(data);
-    startAutoScroll();
+    requestAnimationFrame(() => {
+      applyTransform(false);
+      startAutoScroll();
+    });
   });
 
 function goTo(link) {
   if (link) window.location.href = link;
 }
 
-/* ---- RESIZE ---- */
+/* Resize handler */
+let resizeTimer;
 window.addEventListener("resize", () => {
-  if (realData.length) buildSlider(realData);
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (!realData.length) return;
+    currentIdx = 0;
+    rebuildDots();
+    requestAnimationFrame(() => applyTransform(false));
+  }, 150);
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrp@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>
