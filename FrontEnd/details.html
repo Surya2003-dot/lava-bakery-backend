@@ -613,7 +613,7 @@ function buyNow(){
         description:window.cake.description,
         image:window.cake.imageUrl,
 
-        price: finalPrice,   // ✅ FIXED
+        price: finalPrice,
         weight: weight,
 
         shapes: window.cake.shapes,
@@ -623,7 +623,7 @@ function buyNow(){
 
     localStorage.setItem("buyNowCake",JSON.stringify(product))
 
-    window.location.href="checkout.html"
+    window.location.href="pickupDetails.html"
 }
 // =============================
 // Weight Price
