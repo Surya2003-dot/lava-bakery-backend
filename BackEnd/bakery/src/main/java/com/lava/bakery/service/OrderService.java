@@ -23,14 +23,18 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final CakeRepository cakeRepository;
-    private TelegramService telegramService;
-    public OrderService(UserRepository userRepository, OrderRepository orderRepository,
-                        CakeRepository cakeRepository) {
+    private final TelegramService telegramService;
+
+    public OrderService(UserRepository userRepository,
+                        OrderRepository orderRepository,
+                        CakeRepository cakeRepository,
+                        TelegramService telegramService) {
+
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.cakeRepository = cakeRepository;
+        this.telegramService = telegramService;
     }
-
     // =========================================
     // USER - Place Order
     // =========================================
@@ -119,7 +123,7 @@ public class OrderService {
                 + "\n💰 Total: ₹" + savedOrder.getTotalPrice();
 
 // ⚠ encode (important)
-        msg = java.net.URLEncoder.encode(msg, java.nio.charset.StandardCharsets.UTF_8);
+//        msg = java.net.URLEncoder.encode(msg, java.nio.charset.StandardCharsets.UTF_8);
 
 // 🔥 SEND
         telegramService.sendMessage(msg);
