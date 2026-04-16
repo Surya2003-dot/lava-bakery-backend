@@ -1,3 +1,5 @@
+package com.lava.bakery.service;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,13 +22,13 @@ public class TelegramService {
                     + "/sendMessage?chat_id=" + CHAT_ID
                     + "&text=" + encodedMsg;
 
-            System.out.println("TELEGRAM URL: " + url); // 🔥 debug
+            System.out.println("TELEGRAM URL: " + url);
 
             RestTemplate rest = new RestTemplate();
             rest.getForObject(url, String.class);
 
         }catch(Exception e){
-            e.printStackTrace(); // 🔥 important
+            e.printStackTrace();
         }
     }
 }
