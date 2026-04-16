@@ -111,7 +111,8 @@ public class OrderService {
 
 // 🔥 TELEGRAM MESSAGE
         String msg = "🍰 New Order\n\n"
-                + "👤 Customer: " + savedOrder.getCustomerName()
+                + "🆔 Order ID: " + savedOrder.getId()
+                + "\n👤 Customer: " + savedOrder.getCustomerName()
                 + "\n📧 Email: " + savedOrder.getUserEmail()
                 + "\n🎂 Cake: " + savedOrder.getCake().getName()
                 + "\n⚖ Kg: " + savedOrder.getOrderedKg()
