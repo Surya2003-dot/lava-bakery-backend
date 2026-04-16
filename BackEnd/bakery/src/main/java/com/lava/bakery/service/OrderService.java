@@ -23,7 +23,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final CakeRepository cakeRepository;
-
+    private TelegramService telegramService;
     public OrderService(UserRepository userRepository, OrderRepository orderRepository,
                         CakeRepository cakeRepository) {
         this.userRepository = userRepository;
@@ -102,7 +102,30 @@ public class OrderService {
 
         order.setCustomerName(user.getName());
 
-        return convertToDTO(orderRepository.save(order));
+//        return convertToDTO(orderRepository.save(order));    changee for tele mssg
+        Order savedOrder = orderRepository.save(order);
+
+// 🔥 TELEGRAM MESSAGE
+        String msg = "🍰 New Order\n\n"
+                + "👤 Customer: " + savedOrder.getCustomerName()
+                + "\n📧 Email: " + savedOrder.getUserEmail()
+                + "\n🎂 Cake: " + savedOrder.getCake().getName()
+                + "\n⚖ Kg: " + savedOrder.getOrderedKg()
+                + "\n📅 Date: " + savedOrder.getDeliveryDate()
+                + "\n⏰ Slot: " + savedOrder.getDeliverySlot()
+                + "\n📞 Phone: " + savedOrder.getPhoneNumber()
+                + "\n💬 Message: " + savedOrder.getCakeMessage()
+                + "\n🎨 Shape: " + savedOrder.getCakeShape()
+                + "\n💰 Total: ₹" + savedOrder.getTotalPrice();
+
+// ⚠ encode (important)
+        msg = java.net.URLEncoder.encode(msg, java.nio.charset.StandardCharsets.UTF_8);
+
+// 🔥 SEND
+        telegramService.sendMessage(msg);
+
+// ✅ return
+        return convertToDTO(savedOrder);
     }
     // =========================================
     // USER - Pay For Order

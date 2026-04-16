@@ -65,7 +65,6 @@ display:none;
 
 <img id="cakeImg" class="product-img">
 <h6 id="cakeName"></h6>
-<p id="cakeFlavour"></p>
 <p id="cakeDesc"></p>
 <p id="cakeprep"></p>
 
@@ -138,8 +137,6 @@ document.getElementById("cakeprep").innerText =
 "Preparation Time: " + product.preparationTimeHours + " hr"
 
 document.getElementById("cakeName").innerText = product.name
-document.getElementById("cakeFlavour").innerText =
-"Flavour: " + product.flavour
 document.getElementById("cakeDesc").innerText = product.description
 document.getElementById("cakeWeight").innerText = product.weight + " KG"
 document.getElementById("cakePrice").innerText = cakePrice
