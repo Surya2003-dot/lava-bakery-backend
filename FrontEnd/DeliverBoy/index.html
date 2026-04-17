@@ -180,13 +180,13 @@ fetch(`https://lava-bakery-backend.onrender.com/api/orders/${id}`,{
 
     document.getElementById("oId").innerText = data.orderId || "-"
     document.getElementById("name").innerText = data.customerName || "-"
-    document.getElementById("address").innerText = data.deliveryAddress || "-"
+    // document.getElementById("address").innerText = data.deliveryAddress || "-"
     document.getElementById("phone").innerText = data.phoneNumber || "-"
     document.getElementById("cake").innerText = data.cakeName || "-"
     document.getElementById("kg").innerText = (data.orderedKg || 0) + " KG"
 
     document.getElementById("cakePrice").innerText = data.cakePrice || 0
-    document.getElementById("dCharge").innerText = data.deliveryCharge || 0
+    // document.getElementById("dCharge").innerText = data.deliveryCharge || 0
     document.getElementById("amount").innerText = data.totalPrice || 0
 
     let statusEl = document.getElementById("status")
@@ -200,6 +200,7 @@ fetch(`https://lava-bakery-backend.onrender.com/api/orders/${id}`,{
         if(data.status === "DELIVERED"){
             statusEl.style.color = "green"
         } else if(data.status === "OUT_FOR_DELIVERY"){
+        statusEl.innerText = "Ready for Pickup"
             statusEl.style.color = "orange"
         } else {
             statusEl.style.color = "gray"
