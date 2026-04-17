@@ -3,72 +3,412 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Laava Cakes - Place Order</title>
-
+<title>Laava Cakes - Pickup Order</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<link rel="icon" href="images/laavaIcon.png">
+<style>
+body { background: #f6f6f6; }
 
+.checkout-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.product-img {
+  height: 120px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.order-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 999;
+  display: none;
+}
+
+.toast-box {
+  background: #28a745;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.alert-msg {
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: none;
+}
+.alert-warning-custom {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffc107;
+}
+.alert-danger-custom {
+  background: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+}
+.prep-info {
+  background: #e9f7ef;
+  color: #1a6035;
+  border: 1px solid #a3d9b1;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+/* Inline field errors */
+.field-error {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}
+.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 0.18rem rgba(220,53,69,.15) !important;
+}
+
+/* API error */
+.api-error {
+  background: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  display: none;
+  margin-top: 12px;
+}
+</style>
 </head>
+
 <body>
 
 <div class="container py-5">
-  <div class="row">
+  <h2 class="mb-4">🎂 Pickup Order</h2>
 
-    <!-- Mobile Image (only small screens) -->
-    <div class="col-12 d-lg-none mb-3">
-      <img id="cakeImage"
-           class="img-fluid rounded shadow"
-           style="height:200px; object-fit:cover; width:100%;">
+  <div class="row g-4">
+
+    <!-- LEFT: Order Summary -->
+    <div class="col-md-5">
+      <div class="checkout-card p-3">
+        <h5 class="mb-3">Order Summary</h5>
+        <img id="cakeImg" class="product-img">
+        <h6 id="cakeName"></h6>
+        <p id="cakeDesc" class="text-muted mb-1"></p>
+        <p id="cakeprep" class="text-muted mb-2" style="font-size:13px;"></p>
+        <p class="mb-1">Weight: <strong><span id="cakeWeight"></span></strong></p>
+        <hr>
+        <p class="mb-1">Cake Price: ₹<span id="cakePrice"></span></p>
+        <h5 class="mt-2">Total: ₹<span id="totalPrice"></span></h5>
+      </div>
     </div>
 
-    <!-- LEFT SIDE FORM -->
-    <div class="col-12 col-lg-7">
-      <h3 class="mb-4">Order Details</h3>
+    <!-- RIGHT: Pickup Details -->
+    <div class="col-md-7">
+      <div class="checkout-card p-4">
+        <form id="checkoutForm" novalidate autocomplete="off">
+          <h5 class="mb-3">Pickup Details</h5>
 
-      <div class="mb-3">
-        <label>Delivery Address</label>
-        <textarea id="address" class="form-control" rows="3"></textarea>
-      </div>
+          <!-- Phone -->
+          <div class="mb-3">
+            <input id="phone" class="form-control" placeholder="Phone Number " maxlength="15">
+            <div class="field-error" id="phoneError">Please enter a valid 10-digit phone number.</div>
+          </div>
 
-      <div class="mb-3">
-        <label>Quantity (Kg)</label>
-        <input type="number" id="kg" class="form-control" step="0.5" min="0.5">
-      </div>
+          <!-- Cake Message -->
+          <div class="mb-3">
+            <input id="cakeMessage" class="form-control" placeholder="Cake Message ">
+            <div class="field-error" id="messageError">Please enter a cake message.</div>
+          </div>
 
-      <div class="mb-3">
-        <label>Choose Shape</label>
-        <select id="shape" class="form-select">
-          <option>Round</option>
-          <option>Square</option>
-          <option>Heart</option>
-        </select>
-      </div>
+          <!-- Prep Info Banner -->
+          <div id="prepInfo" class="prep-info mb-3"></div>
 
-      <div class="mb-3">
-        <label>Upload Custom Image (Optional)</label>
-        <input type="file" id="customImage" class="form-control">
-      </div>
+          <!-- After 8PM warning -->
+          <div id="warningMsg" class="alert-msg alert-warning-custom mb-2">
+            ⚠ Orders after 8 PM cannot be placed for today. Please select tomorrow's date.
+          </div>
 
-      <button class="btn btn-dark w-100" onclick="placeOrder()">Place Order</button>
-    </div>
+          <!-- Pickup Date -->
+          <div class="mb-3">
+            <label class="form-label">Pickup Date </label>
+            <input type="date" id="pickupDate" class="form-control">
+            <div class="field-error" id="dateError">Please select a pickup date.</div>
+          </div>
 
-    <!-- Desktop Image (only large screens) -->
-    <div class="col-lg-5 d-none d-lg-block">
-      <div class="card shadow">
-        <img id="cakeImageDesktop"
-             class="card-img-top"
-             style="height:250px; object-fit:cover;">
-        <div class="card-body">
-          <h5 id="cakeName"></h5>
-          <p id="cakePrice"></p>
-        </div>
+          <!-- Pickup Slot -->
+          <div class="mb-3">
+            <label class="form-label">Pickup Slot </label>
+            <select id="pickupTime" class="form-control">
+              <option value="">Select Slot</option>
+            </select>
+            <div class="field-error" id="slotError">Please select a pickup slot.</div>
+          </div>
+
+          <!-- No Slots Info -->
+          <div id="slotWarning" class="alert-msg alert-danger-custom mb-2">
+            ⚠ No pickup slots available for today. Please select tomorrow.
+          </div>
+
+          <!-- API Error -->
+          <div id="apiError" class="api-error">
+            ❌ Failed to place order. Please try again.
+          </div>
+
+          <button type="submit" id="submitBtn" class="btn btn-danger w-100 mt-3">Place Order</button>
+
+        </form>
       </div>
     </div>
 
   </div>
 </div>
-<script src="js/config.js"></script>
-<script src="js/orders.js"></script>
+
+<!-- Toast -->
+<div id="orderToast" class="order-toast">
+  <div class="toast-box">✔ Order Placed Successfully!</div>
+</div>
+
+<script>
+
+// ============================================================
+// 1. LOAD PRODUCT
+// ============================================================
+let product = JSON.parse(localStorage.getItem("buyNowCake"));
+
+if (product && !product.weight) product.weight = 1;
+
+let cakePrice = 0;
+
+if (product) {
+  cakePrice = product.price;
+  document.getElementById("cakeName").innerText   = product.name;
+  document.getElementById("cakeDesc").innerText   = product.description;
+  document.getElementById("cakeprep").innerText   = "Preparation Time: " + product.preparationTimeHours + " hr";
+  document.getElementById("cakeWeight").innerText = product.weight + " KG";
+  document.getElementById("cakePrice").innerText  = cakePrice;
+  document.getElementById("totalPrice").innerText = cakePrice;
+  document.getElementById("cakeImg").src          = product.image;
+  document.getElementById("cakeImg").alt          = product.name;
+}
+
+// ============================================================
+// 2. HELPERS
+// ============================================================
+function formatTime(h, m) {
+  let ampm = h >= 12 ? "PM" : "AM";
+  let h12  = h % 12 || 12;
+  return `${h12}:${String(m).padStart(2, "0")} ${ampm}`;
+}
+
+// LOCAL date — fixes IST timezone UTC offset bug
+function toDateStr(date) {
+  let y = date.getFullYear();
+  let m = String(date.getMonth() + 1).padStart(2, "0");
+  let d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+function setFieldError(fieldId, errorId, show) {
+  document.getElementById(fieldId).classList.toggle("is-invalid", show);
+  document.getElementById(errorId).style.display = show ? "block" : "none";
+}
+
+// ============================================================
+// 3. READY TIME
+// ============================================================
+let now       = new Date();
+let prep      = (product && product.preparationTimeHours) ? product.preparationTimeHours : 1;
+let ready     = new Date(now.getTime() + prep * 60 * 60 * 1000);
+let readyHour = ready.getHours();
+let readyMin  = ready.getMinutes();
+
+let todayStr    = toDateStr(now);
+let tomorrowStr = toDateStr(new Date(now.getTime() + 86400000));
+
+document.getElementById("prepInfo").innerText =
+  `⏱ Prep time: ${prep} hr  |  Ready by: ${formatTime(readyHour, readyMin)}`;
+
+// ============================================================
+// 4. DATE SETUP
+// ============================================================
+let dateInput  = document.getElementById("pickupDate");
+let warningMsg = document.getElementById("warningMsg");
+
+if (readyHour >= 20) {
+  dateInput.min   = tomorrowStr;
+  dateInput.value = tomorrowStr;
+  warningMsg.style.display = "block";
+} else {
+  dateInput.min   = todayStr;
+  dateInput.value = todayStr;
+  warningMsg.style.display = "none";
+}
+
+// ============================================================
+// 5. SLOT GENERATION
+// ============================================================
+function generateSlots() {
+  let selectedDate = dateInput.value;
+  let dropdown     = document.getElementById("pickupTime");
+  let slotWarn     = document.getElementById("slotWarning");
+
+  dropdown.innerHTML = `<option value="">Select Slot</option>`;
+  dropdown.disabled  = false;
+  slotWarn.style.display = "none";
+
+  let startHour;
+
+  if (selectedDate === todayStr) {
+    startHour = readyHour;
+    if (readyMin > 0) startHour += 1;
+    if (startHour < 10) startHour = 10;
+
+    if (startHour >= 21) {
+      dropdown.innerHTML = `<option value="">No slots available</option>`;
+      dropdown.disabled  = true;
+      slotWarn.style.display = "block";
+      return;
+    }
+  } else {
+    startHour = 10;
+  }
+
+  let count = 0;
+  for (let i = startHour; i < 21; i += 2) {
+    let end = i + 2;
+    if (end > 21) break;
+    let label = `${formatTime(i, 0)} – ${formatTime(end, 0)}`;
+    dropdown.innerHTML += `<option value="${label}">${label}</option>`;
+    count++;
+  }
+
+  if (count === 0) {
+    dropdown.innerHTML = `<option value="">No slots available</option>`;
+    dropdown.disabled  = true;
+    slotWarn.style.display = "block";
+  }
+}
+
+generateSlots();
+dateInput.addEventListener("change", generateSlots);
+
+// ============================================================
+// 6. CLEAR ERRORS ON INPUT
+// ============================================================
+document.getElementById("phone").addEventListener("input", function() {
+  setFieldError("phone", "phoneError", false);
+});
+document.getElementById("cakeMessage").addEventListener("input", function() {
+  setFieldError("cakeMessage", "messageError", false);
+});
+dateInput.addEventListener("change", function() {
+  setFieldError("pickupDate", "dateError", false);
+});
+document.getElementById("pickupTime").addEventListener("change", function() {
+  setFieldError("pickupTime", "slotError", false);
+});
+
+// ============================================================
+// 7. VALIDATE — UI only, zero alerts
+// ============================================================
+function validateForm() {
+  let phone   = document.getElementById("phone").value.trim();
+  let message = document.getElementById("cakeMessage").value.trim();
+  let date    = dateInput.value;
+  let slot    = document.getElementById("pickupTime").value;
+
+  let valid = true;
+
+  if (!phone || phone.length < 10 || !/^\d+$/.test(phone)) {
+    setFieldError("phone", "phoneError", true);
+    valid = false;
+  }
+
+  if (!message) {
+    setFieldError("cakeMessage", "messageError", true);
+    valid = false;
+  }
+
+  if (!date) {
+    setFieldError("pickupDate", "dateError", true);
+    valid = false;
+  }
+
+  if (!slot) {
+    setFieldError("pickupTime", "slotError", true);
+    valid = false;
+  }
+
+  return valid;
+}
+
+// ============================================================
+// 8. SUBMIT
+// ============================================================
+document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  document.getElementById("apiError").style.display = "none";
+  if (!validateForm()) return;
+  placeOrder();
+});
+
+function placeOrder() {
+  let btn = document.getElementById("submitBtn");
+  btn.disabled  = true;
+  btn.innerText = "Placing Order...";
+
+  let token   = localStorage.getItem("token");
+  let phone   = document.getElementById("phone").value.trim();
+  let message = document.getElementById("cakeMessage").value.trim();
+  let date    = dateInput.value;
+  let slot    = document.getElementById("pickupTime").value;
+
+  let url = `https://lava-bakery-backend.onrender.com/api/orders/place`
+    + `?cakeId=${encodeURIComponent(product.id)}`
+    + `&kg=${encodeURIComponent(product.weight)}`
+    + `&phoneNumber=${encodeURIComponent(phone)}`
+    + `&paymentMethod=CASH_ON_DELIVERY`
+    + `&eggType=${encodeURIComponent(product.type.toUpperCase())}`
+    + `&cakeMessage=${encodeURIComponent(message)}`
+    + `&deliveryDate=${encodeURIComponent(date)}`
+    + `&deliverySlot=${encodeURIComponent(slot)}`
+    + `&deliveryAddress=${encodeURIComponent("SELF PICKUP")}`
+    + `&cakeShape=${encodeURIComponent(product.shapes)}`
+    + `&cakePrice=${encodeURIComponent(cakePrice)}`
+    + `&deliveryCharge=0`;
+
+  fetch(url, {
+    method: "POST",
+    headers: { "Authorization": "Bearer " + token }
+  })
+  .then(res => res.json())
+  .then(data => {
+    let orders = JSON.parse(localStorage.getItem("orders")) || [];
+    orders.push({ cake: product.name, date, slot, total: cakePrice, status: "PREPARING" });
+    localStorage.setItem("orders", JSON.stringify(orders));
+
+    document.getElementById("orderToast").style.display = "block";
+    setTimeout(() => { window.location.href = "bag.html"; }, 1500);
+  })
+  .catch(err => {
+    console.error("Order failed:", err);
+    document.getElementById("apiError").style.display = "block";
+    btn.disabled  = false;
+    btn.innerText = "Place Order";
+  });
+}
+
+</script>
 </body>
 </html>

@@ -156,6 +156,20 @@ body {
   border-radius: 10px;
   background: #e03120;
 }
+/* 🔥 MOBILE HEIGHT INCREASE */
+@media (max-width: 639px) {
+
+  .promo-card {
+    aspect-ratio: auto;     /* remove fixed ratio */
+    height: 320px;          /* 🔥 increase height */
+  }
+
+  .promo-img {
+    height: 100%;
+    object-fit: contain;    /* no damage */
+  }
+
+}
 </style>
 </head>
 <body>
