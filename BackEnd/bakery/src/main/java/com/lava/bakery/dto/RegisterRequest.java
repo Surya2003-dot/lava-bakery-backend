@@ -3,10 +3,12 @@ package com.lava.bakery.dto;
 public class RegisterRequest {
 
     private String name;
+    private String phoneNumber;
     private String email;
     private String password;
     private String otp;
-
+    public RegisterRequest() {
+    }
     // Getters & Setters
     public String getName() {
         return name;
@@ -15,7 +17,13 @@ public class RegisterRequest {
     public void setName(String name) {
         this.name = name;
     }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
     public String getEmail() {
         return email;
     }
@@ -32,8 +40,9 @@ public class RegisterRequest {
         this.password = password;
     }
 
-    public RegisterRequest(String name, String email, String password, String otp) {
+    public RegisterRequest(String name, String phoneNumber, String email, String password, String otp) {
         this.name = name;
+        this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
         this.otp = otp;
