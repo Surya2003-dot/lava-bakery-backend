@@ -27,7 +27,19 @@ transition:0.3s;
 .cart-card:hover{
 transform:scale(1.02);
 }
+/* Cart active icon (RED) */
+.cart-icon-btn.cart-active {
+    background: #e11d48;
+    border: none;
+}
 
+.cart-icon-btn.cart-active i {
+    color: white;
+}
+.cart-icon-btn:hover {
+    transform: scale(1.1);
+    transition: 0.2s;
+}
 </style>
 
 </head>
@@ -310,7 +322,7 @@ Remove
 
 <button class="btn btn-success btn-sm w-50"
 onclick="goToDetails(${item.cakeId})">
-Buy Now
+Check Now
 </button>
 
 </div>
