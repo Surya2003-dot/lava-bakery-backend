@@ -261,7 +261,14 @@ function displayCake(cake){
 let defaultWeight = selectedWeightFromCard || cake.minOrderKg;
 let defaultPrice = cake.pricePerKg * defaultWeight;
 const container=document.getElementById("detailsContainer")
-
+let isAvailable = cake.available ?? cake.isAvailable;
+let orderBtn = isAvailable 
+? `<button class="btn btn-success px-4 w-100" onclick="buyNow()">
+     <i class="fa-solid fa-bolt me-2"></i> Order Now
+   </button>`
+: `<button class="btn btn-secondary px-4 w-100" disabled>
+      Unavailable
+   </button>`;
 container.innerHTML=`
 
 <div class="col-lg-6">
@@ -336,13 +343,7 @@ Add To Cart
 
 </button>
 
-<button class="btn btn-success px-4 w-100"
-onclick="buyNow()">
-
-<i class="fa-solid fa-bolt me-2"></i>
-Order Now
-
-</button>
+${orderBtn}
 
 </div>
 
