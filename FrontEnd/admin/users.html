@@ -75,6 +75,7 @@ placeholder="🔍 Search by ID / Name / Email..." onkeyup="searchUsers()">
 <th>ID</th>
 <th>Name</th>
 <th>Email</th>
+<th>Phone</th>
 </tr>
 </thead>
 
@@ -138,6 +139,7 @@ html += `
 <td>${u.id}</td>
 <td>${u.name}</td>
 <td>${u.email}</td>
+<td>${u.phoneNumber || '-'}</td> 
 </tr>
 `
 

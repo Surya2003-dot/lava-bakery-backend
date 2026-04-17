@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public class OrderResponseDTO {
 
     private Long orderId;
+    private Long cakeId;
     private String customerName;
     private String cakeName;
     private double orderedKg;
@@ -27,6 +28,7 @@ public class OrderResponseDTO {
     private String deliveryBoyName;
     private String deliveryBoyPhone;
     public OrderResponseDTO(Long orderId,
+                            Long cakeId,
                             String cakeName,
                             double orderedKg,
                             double totalPrice,
@@ -49,7 +51,7 @@ public class OrderResponseDTO {
                             String deliveryBoyPhone) {
 
         this.orderId = orderId;
-
+        this.cakeId = cakeId;
         this.cakeName = cakeName;
         this.orderedKg = orderedKg;
         this.totalPrice = totalPrice;
@@ -74,6 +76,9 @@ public class OrderResponseDTO {
     }
 
     public Long getOrderId() { return orderId; }
+    public Long getCakeId() {
+        return cakeId;
+    }
     public String getCakeName() { return cakeName; }
     public double getOrderedKg() { return orderedKg; }
     public double getTotalPrice() { return totalPrice; }

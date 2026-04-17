@@ -424,7 +424,8 @@ delivered = "step active"
 
 html += `
 
-<div class="order-card"  >
+<div class="order-card" onclick="goToDetails(${order.cakeId}, '${kg}')"
+style="cursor:pointer;" >
 
 <div class="row align-items-center g-3">
 

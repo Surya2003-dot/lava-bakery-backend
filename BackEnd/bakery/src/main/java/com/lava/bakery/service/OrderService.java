@@ -333,7 +333,7 @@ public class OrderService {
 
         return new OrderResponseDTO(
                 order.getId(),
-
+                order.getCake() != null ? order.getCake().getId() : null,
                 cakeName,
                 order.getOrderedKg(),
                 order.getTotalPrice(),
