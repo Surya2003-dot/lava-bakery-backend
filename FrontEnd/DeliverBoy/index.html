@@ -50,7 +50,7 @@ cursor:not-allowed;
 </div>
 <div class="container mt-3">
 
-<h3 class="text-center mb-4">🚚 Delivery Dashboard</h3>
+<h3 class="text-center mb-4"> Order Dashboard</h3>
 
 <!-- ORDER SEARCH -->
 <div class="card p-4 shadow mb-4">
@@ -68,12 +68,12 @@ cursor:not-allowed;
 
 <p><b>Order ID:</b> <span id="oId"></span></p>
 <p><b>Customer Name:</b> <span id="name"></span></p>
-<p><b>Address:</b> <span id="address"></span></p>
+<!-- <p><b>Address:</b> <span id="address"></span></p> -->
 <p><b>Phone:</b> <span id="phone"></span></p>
 <p><b>Cake:</b> <span id="cake"></span></p>
 <p><b>KG:</b> <span id="kg"></span></p>
 <p><b>Cake Price:</b> ₹<span id="cakePrice"></span></p>
-<p><b>Delivery Charge:</b> ₹<span id="dCharge"></span></p>
+<!-- <p><b>Delivery Charge:</b> ₹<span id="dCharge"></span></p> -->
 <p><b>Total Amount:</b> ₹<span id="amount"></span></p>
 <p><b>Status:</b> <span id="status"></span></p>
 
@@ -81,7 +81,7 @@ cursor:not-allowed;
 <!-- 
 <button id="outBtn" class="btn btn-warning w-50" onclick="updateStatus('OUT_FOR_DELIVERY')"> -->
     <button id="outBtn" class="btn btn-warning w-50" onclick="updateStatus()">
-🚚 Out for Delivery
+Ready for Pickup
 </button>
 
 <button id="delBtn" class="btn btn-success w-50" onclick="markDelivered()">
@@ -254,7 +254,7 @@ if(!deliveryBoyId){
     .then(res => {
         if(!res.ok) throw new Error()
 
-        showToast("Out for Delivery 🚚","warning")
+        showToast("Ready For Pickup","warning")
         getOrder()
     })
     .catch(()=>{
