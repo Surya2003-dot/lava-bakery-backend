@@ -10,7 +10,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String phoneNumber;
     private String name;
 
     @Column(unique = true, nullable = false)
@@ -25,8 +25,9 @@ public class User {
     // Constructors
     public User() {}
 
-    public User(String name, String email, String password, Role role, String otp) {
+    public User(String name,String phoneNumber, String email, String password, Role role, String otp) {
         this.name = name;
+        this.phoneNumber = phoneNumber;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -59,5 +60,12 @@ public class User {
 
     public void setOtp(String otp) {
         this.otp = otp;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

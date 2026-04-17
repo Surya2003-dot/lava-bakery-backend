@@ -109,7 +109,7 @@ public class OrderService {
 //        return convertToDTO(orderRepository.save(order));    changee for tele mssg
         Order savedOrder = orderRepository.save(order);
 
-// 🔥 TELEGRAM MESSAGE
+// TELEGRAM MESSAGE
         String msg = "🍰 New Order\n\n"
                 + "🆔 Order ID: " + savedOrder.getId()
                 + "\n👤 Customer: " + savedOrder.getCustomerName()

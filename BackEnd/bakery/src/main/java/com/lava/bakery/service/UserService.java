@@ -43,6 +43,7 @@ public class UserService {
 
         User user = new User(
                 request.getName(),
+                request.getPhoneNumber(),
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
                 userRole,

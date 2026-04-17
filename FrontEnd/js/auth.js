@@ -179,6 +179,7 @@ otpError.style.display="block";
 function register(){
 
 const name=document.getElementById("name").value;
+let phoneNumber = document.getElementById("phoneNumber").value.trim();
 const email=document.getElementById("email").value;
 const password=document.getElementById("password").value;
 const otp=document.getElementById("otp").value;
@@ -186,7 +187,13 @@ const otp=document.getElementById("otp").value;
 const emailExistError=document.getElementById("emailExistError");
 const registerSuccess=document.getElementById("registerSuccess");
 const otpError=document.getElementById("otpError");
-
+// allow only digits
+if(!/^[0-9]{10}$/.test(phoneNumber)){
+    document.getElementById("phoneError").style.display = "block";
+    return;
+}else{
+    document.getElementById("phoneError").style.display = "none";
+}
 emailExistError.style.display="none";
 otpError.style.display="none";
 
@@ -200,6 +207,7 @@ headers:{
 
 body:JSON.stringify({
 name:name,
+ phoneNumber: phoneNumber, 
 email:email,
 password:password,
 otp:otp
