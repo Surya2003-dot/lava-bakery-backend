@@ -29,12 +29,12 @@ transform:scale(1.02);
 }
 /* Cart active icon (RED) */
 .cart-icon-btn.cart-active {
-    background: #e11d48 !important;
+    background: #e11d48;
     border: none;
 }
 
 .cart-icon-btn.cart-active i {
-    color: white !important;
+    color: white;
 }
 .cart-icon-btn:hover {
     transform: scale(1.1);
@@ -264,9 +264,10 @@ ${item.preparationTimeHours} hrs
 <div class="wishlist">
 
 <button class="cart-icon-btn cart-active"
+style="background:#e11d48;color:white;border:none;"
 onclick="removeItem(event,${item.id})">
 
-<i class="fa fa-shopping-cart cart-icon"></i>
+<i class="fa fa-shopping-cart"></i>
 
 </button>
 

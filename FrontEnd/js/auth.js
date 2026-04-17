@@ -1,8 +1,10 @@
 function login(){
 
-const email=document.getElementById("email").value;
+let email=document.getElementById("email").value.trim();
 const password=document.getElementById("password").value;
-
+if(!email.includes("@")){
+    email = email + "@gmail.com";
+}
 const emailError=document.getElementById("emailError");
 const passwordError=document.getElementById("passwordError");
 
@@ -48,13 +50,15 @@ password:password
 }
 function sendOtp(){
 
-const email = document.getElementById("email").value;
+let email = document.getElementById("email").value.trim();
 
 const otpSuccess = document.getElementById("otpSuccess");
 const emailError = document.getElementById("emailError");
 const emailExistError = document.getElementById("emailExistError");
 const otpBtn = document.getElementById("registerOtpBtn");
-
+if(!email.includes("@")){
+    email = email + "@gmail.com";
+}
 emailError.style.display="none";
 emailExistError.style.display="none";
 
@@ -127,13 +131,15 @@ emailError.style.display="block";
 }
 function resetPassword(){
 
-const email = document.getElementById("email").value;
+let email = document.getElementById("email").value;
 const otp = document.getElementById("otp").value;
 const newPassword = document.getElementById("password").value;
 
 const otpError = document.getElementById("otpError");
 const passwordSuccess = document.getElementById("passwordSuccess");
-
+if(!email.includes("@")){
+    email = email + "@gmail.com";
+}
 otpError.style.display="none";
 
 fetch(`${API_BASE_URL}/auth/reset-password`,{
@@ -180,13 +186,16 @@ function register(){
 
 const name=document.getElementById("name").value;
 let phoneNumber = document.getElementById("phoneNumber").value.trim();
-const email=document.getElementById("email").value;
+let email=document.getElementById("email").value.trim();
 const password=document.getElementById("password").value;
 const otp=document.getElementById("otp").value;
 
 const emailExistError=document.getElementById("emailExistError");
 const registerSuccess=document.getElementById("registerSuccess");
 const otpError=document.getElementById("otpError");
+if(!email.includes("@")){
+    email = email + "@gmail.com";
+}
 // allow only digits
 if(!/^[0-9]{10}$/.test(phoneNumber)){
     document.getElementById("phoneError").style.display = "block";
@@ -254,7 +263,10 @@ otpError.style.display="block";
 }
 function sendForgotOtp(){
 
-const email = document.getElementById("email").value;
+let email = document.getElementById("email").value.trim();
+if(!email.includes("@")){
+    email = email + "@gmail.com";
+}
 const emailError = document.getElementById("emailError");
 const otpSuccess = document.getElementById("otpSuccess");
 const otpBtn = document.getElementById("otpBtn");
