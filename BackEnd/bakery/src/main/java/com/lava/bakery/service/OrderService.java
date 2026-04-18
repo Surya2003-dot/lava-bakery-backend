@@ -122,14 +122,15 @@ public class OrderService {
                 + "\n💬 Message: " + savedOrder.getCakeMessage()
                 + "\n🎨 Shape: " + savedOrder.getCakeShape()
                 + "\n💰 Total: ₹" + savedOrder.getTotalPrice();
+                +"\n Update Status: https://lavacakes.vercel.app/DeliverBoy/index.html";
 
 // ⚠ encode (important)
 //        msg = java.net.URLEncoder.encode(msg, java.nio.charset.StandardCharsets.UTF_8);
 
-// 🔥 SEND
+//  SEND
         telegramService.sendMessage(msg);
 
-// ✅ return
+// return
         return convertToDTO(savedOrder);
     }
     // =========================================
